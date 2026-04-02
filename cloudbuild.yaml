@@ -1,30 +1,42 @@
+substitutions:
+  _REGION: us-central1
+  _AR_REPO: zolten-ranch
+  _SERVICE: zolten-ranch-app
+  _RUNTIME_SA: zolten-run-sa
+  _DB_INSTANCE_CONNECTION: zoltenranch:us-central1:zolten-ranch-pg
+  _DB_USER: zolten
+  _DB_NAME: zolten_ranch
+
 steps:
 - name: gcr.io/cloud-builders/docker
   args:
   - build
   - -t
-  - :$COMMIT_SHA
+  - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_SERVICE}:$COMMIT_SHA
   - .
 
 - name: gcr.io/cloud-builders/docker
   args:
   - push
-  - :$COMMIT_SHA
+  - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_SERVICE}:$COMMIT_SHA
 
 - name: gcr.io/google.com/cloudsdktool/cloud-sdk
   entrypoint: gcloud
   args:
   - run
   - deploy
-  - 
-  - --image=:$COMMIT_SHA
-  - --region=
+  - ${_SERVICE}
+  - --image=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_SERVICE}:$COMMIT_SHA
+  - --region=${_REGION}
   - --platform=managed
   - --allow-unauthenticated
-  - --service-account=
-  - --add-cloudsql-instances=
-  - --set-env-vars=NODE_ENV=production,DB_HOST=/cloudsql/,DB_PORT=5432,DB_USER=,DB_NAME=
+  - --service-account=${_RUNTIME_SA}@$PROJECT_ID.iam.gserviceaccount.com
+  - --add-cloudsql-instances=${_DB_INSTANCE_CONNECTION}
+  - --set-env-vars=NODE_ENV=production,DB_HOST=/cloudsql/${_DB_INSTANCE_CONNECTION},DB_PORT=5432,DB_USER=${_DB_USER},DB_NAME=${_DB_NAME}
   - --set-secrets=DB_PASSWORD=DB_PASSWORD:latest,JWT_SECRET=JWT_SECRET:latest
 
 images:
-- :$COMMIT_SHA
+- ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_SERVICE}:$COMMIT_SHA
+
+options:
+  logging: CLOUD_LOGGING_ONLY
