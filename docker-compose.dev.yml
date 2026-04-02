@@ -1,0 +1,55 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8080:3000"
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./public:/app/public
+      - ./backend:/app
+      - /app/node_modules
+    networks:
+      - ranch_network
+    command: npm run dev
+
+  db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=zolten
+      - POSTGRES_PASSWORD=zolten_ranch_2024
+      - POSTGRES_DB=zolten_ranch
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - ranch_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U zolten"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./public:/app/public:ro
+    depends_on:
+      - web
+    networks:
+      - ranch_network
+
+volumes:
+  postgres_data:
+
+networks:
+  ranch_network:
+    driver: bridge

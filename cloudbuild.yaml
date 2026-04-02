@@ -1,0 +1,30 @@
+steps:
+- name: gcr.io/cloud-builders/docker
+  args:
+  - build
+  - -t
+  - :$COMMIT_SHA
+  - .
+
+- name: gcr.io/cloud-builders/docker
+  args:
+  - push
+  - :$COMMIT_SHA
+
+- name: gcr.io/google.com/cloudsdktool/cloud-sdk
+  entrypoint: gcloud
+  args:
+  - run
+  - deploy
+  - 
+  - --image=:$COMMIT_SHA
+  - --region=
+  - --platform=managed
+  - --allow-unauthenticated
+  - --service-account=
+  - --add-cloudsql-instances=
+  - --set-env-vars=NODE_ENV=production,DB_HOST=/cloudsql/,DB_PORT=5432,DB_USER=,DB_NAME=
+  - --set-secrets=DB_PASSWORD=DB_PASSWORD:latest,JWT_SECRET=JWT_SECRET:latest
+
+images:
+- :$COMMIT_SHA

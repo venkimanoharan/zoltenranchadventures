@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Experience scenic horseback riding trails at Zolten Ranch Adventures in San Antonio, TX. Perfect for all skill levels. Book your trail ride today!">
-    <meta name="keywords" content="horseback riding San Antonio, trail rides Texas, horse riding lessons, guided horseback tours, family horseback riding">
-    <meta property="og:title" content="Horseback Riding at Zolten Ranch Adventures">
-    <meta property="og:description" content="Explore beautiful trails on gentle, well-trained horses. Suitable for beginners and experienced riders.">
-    <title>Horseback Riding | Zolten Ranch Adventures - San Antonio, TX</title>
-    <link rel="canonical" href="https://zoltenranch.com/horseback-riding.html">
+    <meta name="description" content="Visit our petting zoo at Zolten Ranch Adventures! Meet friendly goats, sheep, rabbits, and more farm animals. Perfect for kids and families in San Antonio, TX.">
+    <meta name="keywords" content="petting zoo San Antonio, farm animals Texas, kids activities, family fun, goats, rabbits, educational farm tour">
+    <meta property="og:title" content="Petting Zoo at Zolten Ranch Adventures">
+    <meta property="og:description" content="Interactive farm animal experiences for kids and families. Meet our friendly animals up close!">
+    <title>Petting Zoo | Zolten Ranch Adventures - San Antonio, TX</title>
+    <link rel="canonical" href="https://zoltenranch.com/petting-zoo.html">
     <style>
         * {
             margin: 0;
@@ -17,12 +17,13 @@
         }
 
         :root {
-            --primary: #8B4513;
-            --secondary: #D2691E;
-            --accent: #4a7c59;
-            --dark: #2c2c2c;
-            --light: #f9f5f0;
+            --primary: #8B1538;
+            --secondary: #D4464A;
+            --accent: #F5A623;
+            --dark: #1a1a1a;
+            --light: #f8f6f3;
             --white: #ffffff;
+            --border: #e0d5c7;
         }
 
         body {
@@ -210,118 +211,115 @@
             line-height: 1.9;
         }
 
-        .two-column {
+        .animals-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
             margin: 4rem 0;
         }
 
-        .two-column img {
+        .animal-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .animal-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .animal-image {
             width: 100%;
-            border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            height: 250px;
+            object-fit: cover;
         }
 
-        .column-content h4 {
-            font-size: 2rem;
+        .animal-content {
+            padding: 2rem;
+        }
+
+        .animal-content h4 {
+            font-size: 1.8rem;
             color: var(--primary);
-            margin-bottom: 1.5rem;
+            margin-bottom: 0.5rem;
         }
 
-        .column-content p {
-            color: #666;
+        .animal-emoji {
+            font-size: 3rem;
             margin-bottom: 1rem;
-            line-height: 1.9;
+            display: block;
         }
 
-        .features-list {
+        .animal-content p {
+            color: #666;
+            line-height: 1.8;
+        }
+
+        .experience-section {
+            background: var(--light);
+            padding: 6rem 4rem;
+        }
+
+        .experience-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 3rem auto 0;
+        }
+
+        .experience-box {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .experience-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+
+        .experience-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .experience-box h5 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .experience-box p {
+            color: #666;
+        }
+
+        .info-boxes {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
             margin: 4rem 0;
         }
 
-        .feature-box {
-            background: var(--light);
-            padding: 2.5rem;
-            border-radius: 15px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .feature-box:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
-        }
-
-        .feature-box h5 {
-            font-size: 1.5rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .feature-icon {
-            font-size: 2rem;
-        }
-
-        .pricing-section {
-            background: var(--light);
-            padding: 6rem 4rem;
-        }
-
-        .pricing-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            max-width: 1200px;
-            margin: 3rem auto 0;
-        }
-
-        .pricing-card {
-            background: white;
+        .info-box {
+            background: var(--accent);
+            color: white;
             padding: 3rem 2rem;
             border-radius: 15px;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
         }
 
-        .pricing-card:hover {
-            transform: translateY(-10px);
-        }
-
-        .pricing-card h6 {
+        .info-box h4 {
             font-size: 1.8rem;
-            color: var(--primary);
             margin-bottom: 1rem;
         }
 
-        .price {
-            font-size: 3rem;
-            color: var(--secondary);
-            font-weight: 700;
-            margin: 1rem 0;
-        }
-
-        .pricing-card ul {
-            list-style: none;
-            margin: 2rem 0;
-            text-align: left;
-        }
-
-        .pricing-card li {
-            padding: 0.5rem 0;
-            color: #666;
-        }
-
-        .pricing-card li::before {
-            content: "✓ ";
-            color: var(--accent);
-            font-weight: bold;
+        .info-box p {
+            line-height: 1.8;
         }
 
         .btn {
@@ -448,18 +446,17 @@
             }
 
             .content-section,
-            .pricing-section,
+            .experience-section,
             .cta-section {
                 padding: 3rem 2rem;
             }
 
-            .two-column {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-
             .section-intro h3 {
                 font-size: 2rem;
+            }
+
+            .animals-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -476,129 +473,148 @@
             </div>
             <button class="mobile-menu-btn" aria-label="Toggle menu">☰</button>
             <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="horseback-riding.html" class="active">Horseback Riding</a></li>
-                <li><a href="petting-zoo.html">Petting Zoo</a></li>
-                <li><a href="events.html">Events</a></li>
-                <li><a href="gallery.html">Gallery</a></li>
-                <li><a href="contact.html" class="cta-button">Book Now</a></li>
+                <li><a href="/">Home</a></li>
+                <li><a href="/horseback-riding.html">Experiences</a></li>
+                <li><a href="/gallery.html">Gallery</a></li>
+                <li><a href="/pricing.html">Pricing</a></li>
+                <li><a href="/faq.html">FAQ</a></li>
+                <li><a href="/booking.html" class="cta-button">Book Now</a></li>
             </ul>
         </nav>
     </header>
 
     <section class="page-hero">
-        <img src="./images/building.jpg" alt="Horseback Riding at Zolten Ranch" class="page-hero-image">
+        <img src="./images/animals.jpg" alt="Petting Zoo at Zolten Ranch" class="page-hero-image">
         <div class="page-hero-overlay"></div>
         <div class="page-hero-content">
-            <h2>Horseback Riding</h2>
-            <p>Explore scenic trails on gentle, well-trained horses</p>
+            <h2>Petting Zoo</h2>
+            <p>Meet our friendly farm animals up close</p>
         </div>
     </section>
 
     <section class="content-section">
         <div class="section-intro">
-            <h3>Trail Riding Adventures</h3>
-            <p>Experience the beauty of our ranch from horseback. Whether you're a first-time rider or an experienced equestrian, our guided trail rides offer the perfect opportunity to connect with nature and enjoy the peaceful Texas landscape.</p>
+            <h3>Interactive Animal Experiences</h3>
+            <p>Our petting zoo offers hands-on fun for visitors of all ages. Meet and interact with a variety of friendly farm animals in a safe, supervised environment. It's the perfect educational and entertaining experience for families!</p>
         </div>
 
-        <div class="two-column">
-            <img src="./images/building.jpg" alt="Ranch trails">
-            <div class="column-content">
-                <h4>Scenic Trail Experiences</h4>
-                <p>Our carefully maintained trails wind through beautiful terrain, offering stunning views and a peaceful escape from the everyday hustle. Each ride is led by our experienced guides who ensure your safety and comfort throughout the journey.</p>
-                <p>We provide gentle, well-trained horses that are perfect for riders of all skill levels. Our horses are carefully matched to each rider's experience and comfort level, ensuring everyone has an enjoyable experience.</p>
+        <div class="animals-grid">
+            <div class="animal-card">
+                <img src="./images/animals.jpg" alt="Friendly Goats" class="animal-image">
+                <div class="animal-content">
+                    <span class="animal-emoji">🐐</span>
+                    <h4>Playful Goats</h4>
+                    <p>Our goats are energetic, friendly, and love attention! Watch them jump and play, or give them a gentle pet. They're always ready to make new friends and their playful antics will keep you entertained.</p>
+                </div>
+            </div>
+
+            <div class="animal-card">
+                <img src="./images/animals.jpg" alt="Adorable Sheep" class="animal-image">
+                <div class="animal-content">
+                    <span class="animal-emoji">🐑</span>
+                    <h4>Gentle Sheep</h4>
+                    <p>Our woolly sheep are calm and gentle, perfect for younger children. Feel their soft wool and learn about how sheep help us. They're patient and love being brushed and petted.</p>
+                </div>
+            </div>
+
+            <div class="animal-card">
+                <img src="./images/animals.jpg" alt="Cute Rabbits" class="animal-image">
+                <div class="animal-content">
+                    <span class="animal-emoji">🐰</span>
+                    <h4>Cuddly Rabbits</h4>
+                    <p>Our bunnies are soft, gentle, and perfect for little hands. Hold them gently and watch them hop around. Kids especially love feeding our rabbits their favorite vegetables!</p>
+                </div>
+            </div>
+
+            <div class="animal-card">
+                <img src="./images/animals.jpg" alt="Friendly Donkeys" class="animal-image">
+                <div class="animal-content">
+                    <span class="animal-emoji">🫏</span>
+                    <h4>Sweet Donkeys</h4>
+                    <p>Meet our lovable donkeys with their big personalities! They're gentle giants who love scratches behind the ears and treats. Don't be surprised by their loud but friendly brays!</p>
+                </div>
+            </div>
+
+            <div class="animal-card">
+                <img src="./images/animals.jpg" alt="Colorful Chickens" class="animal-image">
+                <div class="animal-content">
+                    <span class="animal-emoji">🐔</span>
+                    <h4>Chickens & Birds</h4>
+                    <p>Watch our chickens peck around and learn about where eggs come from. We also have turkeys and other birds that add to the farm experience. Educational and entertaining!</p>
+                </div>
+            </div>
+
+            <div class="animal-card">
+                <img src="./images/animals.jpg" alt="More Farm Friends" class="animal-image">
+                <div class="animal-content">
+                    <span class="animal-emoji">🦆</span>
+                    <h4>And More!</h4>
+                    <p>We have even more animal friends waiting to meet you! From ducks to miniature horses, there's always something new to discover at our petting zoo.</p>
+                </div>
             </div>
         </div>
 
-        <div class="features-list">
-            <div class="feature-box">
-                <h5><span class="feature-icon">🐴</span> All Skill Levels</h5>
-                <p>From first-timers to experienced riders, everyone is welcome. Our guides provide instruction and support throughout your ride.</p>
+        <div class="info-boxes">
+            <div class="info-box">
+                <h4>🎫 Admission</h4>
+                <p>$15 per person<br>Children under 2 free<br>Includes animal feed</p>
             </div>
-            <div class="feature-box">
-                <h5><span class="feature-icon">👨‍👩‍👧‍👦</span> Family Friendly</h5>
-                <p>Perfect for families! Children 6 and older can participate with parental supervision. We make it fun for all ages.</p>
+            <div class="info-box">
+                <h4>⏰ Visit Duration</h4>
+                <p>Self-paced visits<br>Most families spend<br>45 minutes to 1 hour</p>
             </div>
-            <div class="feature-box">
-                <h5><span class="feature-icon">🌳</span> Beautiful Scenery</h5>
-                <p>Ride through picturesque landscapes and enjoy the natural beauty of our ranch and surrounding areas.</p>
+            <div class="info-box">
+                <h4>👶 Ages Welcome</h4>
+                <p>Perfect for all ages!<br>Especially great for<br>ages 2-12</p>
             </div>
-            <div class="feature-box">
-                <h5><span class="feature-icon">✓</span> Safety First</h5>
-                <p>All riders are provided with helmets and safety equipment. Our guides are trained in safety procedures and first aid.</p>
-            </div>
-            <div class="feature-box">
-                <h5><span class="feature-icon">⏰</span> Flexible Timing</h5>
-                <p>Choose from various ride durations to fit your schedule. Morning and afternoon rides available daily.</p>
-            </div>
-            <div class="feature-box">
-                <h5><span class="feature-icon">📸</span> Photo Opportunities</h5>
-                <p>Capture memories with beautiful photo opportunities along the trail and with your horse.</p>
-            </div>
-        </div>
-
-        <div class="two-column">
-            <div class="column-content">
-                <h4>What to Expect</h4>
-                <p>Your horseback riding adventure begins with a safety orientation and introduction to your horse. Our guides will help you mount and ensure you're comfortable before heading out on the trail.</p>
-                <p>We provide all necessary equipment including helmets and riding gear. We recommend wearing long pants and closed-toe shoes. Don't forget sunscreen and water!</p>
-                <p>Each ride is paced according to the group's experience level, with plenty of opportunities to take in the scenery and enjoy the experience.</p>
-            </div>
-            <img src="./images/building.jpg" alt="Riders on trail">
         </div>
     </section>
 
-    <section class="pricing-section">
+    <section class="experience-section">
         <div class="content-section">
             <div class="section-intro">
-                <h3>Ride Packages</h3>
-                <p>Choose the perfect ride for your adventure</p>
+                <h3>What to Expect</h3>
+                <p>Your petting zoo adventure includes everything you need for a memorable experience</p>
             </div>
-            <div class="pricing-cards">
-                <div class="pricing-card">
-                    <h6>Trail Ride</h6>
-                    <div class="price">$45</div>
-                    <p>per person</p>
-                    <ul>
-                        <li>1-hour guided trail ride</li>
-                        <li>Helmet & equipment included</li>
-                        <li>Perfect for beginners</li>
-                        <li>Small group sizes</li>
-                    </ul>
-                    <a href="contact.html" class="btn">Book Now</a>
+            <div class="experience-grid">
+                <div class="experience-box">
+                    <div class="experience-icon">🤲</div>
+                    <h5>Hands-On Fun</h5>
+                    <p>Pet, feed, and interact with all our friendly animals under staff supervision.</p>
                 </div>
-                <div class="pricing-card">
-                    <h6>Extended Trail</h6>
-                    <div class="price">$75</div>
-                    <p>per person</p>
-                    <ul>
-                        <li>2-hour guided trail ride</li>
-                        <li>Helmet & equipment included</li>
-                        <li>More scenic views</li>
-                        <li>All skill levels welcome</li>
-                    </ul>
-                    <a href="contact.html" class="btn">Book Now</a>
+                <div class="experience-box">
+                    <div class="experience-icon">📚</div>
+                    <h5>Educational</h5>
+                    <p>Learn interesting facts about each animal from our knowledgeable staff.</p>
                 </div>
-                <div class="pricing-card">
-                    <h6>Private Ride</h6>
-                    <div class="price">$150</div>
-                    <p>per hour</p>
-                    <ul>
-                        <li>Private guided experience</li>
-                        <li>Customized route</li>
-                        <li>Flexible duration</li>
-                        <li>Perfect for special occasions</li>
-                    </ul>
-                    <a href="contact.html" class="btn">Book Now</a>
+                <div class="experience-box">
+                    <div class="experience-icon">🧼</div>
+                    <h5>Clean & Safe</h5>
+                    <p>Hand washing stations throughout. All animals are healthy, vaccinated, and well-cared for.</p>
+                </div>
+                <div class="experience-box">
+                    <div class="experience-icon">📸</div>
+                    <h5>Photo Ready</h5>
+                    <p>Capture adorable moments! Bring your camera for picture-perfect memories.</p>
+                </div>
+                <div class="experience-box">
+                    <div class="experience-icon">🌤️</div>
+                    <h5>Mostly Outdoors</h5>
+                    <p>Enjoy fresh air! Some covered areas available. Dress for the weather.</p>
+                </div>
+                <div class="experience-box">
+                    <div class="experience-icon">♿</div>
+                    <h5>Accessible</h5>
+                    <p>Wheelchair and stroller friendly paths throughout the petting zoo area.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <section class="cta-section">
-        <h3>Ready to Saddle Up?</h3>
-        <p>Book your horseback riding adventure today and create memories that will last a lifetime</p>
-        <a href="contact.html" class="btn btn-light">Book Your Ride</a>
+        <h3>Ready to Meet the Animals?</h3>
+        <p>Book your petting zoo visit today and create unforgettable memories with our furry friends!</p>
+        <a href="contact.html" class="btn btn-light">Plan Your Visit</a>
     </section>
 
     <footer>

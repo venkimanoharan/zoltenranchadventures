@@ -1,0 +1,22 @@
+# Development Mode - docker-compose.override.yml
+# Place this file in the project root to enable development features
+# Docker Compose will automatically merge this with docker-compose.yml
+
+services:
+  web:
+    environment:
+      - NODE_ENV=development
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    command: npm run dev
+
+  db:
+    ports:
+      - "5432:5432"
+
+  nginx:
+    ports:
+      - "80:80"

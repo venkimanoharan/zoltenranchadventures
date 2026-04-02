@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Zolten Ranch Adventures - Premium horseback riding, petting zoo, and unforgettable ranch experiences in San Antonio, TX.">
+    <meta name="keywords" content="horseback riding San Antonio, equestrian adventures, premium ranch experiences, family activities">
+    <title>Zolten Ranch Adventures | Premium Equestrian Experiences</title>
+    <link rel="canonical" href="https://zoltenranchadventures.com/">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #8B1538;
+            --primary-dark: #5C0E28;
+            --secondary: #D4464A;
+            --accent: #F5A623;
+            --dark: #1a1a1a;
+            --light: #f8f6f3;
+            --white: #ffffff;
+            --text: #333333;
+            --border: #e0d5c7;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: var(--light);
+        }
+
+        /* Navigation */
+        nav {
+            background: var(--white);
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav .logo {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        nav a {
+            display: inline-block;
+            padding: 10px 18px;
+            text-decoration: none;
+            color: var(--dark);
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.95em;
+        }
+
+        nav a:hover {
+            color: var(--secondary);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, rgba(107, 68, 35, 0.85) 0%, rgba(212, 175, 55, 0.75) 100%), 
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%236B4423" width="1200" height="600"/><path fill="%239CAF88" opacity="0.1" d="M0 400 Q300 350 600 400 T1200 400 L1200 600 L0 600 Z"/></svg>');
+            background-size: cover;
+            background-position: center;
+            color: var(--white);
+            padding: 120px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(107, 68, 35, 0.5) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .hero h1 {
+            font-size: 3.5em;
+            margin-bottom: 15px;
+            font-weight: 700;
+            letter-spacing: -1px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero p {
+            font-size: 1.4em;
+            margin-bottom: 30px;
+            opacity: 0.95;
+            font-weight: 300;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Trust Badges */
+        .trust-badges {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            padding: 25px 20px;
+            background: var(--white);
+            flex-wrap: wrap;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .badge {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9em;
+            color: var(--primary);
+        }
+
+        .badge strong {
+            color: var(--dark);
+        }
+
+        .badge-icon {
+            font-size: 1.3em;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Section Headers */
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-header h2 {
+            font-size: 2.5em;
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .section-header p {
+            font-size: 1.1em;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Features Grid */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+        }
+
+        .feature-card {
+            background: var(--white);
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--secondary);
+            text-align: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        }
+
+        .feature-card .icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .feature-card h3 {
+            color: var(--primary);
+            margin-bottom: 12px;
+            font-size: 1.4em;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            color: #666;
+            line-height: 1.7;
+        }
+
+        /* Testimonials */
+        .testimonials-section {
+            background: linear-gradient(135deg, #f9f5f0 0%, #f0e6d2 100%);
+            padding: 60px 20px;
+            margin: 60px 0;
+            border-radius: 12px;
+        }
+
+        .testimonials {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .testimonial {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            border-left: 4px solid var(--accent);
+            position: relative;
+        }
+
+        .testimonial .stars {
+            color: var(--secondary);
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .testimonial p {
+            margin-bottom: 20px;
+            font-italic;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border);
+        }
+
+        .author-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 700;
+            font-size: 1.2em;
+        }
+
+        .author-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .author-name {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .author-title {
+            font-size: 0.85em;
+            color: #999;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            padding: 80px 20px;
+            text-align: center;
+            border-radius: 12px;
+            margin: 60px 0;
+            box-shadow: 0 10px 40px rgba(107, 68, 35, 0.2);
+        }
+
+        .cta-section h2 {
+            font-size: 2.3em;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .cta-section p {
+            font-size: 1.15em;
+            margin-bottom: 35px;
+            opacity: 0.95;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: var(--primary);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 8px;
+        }
+
+        .btn:hover {
+            background: var(--secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(107, 68, 35, 0.3);
+        }
+
+        .btn-light {
+            background: var(--white);
+            color: var(--primary);
+            border-color: var(--white);
+        }
+
+        .btn-light:hover {
+            background: var(--light);
+            color: var(--secondary);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: var(--white);
+            padding: 40px 20px;
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        footer a {
+            color: var(--secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: var(--white);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.2em;
+            }
+
+            .hero p {
+                font-size: 1.1em;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .section-header h2 {
+                font-size: 1.8em;
+            }
+
+            nav .nav-container {
+                flex-wrap: wrap;
+            }
+
+            nav a {
+                padding: 8px 12px;
+                font-size: 0.9em;
+            }
+
+            .btn {
+                padding: 12px 30px;
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="/" class="logo">🐎 Zolten Ranch</a>
+            <div>
+                <a href="/">Home</a>
+                <a href="/horseback-riding.html">Experiences</a>
+                <a href="/gallery.html">Gallery</a>
+                <a href="/pricing.html">Pricing</a>
+                <a href="/faq.html">FAQ</a>
+                <a href="/contact.html">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>🐎 Zolten Ranch Adventures</h1>
+            <p>Create Unforgettable Memories</p>
+            <p style="font-size: 1.1em; opacity: 0.9;">Premium horseback riding, petting zoo, and ranch experiences for families in San Antonio, Texas</p>
+            <div class="hero-buttons">
+                <a href="/booking" class="btn">📅 Book Now</a>
+                <a href="#experiences" class="btn btn-light">Learn More</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Badges -->
+    <div class="trust-badges">
+        <div class="badge">
+            <span class="badge-icon">⭐</span>
+            <strong>4.9/5 Stars</strong> - 500+ Reviews
+        </div>
+        <div class="badge">
+            <span class="badge-icon">🏆</span>
+            <strong>Premium Quality</strong> - Best in Texas
+        </div>
+        <div class="badge">
+            <span class="badge-icon">👨‍👩‍👧‍👦</span>
+            <strong>Family Friendly</strong> - Since 2010
+        </div>
+        <div class="badge">
+            <span class="badge-icon">✅</span>
+            <strong>Fully Insured</strong> - Your Safety First
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Experiences Section -->
+        <section id="experiences">
+            <div class="section-header">
+                <h2>🌟 Our Experiences</h2>
+                <p>Discover the perfect adventure tailored to your needs and skill level</p>
+            </div>
+            <div class="features">
+                <div class="feature-card">
+                    <div class="icon">🏇</div>
+                    <h3>Trail Riding</h3>
+                    <p>Experience beautiful scenic trails on gentle, well-trained horses. Perfect for all skill levels from beginners to advanced riders. 1-4 hour tours available.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🐶</div>
+                    <h3>Petting Zoo</h3>
+                    <p>Meet our friendly farm animals in a safe, interactive environment. Perfect for children to learn about animal care and build confidence.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🎊</div>
+                    <h3>Special Events</h3>
+                    <p>Host your birthday parties, corporate team building, or family gatherings with customizable packages and dedicated staff.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">👨‍👩‍👧‍👦</div>
+                    <h3>Family Packages</h3>
+                    <p>Create lasting memories with our all-inclusive family packages featuring trail rides, petting zoo, and delicious ranch-style meals.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🎓</div>
+                    <h3>Riding Lessons</h3>
+                    <p>Learn proper horsemanship from our certified instructors in a supportive environment. Lessons for all ages and experience levels.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🌄</div>
+                    <h3>Scenic Tours</h3>
+                    <p>Explore our 100+ acres of beautiful Texas ranch landscape with guided tours showcasing local wildlife and natural beauty.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="testimonials-section">
+            <div class="section-header">
+                <h2>💬 What Our Guests Say</h2>
+                <p>Real feedback from happy families who've made memories with us</p>
+            </div>
+            <div class="testimonials">
+                <div class="testimonial">
+                    <div class="stars">★★★★★</div>
+                    <p>"This was the best family experience we've had in years! The staff was incredibly professional and patient with our kids. The horses were beautiful and well-cared for. Highly recommend!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">SC</div>
+                        <div class="author-info">
+                            <span class="author-name">Sarah Chen</span>
+                            <span class="author-title">Family of 4</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial">
+                    <div class="stars">★★★★★</div>
+                    <p>"My corporate team and I had an amazing team-building event at Zolten Ranch. The staff accommodated all our needs, and everyone left feeling refreshed and bonded!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">MJ</div>
+                        <div class="author-info">
+                            <span class="author-name">Michael Johnson</span>
+                            <span class="author-title">Corporate Group</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial">
+                    <div class="stars">★★★★★</div>
+                    <p>"We've visited Zolten Ranch three times now and keep coming back! The petting zoo is perfect for our toddler, and the trail rides are absolutely stunning. Best investment in family time!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">EM</div>
+                        <div class="author-info">
+                            <span class="author-name">Emily Martinez</span>
+                            <span class="author-title">Returning Guest</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="cta-section">
+            <h2>Ready for Your Adventure?</h2>
+            <p>Book your unforgettable ranch experience today. Limited spots available on weekends!</p>
+            <a href="/booking" class="btn btn-light">Reserve Your Spot Now</a>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Zolten Ranch Adventures. All rights reserved.</p>
+        <p>Located in San Antonio, Texas | Open Year-Round</p>
+        <p><a href="/contact.html">Contact Us</a> | <a href="/privacy.html">Privacy Policy</a> | <a href="/terms.html">Terms of Service</a></p>
+    </footer>
+</body>
+</html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Zolten Ranch Adventures in San Antonio, TX - Premium horseback riding, petting zoo, and ranch experiences for families.">
+    <meta name="keywords" content="horseback riding San Antonio, petting zoo Texas, ranch adventures, family outdoor activities">
+    <title>Zolten Ranch Adventures | Premium Horseback Riding & Petting Zoo</title>
+    <link rel="canonical" href="https://zoltenranchadventures.com/">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6B4423;
+            --secondary: #D4AF37;
+            --accent: #9CAF88;
+            --dark: #2c2c2c;
+            --light: #f9f5f0;
+            --white: #ffffff;
+            --success: #27ae60;
+            --border: #e0d5c7;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: var(--light);
+        }
+
+        /* Navigation */
+        nav {
+            background: var(--white);
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav .logo {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        nav a {
+            display: inline-block;
+            padding: 10px 18px;
+            text-decoration: none;
+            color: var(--dark);
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.95em;
+        }
+
+        nav a:hover {
+            color: var(--secondary);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, rgba(107, 68, 35, 0.85) 0%, rgba(212, 175, 55, 0.75) 100%), 
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%236B4423" width="1200" height="600"/><path fill="%239CAF88" opacity="0.1" d="M0 400 Q300 350 600 400 T1200 400 L1200 600 L0 600 Z"/></svg>');
+            background-size: cover;
+            background-position: center;
+            color: var(--white);
+            padding: 120px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(107, 68, 35, 0.5) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .hero h1 {
+            font-size: 3.5em;
+            margin-bottom: 15px;
+            font-weight: 700;
+            letter-spacing: -1px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero p {
+            font-size: 1.4em;
+            margin-bottom: 30px;
+            opacity: 0.95;
+            font-weight: 300;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Trust Badges */
+        .trust-badges {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            padding: 25px 20px;
+            background: var(--white);
+            flex-wrap: wrap;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .badge {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9em;
+            color: var(--primary);
+        }
+
+        .badge strong {
+            color: var(--dark);
+        }
+
+        .badge-icon {
+            font-size: 1.3em;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Section Headers */
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-header h2 {
+            font-size: 2.5em;
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .section-header p {
+            font-size: 1.1em;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Features Grid */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+        }
+
+        .feature-card {
+            background: var(--white);
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--secondary);
+            text-align: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        }
+
+        .feature-card .icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .feature-card h3 {
+            color: var(--primary);
+            margin-bottom: 12px;
+            font-size: 1.4em;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            color: #666;
+            line-height: 1.7;
+        }
+
+        /* Testimonials */
+        .testimonials-section {
+            background: linear-gradient(135deg, #f9f5f0 0%, #f0e6d2 100%);
+            padding: 60px 20px;
+            margin: 60px 0;
+            border-radius: 12px;
+        }
+
+        .testimonials {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .testimonial {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            border-left: 4px solid var(--accent);
+            position: relative;
+        }
+
+        .testimonial .stars {
+            color: var(--secondary);
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .testimonial p {
+            margin-bottom: 20px;
+            font-italic;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border);
+        }
+
+        .author-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 700;
+            font-size: 1.2em;
+        }
+
+        .author-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .author-name {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .author-title {
+            font-size: 0.85em;
+            color: #999;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            padding: 80px 20px;
+            text-align: center;
+            border-radius: 12px;
+            margin: 60px 0;
+            box-shadow: 0 10px 40px rgba(107, 68, 35, 0.2);
+        }
+
+        .cta-section h2 {
+            font-size: 2.3em;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .cta-section p {
+            font-size: 1.15em;
+            margin-bottom: 35px;
+            opacity: 0.95;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: var(--primary);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 8px;
+        }
+
+        .btn:hover {
+            background: var(--secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(107, 68, 35, 0.3);
+        }
+
+        .btn-light {
+            background: var(--white);
+            color: var(--primary);
+            border-color: var(--white);
+        }
+
+        .btn-light:hover {
+            background: var(--light);
+            color: var(--secondary);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: var(--white);
+            padding: 40px 20px;
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        footer a {
+            color: var(--secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: var(--white);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.2em;
+            }
+
+            .hero p {
+                font-size: 1.1em;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .section-header h2 {
+                font-size: 1.8em;
+            }
+
+            nav .nav-container {
+                flex-wrap: wrap;
+            }
+
+            nav a {
+                padding: 8px 12px;
+                font-size: 0.9em;
+            }
+
+            .btn {
+                padding: 12px 30px;
+                font-size: 0.9em;
+            }
+        }
+        }
+
+        .btn-secondary:hover {
+            background: #3a6a49;
+        }
+
+        footer {
+            background: var(--dark);
+            color: var(--white);
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 60px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🐎 Zolten Ranch Adventures</h1>
+        <p>Your Premier Ranch Experience in San Antonio, Texas</p>
+    </header>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/horseback-riding.html">🐎 Horseback Riding</a>
+        <a href="/petting-zoo.html">🐾 Petting Zoo</a>
+        <a href="/events.html">🎉 Events</a>
+        <a href="/gallery.html">📸 Gallery</a>
+        <a href="/contact.html">📞 Contact</a>
+    </nav>
+
+    <div class="container">
+        <div class="cta-section">
+            <h2>Ready for an Adventure?</h2>
+            <p>Book your unforgettable trail riding experience at Zolten Ranch. Perfect for families, friends, and groups.</p>
+            <div class="button-group">
+                <button class="btn" onclick="location.href='/booking'">📅 Book a Trail Ride</button>
+                <button class="btn btn-secondary" onclick="location.href='/admin'">🔐 Admin Panel</button>
+            </div>
+        </div>
+
+        <div class="features">
+            <div class="feature-card">
+                <h3>🏇 Trail Riding</h3>
+                <p>Experience beautiful scenic trails on gentle, well-trained horses. Suitable for all skill levels from beginners to advanced riders.</p>
+            </div>
+            <div class="feature-card">
+                <h3>🐶 Petting Zoo</h3>
+                <p>Meet our friendly farm animals in a safe, interactive environment. Perfect for children and families looking for a unique experience.</p>
+            </div>
+            <div class="feature-card">
+                <h3>🎊 Special Events</h3>
+                <p>Host your birthday parties, corporate events, or family gatherings at our beautiful ranch with customizable packages.</p>
+            </div>
+            <div class="feature-card">
+                <h3>🏡 Full Day Packages</h3>
+                <p>Choose from 1-4 hour trail rides with flexible scheduling to fit your needs and preferences.</p>
+            </div>
+            <div class="feature-card">
+                <h3>👨‍👩‍👧‍👦 Family Friendly</h3>
+                <p>Safe, supervised experiences suitable for all ages. Our professional staff ensures everyone has a memorable time.</p>
+            </div>
+            <div class="feature-card">
+                <h3>📍 Located in San Antonio</h3>
+                <p>Conveniently located in beautiful San Antonio, TX. Easy to reach and worth the trip for an authentic ranch experience.</p>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <h2>Start Your Adventure Today</h2>
+            <p>Don't miss out on the experience of a lifetime. Book your trail ride or special event now!</p>
+            <button class="btn" onclick="location.href='/booking'" style="font-size: 1.1em; padding: 18px 50px;">Book Now</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Zolten Ranch Adventures. All rights reserved.</p>
+        <p>📍 San Antonio, Texas | 📞 (210) 769-4164</p>
+    </footer>
+
+    <script>
+        // Simple page tracker
+        console.log('Welcome to Zolten Ranch Adventures!');
+    </script>
+</body>
+</html>
