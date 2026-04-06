@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Zolten Ranch Adventures pricing - Transparent pricing for horseback riding, petting zoo, and ranch experiences.">
     <title>Pricing | Zolten Ranch Adventures</title>
+    <link rel="icon" type="image/png" href="/images/logo.png">
     <style>
         * {
             margin: 0;
@@ -23,38 +24,75 @@
         }
 
         body {
-            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
             line-height: 1.6;
             color: var(--dark);
             background: var(--light);
+            overflow-x: hidden;
         }
 
         nav {
             background: var(--white);
-            padding: 15px 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            padding: 18px 0;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
             position: sticky;
             top: 0;
             z-index: 1000;
         }
 
         nav .nav-container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 32px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        nav .logo {
-            font-size: 1.3em;
-            font-weight: 700;
-            color: var(--primary);
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
             text-decoration: none;
         }
 
-        nav a {
+        .logo-container img {
+            height: 56px;
+            width: auto;
+            border-radius: 12px;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.05;
+        }
+
+        .logo-text strong {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .logo-text span {
+            font-size: 0.8rem;
+            color: var(--secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 10px;
+            flex-wrap: wrap;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links a {
             display: inline-block;
             padding: 10px 18px;
             text-decoration: none;
@@ -64,19 +102,39 @@
             font-size: 0.95em;
         }
 
-        nav a:hover {
+        .nav-links a:hover {
             color: var(--secondary);
+        }
+
+        .nav-links a.active {
+            color: var(--secondary);
+        }
+
+        .nav-links .cta-button {
+            background: var(--secondary);
+            color: var(--white);
+            border-radius: 999px;
+            box-shadow: 0 8px 20px rgba(212, 70, 74, 0.22);
+        }
+
+        .nav-links .cta-button:hover {
+            color: var(--white);
+            background: #c1333f;
+        }
+
+        .nav-links .cta-button.active {
+            background: #c1333f;
         }
 
         .hero {
             background: linear-gradient(135deg, rgba(107, 68, 35, 0.85) 0%, rgba(212, 175, 55, 0.75) 100%);
             color: var(--white);
-            padding: 80px 20px;
+            padding: 104px 20px;
             text-align: center;
         }
 
         .hero h1 {
-            font-size: 2.8em;
+            font-size: 3.1em;
             margin-bottom: 15px;
         }
 
@@ -90,7 +148,7 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 60px 20px;
+            padding: 72px 24px;
         }
 
         .section-header {
@@ -353,6 +411,16 @@
 
         /* Responsive */
         @media (max-width: 768px) {
+            nav .nav-container {
+                gap: 16px;
+                justify-content: center;
+                padding: 0 20px;
+            }
+
+            .logo-container img {
+                height: 44px;
+            }
+
             .pricing-grid {
                 grid-template-columns: 1fr;
             }
@@ -375,15 +443,22 @@
     <!-- Navigation -->
     <nav>
         <div class="nav-container">
-            <a href="/" class="logo">🐎 Zolten Ranch</a>
-            <div>
-                <a href="/">Home</a>
-                <a href="/horseback-riding.html">Experiences</a>
-                <a href="/gallery.html">Gallery</a>
-                <a href="/pricing.html">Pricing</a>
-                <a href="/faq.html">FAQ</a>
-                <a href="/booking.html">Book Now</a>
-            </div>
+            <a href="/" class="logo-container" aria-label="Zolten Ranch home">
+                <img src="/images/logo.png" alt="Zolten Ranch Logo">
+                <div class="logo-text">
+                    <strong>Zolten Ranch</strong>
+                    <span>Adventures</span>
+                </div>
+            </a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/horseback-riding.html">Experiences</a></li>
+                <li><a href="/gallery.html">Gallery</a></li>
+                <li><a href="/pricing.html" class="active">Pricing</a></li>
+                <li><a href="/faq.html">FAQ</a></li>
+                <li><a href="/contact.html">Contact</a></li>
+                <li><a href="/booking.html" class="cta-button">Book Now</a></li>
+            </ul>
         </div>
     </nav>
 
@@ -605,9 +680,9 @@
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2024 Zolten Ranch Adventures. All rights reserved.</p>
-        <p>Contact us: (210) 555-RIDE | info@zoltenranch.com</p>
-        <p><a href="/">Home</a> | <a href="/pricing.html">Pricing</a> | <a href="/faq.html">FAQ</a> | <a href="/contact.html">Contact</a></p>
+        <p>&copy; 2026 Zolten Ranch Adventures. All rights reserved.</p>
+        <p>San Antonio, Texas | <a href="tel:+12107694164">210-769-4164</a> | <a href="mailto:info@zoltenranch.com">info@zoltenranch.com</a></p>
+        <p><a href="/">Home</a> | <a href="/pricing.html">Pricing</a> | <a href="/faq.html">FAQ</a> | <a href="/contact.html">Contact</a> | <a href="/booking.html">Book Now</a></p>
     </footer>
 </body>
 </html>

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard | Zolten Ranch Adventures</title>
+    <link rel="icon" type="image/png" href="/images/logo.png">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * {
@@ -63,9 +64,37 @@
             gap: 20px;
         }
 
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .header-brand img {
+            width: 46px;
+            height: 46px;
+            border-radius: 10px;
+            object-fit: cover;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+        }
+
         .header-title {
-            font-size: 1.4em;
-            font-weight: 700;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.05;
+        }
+
+        .header-title strong {
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: -0.2px;
+        }
+
+        .header-title span {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            opacity: 0.88;
         }
 
         .header-right {
@@ -101,6 +130,21 @@
 
         .logout-btn:hover {
             background: rgba(255,255,255,0.3);
+        }
+
+        .site-link {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.25);
+            background: rgba(255,255,255,0.12);
+            padding: 8px 16px;
+            border-radius: 999px;
+            transition: all 0.3s ease;
+        }
+
+        .site-link:hover {
+            background: rgba(255,255,255,0.22);
         }
 
         /* Sidebar */
@@ -444,6 +488,20 @@
 
         /* Responsive */
         @media (max-width: 768px) {
+            .admin-header {
+                padding: 14px 18px;
+            }
+
+            .header-brand img {
+                width: 38px;
+                height: 38px;
+            }
+
+            .header-title span,
+            .site-link {
+                display: none;
+            }
+
             .admin-layout {
                 grid-template-columns: 1fr;
             }
@@ -474,9 +532,16 @@
     <!-- Header -->
     <div class="admin-header">
         <div class="header-left">
-            <div class="header-title">🐎 Admin Dashboard</div>
+            <a href="/" class="header-brand" aria-label="Return to Zolten Ranch home">
+                <img src="/images/logo.png" alt="Zolten Ranch Logo">
+                <div class="header-title">
+                    <strong>Zolten Ranch Admin</strong>
+                    <span>Operations Dashboard</span>
+                </div>
+            </a>
         </div>
         <div class="header-right">
+            <a href="/" class="site-link">View Site</a>
             <div class="user-status">
                 <span class="status-dot"></span>
                 <span id="userName">Admin</span>
