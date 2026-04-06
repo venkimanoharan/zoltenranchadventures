@@ -660,6 +660,26 @@
         let ranchSettings = {trail_price: 50, max_bookings_per_hour: 5};
         let blockedDates = new Set();
 
+        function getApiErrorMessage(data, fallbackMessage) {
+            return data?.error || data?.message || data?.errors?.[0]?.msg || fallbackMessage;
+        }
+
+        async function readJsonResponse(response, fallbackMessage) {
+            let data = {};
+
+            try {
+                data = await response.json();
+            } catch (error) {
+                data = {};
+            }
+
+            if (!response.ok) {
+                throw new Error(getApiErrorMessage(data, fallbackMessage));
+            }
+
+            return data;
+        }
+
         // Initialize
         document.addEventListener('DOMContentLoaded', async () => {
             initializeForm();
@@ -673,6 +693,14 @@
         function initializeForm() {
             const timePickerContainer = document.getElementById('timePicker');
             timePickerContainer.innerHTML = '<div class="input-hint">Select a date to view available time slots</div>';
+            const defaultDuration = document.querySelector('#durationPicker .picker-option[data-value="1"]');
+
+            if (defaultDuration) {
+                defaultDuration.classList.add('selected');
+                document.getElementById('duration_hours').value = defaultDuration.dataset.value;
+            }
+
+            updateSummary();
         }
 
         async function setupDatePicker() {
@@ -705,11 +733,12 @@
         async function loadBlockedDates(from, to) {
             try {
                 const response = await fetch(`/api/settings/closed-dates?from=${from}&to=${to}`);
-                const data = await response.json();
+                const data = await readJsonResponse(response, 'Unable to load unavailable dates right now.');
                 blockedDates = new Set(data.closed_dates || []);
             } catch (error) {
                 blockedDates = new Set();
                 console.error('Error loading closed dates:', error);
+                showError(error.message);
             }
         }
 
@@ -769,10 +798,11 @@
         async function loadSettings() {
             try {
                 const response = await fetch('/api/settings');
-                const data = await response.json();
+                const data = await readJsonResponse(response, 'Booking is temporarily unavailable while the ranch schedule loads.');
                 ranchSettings = data.settings || data;
             } catch (error) {
-                console.log('Using default settings');
+                console.error('Error loading settings:', error);
+                showError(error.message);
             }
         }
 
@@ -791,7 +821,7 @@
 
             try {
                 const response = await fetch(`/api/bookings/availability/${date}`);
-                const data = await response.json();
+                const data = await readJsonResponse(response, 'Unable to check availability right now. Please try again in a moment.');
                 const statusDiv = document.getElementById('availabilityStatus');
                 const timePickerContainer = document.getElementById('timePicker');
                 statusDiv.style.display = 'block';
@@ -854,6 +884,14 @@
                 updateSummary();
             } catch (error) {
                 console.error('Error checking availability:', error);
+                formData.booking_time = '';
+                document.getElementById('bookingTime').value = '';
+                document.getElementById('timePicker').innerHTML = '<div class="input-hint">Availability could not be loaded. Please try again shortly.</div>';
+                const statusDiv = document.getElementById('availabilityStatus');
+                statusDiv.style.display = 'block';
+                statusDiv.className = 'availability-status unavailable';
+                statusDiv.textContent = error.message;
+                showError(error.message);
             }
         }
 
@@ -904,12 +942,16 @@
             for (let field of required) {
                 if (!field.value) {
                     showError(`Please fill in ${field.previousElementSibling?.textContent || 'all required fields'}`);
+                    field.classList.add('error');
                     field.focus();
                     return false;
                 }
 
+                field.classList.remove('error');
+
                 if (field.type === 'email' && !field.checkValidity()) {
                     showError('Please enter a valid email address.');
+                    field.classList.add('error');
                     field.focus();
                     return false;
                 }
@@ -960,6 +1002,7 @@
             const alert = document.getElementById('errorAlert');
             alert.textContent = message;
             alert.classList.add('show');
+            alert.scrollIntoView({ behavior: 'smooth', block: 'center' });
             setTimeout(() => alert.classList.remove('show'), 5000);
         }
 
