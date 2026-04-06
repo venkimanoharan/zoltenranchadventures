@@ -16,6 +16,7 @@ const healthRoutes = require('./routes/health');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const DB_INIT_RETRY_DELAY_MS = 5000;
+const DB_CONNECTION_TIMEOUT_MS = Number(process.env.DB_CONNECTION_TIMEOUT_MS || 10000);
 
 function resolvePublicDir() {
   const publicDir = path.join(__dirname, '..', 'public');
@@ -42,7 +43,7 @@ const pool = new Pool({
   password: process.env.DB_PASSWORD,
   port: process.env.DB_PORT,
   idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
+  connectionTimeoutMillis: DB_CONNECTION_TIMEOUT_MS,
 });
 
 // Make pool available to routes

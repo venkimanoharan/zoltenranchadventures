@@ -28,11 +28,12 @@ steps:
   - ${_SERVICE}
   - --image=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_SERVICE}:$COMMIT_SHA
   - --region=${_REGION}
+  - --execution-environment=gen2
   - --platform=managed
   - --allow-unauthenticated
   - --service-account=${_RUNTIME_SA}@$PROJECT_ID.iam.gserviceaccount.com
   - --add-cloudsql-instances=${_DB_INSTANCE_CONNECTION}
-  - --set-env-vars=NODE_ENV=production,DB_HOST=/cloudsql/${_DB_INSTANCE_CONNECTION},DB_PORT=5432,DB_USER=${_DB_USER},DB_NAME=${_DB_NAME}
+  - --set-env-vars=NODE_ENV=production,DB_HOST=/cloudsql/${_DB_INSTANCE_CONNECTION},DB_PORT=5432,DB_USER=${_DB_USER},DB_NAME=${_DB_NAME},DB_CONNECTION_TIMEOUT_MS=10000
   - --set-secrets=DB_PASSWORD=DB_PASSWORD:latest,JWT_SECRET=JWT_SECRET:latest
 
 images:
