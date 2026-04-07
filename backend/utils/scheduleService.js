@@ -7,6 +7,7 @@ function toMinutes(timeValue) {
 
 function withDefaults(base, overrides = {}) {
   return {
+    ...base,
     open_time: overrides.open_time ?? base.open_time,
     close_time: overrides.close_time ?? base.close_time,
     max_bookings_per_hour: overrides.max_bookings_per_hour ?? base.max_bookings_per_hour,

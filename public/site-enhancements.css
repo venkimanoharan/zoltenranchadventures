@@ -1,0 +1,87 @@
+.btn,
+.cta-button,
+.submit-btn,
+button.btn,
+button.submit-btn {
+    position: relative;
+    overflow: hidden;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.22s ease, box-shadow 0.22s ease, background-color 0.22s ease, border-color 0.22s ease, color 0.22s ease;
+}
+
+.btn:hover,
+.cta-button:hover,
+.submit-btn:hover,
+button.btn:hover,
+button.submit-btn:hover {
+    transform: translateY(-3px);
+}
+
+.btn:active,
+.cta-button:active,
+.submit-btn:active,
+button.btn:active,
+button.submit-btn:active {
+    transform: translateY(0) scale(0.98);
+}
+
+.btn:focus-visible,
+.cta-button:focus-visible,
+.submit-btn:focus-visible,
+button.btn:focus-visible,
+button.submit-btn:focus-visible {
+    outline: 3px solid rgba(245, 166, 35, 0.95);
+    outline-offset: 4px;
+}
+
+.lang-toggle-slot {
+    display: flex;
+    align-items: center;
+}
+
+.lang-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px;
+    border-radius: 999px;
+    background: rgba(139, 21, 56, 0.08);
+    border: 1px solid rgba(139, 21, 56, 0.14);
+}
+
+.lang-toggle button {
+    border: 0;
+    border-radius: 999px;
+    padding: 0.5rem 0.8rem;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.lang-toggle button:hover {
+    transform: translateY(-1px);
+}
+
+.lang-toggle button.is-active {
+    background: #8B1538;
+    color: #ffffff;
+    box-shadow: 0 8px 20px rgba(139, 21, 56, 0.22);
+}
+
+@media (max-width: 768px) {
+    .lang-toggle-slot {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .lang-toggle {
+        width: 100%;
+        justify-content: center;
+    }
+}

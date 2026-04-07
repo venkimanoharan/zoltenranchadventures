@@ -16,9 +16,28 @@ CREATE TABLE IF NOT EXISTS ranch_settings (
     close_time TIME DEFAULT '17:00:00',
     max_bookings_per_hour INTEGER DEFAULT 4,
     trail_price DECIMAL(10, 2) DEFAULT 75.00,
+    contact_phone VARCHAR(32) DEFAULT '210-769-4164',
+    contact_email VARCHAR(255) DEFAULT 'info@zoltenranch.com',
+    booking_email VARCHAR(255) DEFAULT 'booking@zoltenranch.com',
+    street_address VARCHAR(255) DEFAULT '9536 Hildebrandt',
+    city VARCHAR(120) DEFAULT 'San Antonio',
+    state VARCHAR(32) DEFAULT 'TX',
+    postal_code VARCHAR(20) DEFAULT '78222',
+    hours_note VARCHAR(255) DEFAULT 'Last entry at 4:00 PM',
+    holiday_hours VARCHAR(255) DEFAULT 'Open (call ahead)',
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_by INTEGER REFERENCES admin_users(id)
 );
+
+ALTER TABLE ranch_settings ADD COLUMN IF NOT EXISTS contact_phone VARCHAR(32) DEFAULT '210-769-4164';
+ALTER TABLE ranch_settings ADD COLUMN IF NOT EXISTS contact_email VARCHAR(255) DEFAULT 'info@zoltenranch.com';
+ALTER TABLE ranch_settings ADD COLUMN IF NOT EXISTS booking_email VARCHAR(255) DEFAULT 'booking@zoltenranch.com';
+ALTER TABLE ranch_settings ADD COLUMN IF NOT EXISTS street_address VARCHAR(255) DEFAULT '9536 Hildebrandt';
+ALTER TABLE ranch_settings ADD COLUMN IF NOT EXISTS city VARCHAR(120) DEFAULT 'San Antonio';
+ALTER TABLE ranch_settings ADD COLUMN IF NOT EXISTS state VARCHAR(32) DEFAULT 'TX';
+ALTER TABLE ranch_settings ADD COLUMN IF NOT EXISTS postal_code VARCHAR(20) DEFAULT '78222';
+ALTER TABLE ranch_settings ADD COLUMN IF NOT EXISTS hours_note VARCHAR(255) DEFAULT 'Last entry at 4:00 PM';
+ALTER TABLE ranch_settings ADD COLUMN IF NOT EXISTS holiday_hours VARCHAR(255) DEFAULT 'Open (call ahead)';
 
 -- Weekly schedule overrides by day of week (0=Sun, 6=Sat)
 CREATE TABLE IF NOT EXISTS weekly_schedule (
@@ -91,8 +110,35 @@ VALUES ('admin', '$2a$10$6Wf5D/I30kMnnnbxkxccDecOv8HAIOM0MSwA6X52/gx820DyiUjUO')
 ON CONFLICT (username) DO NOTHING;
 
 -- Insert default ranch settings
-INSERT INTO ranch_settings (open_time, close_time, max_bookings_per_hour, trail_price) 
-SELECT '09:00:00', '17:00:00', 4, 75.00
+INSERT INTO ranch_settings (
+    open_time,
+    close_time,
+    max_bookings_per_hour,
+    trail_price,
+    contact_phone,
+    contact_email,
+    booking_email,
+    street_address,
+    city,
+    state,
+    postal_code,
+    hours_note,
+    holiday_hours
+) 
+SELECT
+    '09:00:00',
+    '17:00:00',
+    4,
+    75.00,
+    '210-769-4164',
+    'info@zoltenranch.com',
+    'booking@zoltenranch.com',
+    '9536 Hildebrandt',
+    'San Antonio',
+    'TX',
+    '78222',
+    'Last entry at 4:00 PM',
+    'Open (call ahead)'
 WHERE NOT EXISTS (SELECT 1 FROM ranch_settings);
 
 -- Seed weekly schedule from global defaults

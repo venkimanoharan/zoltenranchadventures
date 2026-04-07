@@ -58,6 +58,18 @@ router.get('/effective/:date', async (req, res) => {
   }
 });
 
+// Get weekly schedule (public)
+router.get('/schedule/weekly', async (req, res) => {
+  try {
+    const db = req.app.locals.db;
+    const result = await db.query('SELECT * FROM weekly_schedule ORDER BY day_of_week ASC');
+    res.json({ weekly: result.rows });
+  } catch (error) {
+    console.error('Get weekly schedule error:', error);
+    res.status(500).json({ error: 'Failed to fetch weekly schedule' });
+  }
+});
+
 // Get closed dates in a range (public)
 router.get('/closed-dates', async (req, res) => {
   try {
@@ -100,7 +112,19 @@ router.use(verifyAdmin);
 router.put('/', async (req, res) => {
   try {
     const {
-      open_time, close_time, max_bookings_per_hour, trail_price
+      open_time,
+      close_time,
+      max_bookings_per_hour,
+      trail_price,
+      contact_phone,
+      contact_email,
+      booking_email,
+      street_address,
+      city,
+      state,
+      postal_code,
+      hours_note,
+      holiday_hours,
     } = req.body;
 
     const db = req.app.locals.db;
@@ -123,6 +147,14 @@ router.put('/', async (req, res) => {
 
     if (trail_price !== undefined && trail_price < 0) {
       return res.status(400).json({ error: 'Price cannot be negative' });
+    }
+
+    if (contact_email !== undefined && contact_email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact_email)) {
+      return res.status(400).json({ error: 'Invalid contact email address' });
+    }
+
+    if (booking_email !== undefined && booking_email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(booking_email)) {
+      return res.status(400).json({ error: 'Invalid booking email address' });
     }
 
     const updateFields = [];
@@ -153,6 +185,26 @@ router.put('/', async (req, res) => {
       paramIndex++;
     }
 
+    const stringFields = [
+      ['contact_phone', contact_phone],
+      ['contact_email', contact_email],
+      ['booking_email', booking_email],
+      ['street_address', street_address],
+      ['city', city],
+      ['state', state],
+      ['postal_code', postal_code],
+      ['hours_note', hours_note],
+      ['holiday_hours', holiday_hours],
+    ];
+
+    stringFields.forEach(([fieldName, value]) => {
+      if (value !== undefined) {
+        updateFields.push(`${fieldName} = $${paramIndex}`);
+        updateParams.push(value || null);
+        paramIndex++;
+      }
+    });
+
     updateFields.push(`updated_at = NOW()`);
     updateFields.push(`updated_by = $${paramIndex}`);
     updateParams.push(req.user.id);
@@ -171,18 +223,6 @@ router.put('/', async (req, res) => {
   } catch (error) {
     console.error('Update settings error:', error);
     res.status(500).json({ error: 'Failed to update settings' });
-  }
-});
-
-// Weekly schedule APIs
-router.get('/schedule/weekly', async (req, res) => {
-  try {
-    const db = req.app.locals.db;
-    const result = await db.query('SELECT * FROM weekly_schedule ORDER BY day_of_week ASC');
-    res.json({ weekly: result.rows });
-  } catch (error) {
-    console.error('Get weekly schedule error:', error);
-    res.status(500).json({ error: 'Failed to fetch weekly schedule' });
   }
 });
 

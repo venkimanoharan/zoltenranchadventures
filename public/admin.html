@@ -716,6 +716,45 @@
                                 <label>Trail Ride Price (per horse/hour)</label>
                                 <input type="number" id="trailPrice" min="0" step="0.01" required>
                             </div>
+                            <h3 style="margin: 24px 0 12px; color: var(--primary);">Business Contact Details</h3>
+                            <div class="form-group">
+                                <label>Contact Phone</label>
+                                <input type="text" id="contactPhone" placeholder="210-769-4164">
+                            </div>
+                            <div class="form-group">
+                                <label>Contact Email</label>
+                                <input type="email" id="contactEmail" placeholder="info@zoltenranch.com">
+                            </div>
+                            <div class="form-group">
+                                <label>Booking Email</label>
+                                <input type="email" id="bookingEmail" placeholder="booking@zoltenranch.com">
+                            </div>
+                            <div class="form-group">
+                                <label>Street Address</label>
+                                <input type="text" id="streetAddress" placeholder="9536 Hildebrandt">
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1.3fr 0.7fr 0.8fr; gap: 12px;">
+                                <div class="form-group">
+                                    <label>City</label>
+                                    <input type="text" id="cityName" placeholder="San Antonio">
+                                </div>
+                                <div class="form-group">
+                                    <label>State</label>
+                                    <input type="text" id="stateCode" placeholder="TX">
+                                </div>
+                                <div class="form-group">
+                                    <label>ZIP</label>
+                                    <input type="text" id="postalCode" placeholder="78222">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Hours Note</label>
+                                <input type="text" id="hoursNote" placeholder="Last entry at 4:00 PM">
+                            </div>
+                            <div class="form-group">
+                                <label>Holiday Hours Note</label>
+                                <input type="text" id="holidayHours" placeholder="Open (call ahead)">
+                            </div>
                             <button type="submit" class="btn btn-primary">💾 Save Settings</button>
                         </div>
                     </form>
@@ -1024,6 +1063,15 @@
                 document.getElementById('closeTime').value = settings.close_time || '18:00';
                 document.getElementById('maxBookingsHour').value = settings.max_bookings_per_hour || 5;
                 document.getElementById('trailPrice').value = settings.trail_price || 50;
+                document.getElementById('contactPhone').value = settings.contact_phone || '';
+                document.getElementById('contactEmail').value = settings.contact_email || '';
+                document.getElementById('bookingEmail').value = settings.booking_email || '';
+                document.getElementById('streetAddress').value = settings.street_address || '';
+                document.getElementById('cityName').value = settings.city || '';
+                document.getElementById('stateCode').value = settings.state || '';
+                document.getElementById('postalCode').value = settings.postal_code || '';
+                document.getElementById('hoursNote').value = settings.hours_note || '';
+                document.getElementById('holidayHours').value = settings.holiday_hours || '';
 
                 await loadWeeklySchedule();
                 await loadDateOverrides();
@@ -1045,7 +1093,16 @@
                         open_time: document.getElementById('openTime').value,
                         close_time: document.getElementById('closeTime').value,
                         max_bookings_per_hour: parseInt(document.getElementById('maxBookingsHour').value),
-                        trail_price: parseFloat(document.getElementById('trailPrice').value)
+                        trail_price: parseFloat(document.getElementById('trailPrice').value),
+                        contact_phone: document.getElementById('contactPhone').value.trim(),
+                        contact_email: document.getElementById('contactEmail').value.trim(),
+                        booking_email: document.getElementById('bookingEmail').value.trim(),
+                        street_address: document.getElementById('streetAddress').value.trim(),
+                        city: document.getElementById('cityName').value.trim(),
+                        state: document.getElementById('stateCode').value.trim(),
+                        postal_code: document.getElementById('postalCode').value.trim(),
+                        hours_note: document.getElementById('hoursNote').value.trim(),
+                        holiday_hours: document.getElementById('holidayHours').value.trim()
                     })
                 });
 
