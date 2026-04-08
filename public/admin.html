@@ -1277,7 +1277,11 @@
                 adminBookingsChartLabel: 'Bookings',
                 adminConfirmedLabel: 'Confirmed',
                 adminPendingLabel: 'Pending',
-                adminCancelledLabel: 'Cancelled'
+                adminCancelledLabel: 'Cancelled',
+                adminConfirmAction: 'Confirm',
+                adminCancelAction: 'Cancel',
+                adminAdminTitle: 'Zolten Ranch Admin',
+                adminUserName: 'Admin'
             },
             es: {
                 adminOperationsDashboard: 'Panel de operaciones',
@@ -1404,7 +1408,11 @@
                 adminBookingsChartLabel: 'Reservas',
                 adminConfirmedLabel: 'Confirmadas',
                 adminPendingLabel: 'Pendientes',
-                adminCancelledLabel: 'Canceladas'
+                adminCancelledLabel: 'Canceladas',
+                adminConfirmAction: 'Confirmar',
+                adminCancelAction: 'Cancelar',
+                adminAdminTitle: 'Administracion Zolten Ranch',
+                adminUserName: 'Admin'
             }
         };
 
@@ -1503,7 +1511,9 @@
             '🔐 Admin Login': 'adminLoginTitle',
             'Username': 'adminUsername',
             'Password': 'adminPassword',
-            'Login': 'adminLogin'
+            'Login': 'adminLogin',
+            'Zolten Ranch Admin': 'adminAdminTitle',
+            'Admin': 'adminUserName'
         };
 
         const ADMIN_PLACEHOLDER_KEYS = {
@@ -1796,8 +1806,8 @@
                         <td>$${(parseFloat(b.total_price) || 0).toFixed(2)}</td>
                         <td><span class="status-badge status-${b.status}">${b.status === 'confirmed' ? adminT('adminConfirmedLabel') : b.status === 'cancelled' ? adminT('adminCancelledLabel') : adminT('adminPendingLabel')}</span></td>
                         <td>
-                            <button class="btn btn-primary btn-small" onclick="openActionModal(${b.id}, 'confirm')">✓ ${adminT('adminConfirmed')}</button>
-                            <button class="btn btn-primary btn-small" onclick="openActionModal(${b.id}, 'cancel')" style="background: #e74c3c;">✗ ${adminT('adminCancelled')}</button>
+                            <button class="btn btn-primary btn-small" onclick="openActionModal(${b.id}, 'confirm')">✓ ${adminT('adminConfirmAction')}</button>
+                            <button class="btn btn-primary btn-small" onclick="openActionModal(${b.id}, 'cancel')" style="background: #e74c3c;">✗ ${adminT('adminCancelAction')}</button>
                         </td>
                     </tr>
                 `).join('') || `<tr><td colspan="10" style="text-align: center; padding: 20px;">${adminT('adminNoBookings')}</td></tr>`;
@@ -2014,7 +2024,7 @@
             document.getElementById('overridePrice').value = override.trail_price ?? '';
             document.getElementById('overrideClosed').checked = Boolean(override.is_closed);
             document.getElementById('overrideNotes').value = override.notes || '';
-            document.getElementById('saveOverrideBtn').textContent = '💾 ' + adminT('adminEdit');
+            document.getElementById('saveOverrideBtn').textContent = '💾 ' + adminT('adminSaveOverride').replace('➕ ', '');
             document.getElementById('cancelOverrideEditBtn').style.display = 'inline-block';
             document.getElementById('overrideDate').focus();
         }
@@ -2311,7 +2321,7 @@
                 new Chart(bookingsCtx, {
                     type: 'line',
                     data: {
-                        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                        labels: getAdminLanguage() === 'es' ? ['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom'] : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
                         datasets: [{
                             label: adminT('adminBookingsChartLabel'),
                             data: [12, 19, 3, 5, 2, 3, 8],

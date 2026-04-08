@@ -1,5 +1,7 @@
 (function () {
   const STORAGE_KEY = 'zolten-site-language';
+  const BUSINESS_SETTINGS_CACHE_KEY = 'zolten-business-settings';
+  const BUSINESS_SETTINGS_CACHE_TTL_MS = 300000;
 
   const TRANSLATIONS = {
     en: {
@@ -74,6 +76,42 @@
       ctaStillQuestions: 'Still Have Questions?',
       ctaStillQuestionsBody: 'Our team is here to help! Contact us or book your adventure today.',
       ctaBookNowEmoji: '📅 Book Now',
+      homeMetaTitle: 'Zolten Ranch Adventures | Premium Equestrian Experiences',
+      homeMetaDescription: 'Zolten Ranch Adventures offers premium horseback riding and ranch experiences for families in San Antonio, Texas.',
+      homeOgTitle: 'Zolten Ranch Adventures',
+      homeOgDescription: 'Premium horseback riding, petting zoo, and ranch adventures for families in San Antonio, Texas.',
+      contactMetaTitle: 'Contact Us & Book Your Visit | Zolten Ranch Adventures - San Antonio, TX',
+      contactMetaDescription: 'Contact Zolten Ranch Adventures in San Antonio, TX to book a visit, ask questions, or request event information.',
+      contactOgTitle: 'Contact Zolten Ranch Adventures',
+      contactOgDescription: 'Get in touch to plan your ranch adventure, private visit, or special event.',
+      pricingMetaTitle: 'Pricing | Zolten Ranch Adventures',
+      pricingMetaDescription: 'See live Zolten Ranch Adventures pricing for horseback riding, petting zoo visits, add-ons, and group discounts.',
+      pricingOgTitle: 'Pricing at Zolten Ranch Adventures',
+      pricingOgDescription: 'Explore current pricing for ranch experiences, add-ons, and group savings.',
+      bookingMetaTitle: 'Trail Ride Booking | Zolten Ranch Adventures',
+      bookingMetaDescription: 'Reserve your Zolten Ranch horseback riding adventure online with live pricing and availability.',
+      bookingOgTitle: 'Book Your Ride at Zolten Ranch Adventures',
+      bookingOgDescription: 'Choose your date, package, riders, and add-ons for a ranch adventure in San Antonio.',
+      faqMetaTitle: 'FAQ | Zolten Ranch Adventures',
+      faqMetaDescription: 'Find answers about horseback riding, the petting zoo, booking, pricing, and ranch events at Zolten Ranch Adventures.',
+      faqOgTitle: 'Frequently Asked Questions | Zolten Ranch Adventures',
+      faqOgDescription: 'Answers to the most common questions about visiting, booking, and planning your ranch experience.',
+      eventsMetaTitle: 'Events & Parties | Zolten Ranch Adventures - San Antonio, TX',
+      eventsMetaDescription: 'Host birthdays, school field trips, corporate events, and family gatherings at Zolten Ranch Adventures in San Antonio.',
+      eventsOgTitle: 'Events at Zolten Ranch Adventures',
+      eventsOgDescription: 'Make your celebration unforgettable at our ranch venue in San Antonio.',
+      galleryMetaTitle: 'Photo Gallery | Zolten Ranch Adventures - San Antonio, TX',
+      galleryMetaDescription: 'Explore photos of Zolten Ranch Adventures, including ranch spaces, animals, horseback rides, and visitors.',
+      galleryOgTitle: 'Gallery - Zolten Ranch Adventures',
+      galleryOgDescription: 'Browse photos of our ranch, friendly animals, and unforgettable guest experiences.',
+      horseMetaTitle: 'Horseback Riding | Zolten Ranch Adventures - San Antonio, TX',
+      horseMetaDescription: 'Experience scenic horseback riding trails at Zolten Ranch Adventures in San Antonio, TX. Great for beginners and experienced riders.',
+      horseOgTitle: 'Horseback Riding at Zolten Ranch Adventures',
+      horseOgDescription: 'Explore beautiful trails on gentle, well-trained horses with guided ranch rides for all skill levels.',
+      pettingMetaTitle: 'Petting Zoo | Zolten Ranch Adventures - San Antonio, TX',
+      pettingMetaDescription: 'Visit the Zolten Ranch Adventures petting zoo and meet friendly goats, sheep, rabbits, and more in San Antonio, TX.',
+      pettingOgTitle: 'Petting Zoo at Zolten Ranch Adventures',
+      pettingOgDescription: 'Interactive farm animal experiences for kids and families with friendly animals up close.',
       homeHeroTitle: 'CRAFTING AN EQUESTRIAN EXPERIENCE',
       homeHeroSubtitle: 'A Step-by-Step Guide to Unforgettable Adventures',
       homeHeroBody: 'Premium Horseback Riding, Petting Zoo, & Ranch Experiences for Families in San Antonio, Texas',
@@ -371,6 +409,42 @@
       ctaStillQuestions: 'Todavia tienes preguntas?',
       ctaStillQuestionsBody: 'Nuestro equipo esta aqui para ayudarte. Contactanos o reserva tu aventura hoy.',
       ctaBookNowEmoji: '📅 Reservar',
+      homeMetaTitle: 'Zolten Ranch Adventures | Experiencias ecuestres premium',
+      homeMetaDescription: 'Zolten Ranch Adventures ofrece paseos a caballo y experiencias de rancho premium para familias en San Antonio, Texas.',
+      homeOgTitle: 'Zolten Ranch Adventures',
+      homeOgDescription: 'Paseos a caballo, zoologico interactivo y aventuras de rancho premium para familias en San Antonio, Texas.',
+      contactMetaTitle: 'Contactanos y reserva tu visita | Zolten Ranch Adventures - San Antonio, TX',
+      contactMetaDescription: 'Contacta a Zolten Ranch Adventures en San Antonio, TX para reservar una visita, hacer preguntas o solicitar informacion para eventos.',
+      contactOgTitle: 'Contacta a Zolten Ranch Adventures',
+      contactOgDescription: 'Comunicate con nosotros para planear tu aventura de rancho, visita privada o evento especial.',
+      pricingMetaTitle: 'Precios | Zolten Ranch Adventures',
+      pricingMetaDescription: 'Consulta los precios en vivo de Zolten Ranch Adventures para paseos a caballo, zoologico interactivo, extras y descuentos para grupos.',
+      pricingOgTitle: 'Precios en Zolten Ranch Adventures',
+      pricingOgDescription: 'Explora los precios actuales de experiencias de rancho, extras y ahorros para grupos.',
+      bookingMetaTitle: 'Reserva de paseo | Zolten Ranch Adventures',
+      bookingMetaDescription: 'Reserva en linea tu aventura a caballo en Zolten Ranch con precios y disponibilidad en tiempo real.',
+      bookingOgTitle: 'Reserva tu paseo en Zolten Ranch Adventures',
+      bookingOgDescription: 'Elige tu fecha, paquete, jinetes y extras para una aventura de rancho en San Antonio.',
+      faqMetaTitle: 'Preguntas frecuentes | Zolten Ranch Adventures',
+      faqMetaDescription: 'Encuentra respuestas sobre paseos a caballo, zoologico interactivo, reservas, precios y eventos en Zolten Ranch Adventures.',
+      faqOgTitle: 'Preguntas frecuentes | Zolten Ranch Adventures',
+      faqOgDescription: 'Respuestas a las preguntas mas comunes sobre visitas, reservas y la planeacion de tu experiencia de rancho.',
+      eventsMetaTitle: 'Eventos y fiestas | Zolten Ranch Adventures - San Antonio, TX',
+      eventsMetaDescription: 'Organiza cumpleanos, excursiones escolares, eventos corporativos y reuniones familiares en Zolten Ranch Adventures en San Antonio.',
+      eventsOgTitle: 'Eventos en Zolten Ranch Adventures',
+      eventsOgDescription: 'Haz que tu celebracion sea inolvidable en nuestro lugar para eventos en el rancho de San Antonio.',
+      galleryMetaTitle: 'Galeria de fotos | Zolten Ranch Adventures - San Antonio, TX',
+      galleryMetaDescription: 'Explora fotos de Zolten Ranch Adventures, incluyendo espacios del rancho, animales, paseos a caballo y visitantes.',
+      galleryOgTitle: 'Galeria - Zolten Ranch Adventures',
+      galleryOgDescription: 'Mira fotos de nuestro rancho, animales amigables y experiencias inolvidables de nuestros visitantes.',
+      horseMetaTitle: 'Paseos a caballo | Zolten Ranch Adventures - San Antonio, TX',
+      horseMetaDescription: 'Disfruta senderos escenicos a caballo en Zolten Ranch Adventures en San Antonio, TX. Ideal para principiantes y jinetes con experiencia.',
+      horseOgTitle: 'Paseos a caballo en Zolten Ranch Adventures',
+      horseOgDescription: 'Explora hermosos senderos en caballos nobles y bien entrenados con paseos guiados para todos los niveles.',
+      pettingMetaTitle: 'Zoologico interactivo | Zolten Ranch Adventures - San Antonio, TX',
+      pettingMetaDescription: 'Visita el zoologico interactivo de Zolten Ranch Adventures y conoce cabras, ovejas, conejos y mas en San Antonio, TX.',
+      pettingOgTitle: 'Zoologico interactivo en Zolten Ranch Adventures',
+      pettingOgDescription: 'Experiencias interactivas con animales de granja para ninos y familias con encuentros cercanos y amigables.',
       homeHeroTitle: 'CREANDO UNA EXPERIENCIA ECUESTRE',
       homeHeroSubtitle: 'Una guia paso a paso para aventuras inolvidables',
       homeHeroBody: 'Paseos a caballo, zoologico interactivo y experiencias de rancho premium para familias en San Antonio, Texas',
@@ -613,6 +687,38 @@
   let cachedBusinessSettings = null;
   let cachedWeeklySchedule = [];
 
+  function readBusinessSettingsCache() {
+    try {
+      const raw = window.sessionStorage.getItem(BUSINESS_SETTINGS_CACHE_KEY);
+      if (!raw) return null;
+
+      const parsed = JSON.parse(raw);
+      if (!parsed.cachedAt || (Date.now() - parsed.cachedAt) > BUSINESS_SETTINGS_CACHE_TTL_MS) {
+        window.sessionStorage.removeItem(BUSINESS_SETTINGS_CACHE_KEY);
+        return null;
+      }
+
+      return {
+        settings: parsed.settings || null,
+        weekly: Array.isArray(parsed.weekly) ? parsed.weekly : [],
+      };
+    } catch (_error) {
+      return null;
+    }
+  }
+
+  function writeBusinessSettingsCache(settings, weekly) {
+    try {
+      window.sessionStorage.setItem(BUSINESS_SETTINGS_CACHE_KEY, JSON.stringify({
+        cachedAt: Date.now(),
+        settings,
+        weekly,
+      }));
+    } catch (_error) {
+      // Ignore storage failures and continue without client caching.
+    }
+  }
+
   const TEXT_KEYS = {
     'Quick Links': 'footerQuickLinks',
     'Contact Info': 'footerContactInfo',
@@ -804,6 +910,11 @@
     document.querySelectorAll('[data-i18n]').forEach((node) => {
       const key = node.getAttribute('data-i18n');
       if (!key) return;
+      const attributeName = node.getAttribute('data-i18n-attr');
+      if (attributeName) {
+        node.setAttribute(attributeName, t(lang, key));
+        return;
+      }
       node.textContent = t(lang, key);
     });
 
@@ -883,21 +994,19 @@
   }
 
   async function fetchBusinessSettings() {
-    const response = await fetch('/api/settings');
+    const cached = readBusinessSettingsCache();
+    if (cached?.settings) {
+      return cached;
+    }
+
+    const response = await fetch('/api/settings?include_schedule=1');
     if (!response.ok) throw new Error('Failed to fetch settings');
     const payload = await response.json();
     const settings = payload.settings || payload;
 
-    let weekly = [];
-    try {
-      const weeklyResponse = await fetch('/api/settings/schedule/weekly');
-      if (weeklyResponse.ok) {
-        const weeklyPayload = await weeklyResponse.json();
-        weekly = weeklyPayload.weekly || [];
-      }
-    } catch (_error) {
-      weekly = [];
-    }
+    const weekly = payload.weekly || [];
+
+    writeBusinessSettingsCache(settings, weekly);
 
     return { settings, weekly };
   }

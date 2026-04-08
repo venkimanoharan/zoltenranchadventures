@@ -36,7 +36,22 @@ app.use(helmet({
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(resolvePublicDir()));
+app.use(express.static(resolvePublicDir(), {
+  etag: true,
+  lastModified: true,
+  setHeaders(res, filePath) {
+    const extension = path.extname(filePath).toLowerCase();
+
+    if (['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.css', '.js'].includes(extension)) {
+      res.setHeader('Cache-Control', 'public, max-age=86400, stale-while-revalidate=604800');
+      return;
+    }
+
+    if (extension === '.html') {
+      res.setHeader('Cache-Control', 'public, max-age=300, stale-while-revalidate=600');
+    }
+  }
+}));
 
 // Database connection pool
 const pool = new Pool({

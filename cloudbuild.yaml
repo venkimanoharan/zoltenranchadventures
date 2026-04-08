@@ -3,6 +3,9 @@ substitutions:
   _AR_REPO: zolten-ranch
   _SERVICE: zolten-ranch-app
   _RUNTIME_SA: zolten-run-sa
+  _MAX_INSTANCES: '5'
+  _MEMORY: 512Mi
+  _CPU: '1'
   _DB_INSTANCE_CONNECTION: zoltenranch:us-central1:zolten-ranch-pg
   _DB_USER: zolten
   _DB_NAME: zolten_ranch
@@ -31,9 +34,13 @@ steps:
   - --execution-environment=gen2
   - --platform=managed
   - --allow-unauthenticated
+  - --min-instances=0
+  - --max-instances=${_MAX_INSTANCES}
+  - --memory=${_MEMORY}
+  - --cpu=${_CPU}
   - --service-account=${_RUNTIME_SA}@$PROJECT_ID.iam.gserviceaccount.com
   - --add-cloudsql-instances=${_DB_INSTANCE_CONNECTION}
-  - --set-env-vars=NODE_ENV=production,DB_HOST=/cloudsql/${_DB_INSTANCE_CONNECTION},DB_PORT=5432,DB_USER=${_DB_USER},DB_NAME=${_DB_NAME},DB_CONNECTION_TIMEOUT_MS=10000
+  - --set-env-vars=NODE_ENV=production,DB_HOST=/cloudsql/${_DB_INSTANCE_CONNECTION},DB_PORT=5432,DB_USER=${_DB_USER},DB_NAME=${_DB_NAME},DB_CONNECTION_TIMEOUT_MS=10000,SETTINGS_CACHE_TTL_MS=300000
   - --set-secrets=DB_PASSWORD=DB_PASSWORD:latest,JWT_SECRET=JWT_SECRET:latest
 
 images:

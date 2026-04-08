@@ -1,3 +1,16 @@
+const SETTINGS_CACHE_TTL_MS = Number(process.env.SETTINGS_CACHE_TTL_MS || 300000);
+
+const scheduleCache = {
+  baseSettings: null,
+  baseSettingsFetchedAt: 0,
+  weeklySchedule: null,
+  weeklyScheduleFetchedAt: 0,
+};
+
+function isCacheFresh(timestamp) {
+  return Boolean(timestamp) && (Date.now() - timestamp) < SETTINGS_CACHE_TTL_MS;
+}
+
 function toMinutes(timeValue) {
   const raw = String(timeValue || '').slice(0, 8);
   const [h, m] = raw.split(':').map(Number);
@@ -28,16 +41,46 @@ function isTimeInWindow(timeValue, openTime, closeTime) {
   return minutes >= openMinutes && minutes < closeMinutes;
 }
 
-async function getBaseSettings(db) {
+async function getBaseSettings(db, options = {}) {
+  const { forceRefresh = false } = options;
+
+  if (!forceRefresh && scheduleCache.baseSettings && isCacheFresh(scheduleCache.baseSettingsFetchedAt)) {
+    return scheduleCache.baseSettings;
+  }
+
   const result = await db.query('SELECT * FROM ranch_settings ORDER BY id DESC LIMIT 1');
   if (result.rows.length === 0) {
     throw new Error('Settings not found');
   }
-  return result.rows[0];
+
+  scheduleCache.baseSettings = result.rows[0];
+  scheduleCache.baseSettingsFetchedAt = Date.now();
+
+  return scheduleCache.baseSettings;
 }
 
-async function resolveEffectiveSettings(db, dateStr) {
-  const base = await getBaseSettings(db);
+async function getWeeklySchedule(db, options = {}) {
+  const { forceRefresh = false } = options;
+
+  if (!forceRefresh && Array.isArray(scheduleCache.weeklySchedule) && isCacheFresh(scheduleCache.weeklyScheduleFetchedAt)) {
+    return scheduleCache.weeklySchedule;
+  }
+
+  const result = await db.query('SELECT * FROM weekly_schedule ORDER BY day_of_week ASC');
+  scheduleCache.weeklySchedule = result.rows;
+  scheduleCache.weeklyScheduleFetchedAt = Date.now();
+  return scheduleCache.weeklySchedule;
+}
+
+function invalidateScheduleCache() {
+  scheduleCache.baseSettings = null;
+  scheduleCache.baseSettingsFetchedAt = 0;
+  scheduleCache.weeklySchedule = null;
+  scheduleCache.weeklyScheduleFetchedAt = 0;
+}
+
+async function resolveEffectiveSettings(db, dateStr, options = {}) {
+  const base = await getBaseSettings(db, options);
   let effective = withDefaults(base);
   let source = 'global';
 
@@ -57,13 +100,11 @@ async function resolveEffectiveSettings(db, dateStr) {
   }
 
   const dayOfWeek = new Date(`${dateStr}T00:00:00`).getDay();
-  const weeklyResult = await db.query(
-    'SELECT * FROM weekly_schedule WHERE day_of_week = $1 LIMIT 1',
-    [dayOfWeek]
-  );
+  const weeklySchedule = await getWeeklySchedule(db, options);
+  const weeklyMatch = weeklySchedule.find((row) => row.day_of_week === dayOfWeek);
 
-  if (weeklyResult.rows.length > 0) {
-    effective = withDefaults(effective, weeklyResult.rows[0]);
+  if (weeklyMatch) {
+    effective = withDefaults(effective, weeklyMatch);
     source = 'weekly';
   }
 
@@ -72,6 +113,8 @@ async function resolveEffectiveSettings(db, dateStr) {
 
 module.exports = {
   getBaseSettings,
+  getWeeklySchedule,
   isTimeInWindow,
+  invalidateScheduleCache,
   resolveEffectiveSettings,
 };

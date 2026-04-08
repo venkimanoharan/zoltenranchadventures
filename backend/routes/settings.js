@@ -1,7 +1,16 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
-const { getBaseSettings, resolveEffectiveSettings } = require('../utils/scheduleService');
+const {
+  getBaseSettings,
+  getWeeklySchedule,
+  invalidateScheduleCache,
+  resolveEffectiveSettings,
+} = require('../utils/scheduleService');
+
+function applyPublicCacheHeaders(res) {
+  res.set('Cache-Control', 'public, max-age=60, s-maxage=300, stale-while-revalidate=600');
+}
 
 const toDbTime = (value) => {
   if (!value) return null;
@@ -31,15 +40,23 @@ const verifyAdmin = (req, res, next) => {
 router.get('/', async (req, res) => {
   try {
     const db = req.app.locals.db;
-    const { date } = req.query;
+    const { date, include_schedule } = req.query;
 
     if (date) {
       const effective = await resolveEffectiveSettings(db, date);
+      applyPublicCacheHeaders(res);
       return res.json({ settings: effective, source: effective.source, date });
     }
 
     const settings = await getBaseSettings(db);
-    res.json({ settings, source: 'global' });
+    const payload = { settings, source: 'global' };
+
+    if (include_schedule === '1' || include_schedule === 'true') {
+      payload.weekly = await getWeeklySchedule(db);
+    }
+
+    applyPublicCacheHeaders(res);
+    res.json(payload);
   } catch (error) {
     console.error('Get settings error:', error);
     res.status(500).json({ error: 'Failed to fetch settings' });
@@ -51,6 +68,7 @@ router.get('/effective/:date', async (req, res) => {
   try {
     const db = req.app.locals.db;
     const effective = await resolveEffectiveSettings(db, req.params.date);
+    applyPublicCacheHeaders(res);
     res.json({ settings: effective, source: effective.source, date: req.params.date });
   } catch (error) {
     console.error('Get effective settings error:', error);
@@ -62,8 +80,9 @@ router.get('/effective/:date', async (req, res) => {
 router.get('/schedule/weekly', async (req, res) => {
   try {
     const db = req.app.locals.db;
-    const result = await db.query('SELECT * FROM weekly_schedule ORDER BY day_of_week ASC');
-    res.json({ weekly: result.rows });
+    const weekly = await getWeeklySchedule(db);
+    applyPublicCacheHeaders(res);
+    res.json({ weekly });
   } catch (error) {
     console.error('Get weekly schedule error:', error);
     res.status(500).json({ error: 'Failed to fetch weekly schedule' });
@@ -240,6 +259,7 @@ router.put('/', async (req, res) => {
 
     const query = `UPDATE ranch_settings SET ${updateFields.join(', ')} RETURNING *`;
     const result = await db.query(query, updateParams);
+    invalidateScheduleCache();
 
     res.json({
       settings: result.rows[0],
@@ -291,6 +311,7 @@ router.put('/schedule/weekly/:day', async (req, res) => {
         req.user.id,
       ]
     );
+    invalidateScheduleCache();
 
     res.json({ schedule: result.rows[0], message: 'Weekly schedule updated' });
   } catch (error) {
@@ -376,6 +397,7 @@ router.post('/schedule/overrides', async (req, res) => {
         req.user.id,
       ]
     );
+    invalidateScheduleCache();
 
     res.status(201).json({ override: result.rows[0], message: 'Date override saved' });
   } catch (error) {
@@ -388,6 +410,7 @@ router.delete('/schedule/overrides/:id', async (req, res) => {
   try {
     const db = req.app.locals.db;
     await db.query('DELETE FROM date_overrides WHERE id = $1', [req.params.id]);
+    invalidateScheduleCache();
     res.json({ message: 'Date override deleted' });
   } catch (error) {
     console.error('Delete date override error:', error);
