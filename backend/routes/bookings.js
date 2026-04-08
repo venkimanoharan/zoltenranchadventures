@@ -2,6 +2,7 @@ const express = require('express');
 const { body, validationResult } = require('express-validator');
 const router = express.Router();
 const { sendBookingConfirmation, sendAdminNotification } = require('../utils/emailService');
+const { calculateBookingPricing, parseAddOnIds } = require('../utils/pricingService');
 const { resolveEffectiveSettings, isTimeInWindow } = require('../utils/scheduleService');
 
 function timeToMinutes(timeValue) {
@@ -97,11 +98,12 @@ router.post('/', [
 
     const {
       name, email, phone, booking_date, booking_time,
-      special_requests, duration_hours = 1
+      special_requests, duration_hours = 1, add_on_ids
     } = req.body;
     const riders = parseInt(req.body.number_of_riders, 10);
     const horses = riders;
     const duration = parseFloat(duration_hours) || 1;
+    const selectedAddOnIds = parseAddOnIds(add_on_ids);
 
     const db = req.app.locals.db;
 
@@ -123,7 +125,11 @@ router.post('/', [
       });
     }
 
-    const total_price = (settings.trail_price * duration * riders);
+    const pricing = await calculateBookingPricing(db, {
+      durationHours: duration,
+      riders,
+      addOnIds: selectedAddOnIds,
+    });
 
     // Check rider capacity for every hour covered by this booking duration.
     const dayBookingsResult = await db.query(
@@ -169,10 +175,22 @@ router.post('/', [
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
       RETURNING *`,
       [name, email, phone, booking_date, booking_time, duration,
-       riders, horses, 'pending', special_requests, total_price]
+       riders, horses, 'pending', special_requests, pricing.total]
     );
 
     const booking = result.rows[0];
+
+    if (pricing.add_ons.length > 0) {
+      const insertPromises = pricing.add_ons.map((addOn) => db.query(
+        `INSERT INTO booking_add_ons (
+            booking_id, pricing_addon_id, add_on_name, charge_type, unit_price, quantity, total_price
+         ) VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+        [booking.id, addOn.id, addOn.name, addOn.charge_type, addOn.price, addOn.quantity, addOn.total_price]
+      ));
+      await Promise.all(insertPromises);
+    }
+
+    booking.pricing_breakdown = pricing;
 
     // Fire-and-forget emails without impacting API response reliability.
     sendBookingConfirmation(booking, settings).catch((emailError) => {

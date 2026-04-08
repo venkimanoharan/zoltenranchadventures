@@ -116,6 +116,10 @@ router.put('/', async (req, res) => {
       close_time,
       max_bookings_per_hour,
       trail_price,
+      package_price_1h,
+      package_price_2h,
+      package_price_4h,
+      package_price_8h,
       contact_phone,
       contact_email,
       booking_email,
@@ -147,6 +151,19 @@ router.put('/', async (req, res) => {
 
     if (trail_price !== undefined && trail_price < 0) {
       return res.status(400).json({ error: 'Price cannot be negative' });
+    }
+
+    const packagePriceFields = {
+      package_price_1h,
+      package_price_2h,
+      package_price_4h,
+      package_price_8h,
+    };
+
+    for (const [fieldName, value] of Object.entries(packagePriceFields)) {
+      if (value !== undefined && value < 0) {
+        return res.status(400).json({ error: `${fieldName} cannot be negative` });
+      }
     }
 
     if (contact_email !== undefined && contact_email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact_email)) {
@@ -184,6 +201,14 @@ router.put('/', async (req, res) => {
       updateParams.push(trail_price);
       paramIndex++;
     }
+
+    Object.entries(packagePriceFields).forEach(([fieldName, value]) => {
+      if (value !== undefined) {
+        updateFields.push(`${fieldName} = $${paramIndex}`);
+        updateParams.push(value);
+        paramIndex++;
+      }
+    });
 
     const stringFields = [
       ['contact_phone', contact_phone],

@@ -358,6 +358,45 @@
             border-left: 4px solid #e74c3c;
         }
 
+        .addon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .addon-option {
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            padding: 14px;
+            background: var(--white);
+            cursor: pointer;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+        }
+
+        .addon-option:hover {
+            border-color: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        .addon-option.selected {
+            border-color: var(--secondary);
+            box-shadow: 0 10px 24px rgba(212, 70, 74, 0.12);
+            background: rgba(212, 70, 74, 0.04);
+        }
+
+        .addon-option strong {
+            display: block;
+            color: var(--primary);
+            margin-bottom: 6px;
+        }
+
+        .addon-option span {
+            display: block;
+            color: #666;
+            font-size: 0.9em;
+        }
+
         /* Summary */
         .summary {
             background: linear-gradient(135deg, #f9f5f0 0%, #f0e6d2 100%);
@@ -638,15 +677,9 @@
                     <div class="form-row full">
                         <div class="form-group">
                             <label>Duration <span class="required">*</span></label>
-                            <div class="duration-picker" id="durationPicker">
-                                <div class="picker-option" data-value="1">1 Hour</div>
-                                <div class="picker-option" data-value="2">2 Hours</div>
-                                <div class="picker-option" data-value="3">3 Hours</div>
-                                <div class="picker-option" data-value="4">4 Hours</div>
-                                <div class="picker-option" data-value="5">Half Day</div>
-                                <div class="picker-option" data-value="8">Full Day</div>
-                            </div>
+                            <div class="duration-picker" id="durationPicker"></div>
                             <input type="hidden" id="duration_hours" name="duration_hours" required>
+                            <div class="input-hint" id="durationHint">Loading package pricing...</div>
                         </div>
                     </div>
 
@@ -668,6 +701,15 @@
                                 <option value="intermediate">Intermediate - Ridden before</option>
                                 <option value="advanced">Advanced - Regular rider</option>
                             </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row full">
+                        <div class="form-group">
+                            <label>Optional Add-Ons</label>
+                            <div class="addon-grid" id="addOnPicker"></div>
+                            <input type="hidden" id="add_on_ids" name="add_on_ids">
+                            <div class="input-hint">Choose any extras you want included in your booking.</div>
                         </div>
                     </div>
 
@@ -709,6 +751,18 @@
                             <strong>Riders:</strong>
                             <span id="summaryRiders">-</span>
                         </div>
+                        <div class="summary-row">
+                            <strong>Package:</strong>
+                            <span id="summaryPackage">-</span>
+                        </div>
+                        <div class="summary-row" id="discountRow" style="display:none;">
+                            <strong>Group Discount:</strong>
+                            <span class="price" id="summaryDiscount">-$0.00</span>
+                        </div>
+                        <div class="summary-row" id="addOnsRow" style="display:none;">
+                            <strong>Add-Ons:</strong>
+                            <span id="summaryAddOns">None</span>
+                        </div>
 
                         <div class="summary-row total" style="border-top: 2px solid var(--border); padding-top: 10px; margin-top: 15px;">
                             <strong>Total Price:</strong>
@@ -743,6 +797,7 @@
         let currentStep = 1;
         let formData = {};
         let ranchSettings = {trail_price: 50, max_bookings_per_hour: 5};
+        let pricingCatalog = { packages: [], add_ons: [], group_discounts: [] };
         let blockedDates = new Set();
 
         function getApiErrorMessage(data, fallbackMessage) {
@@ -769,6 +824,7 @@
         document.addEventListener('DOMContentLoaded', async () => {
             initializeForm();
             await loadSettings();
+            await loadPricingCatalog();
             await setupDatePicker();
             setupDurationPicker();
             setupCounterPickers();
@@ -778,14 +834,57 @@
         function initializeForm() {
             const timePickerContainer = document.getElementById('timePicker');
             timePickerContainer.innerHTML = '<div class="input-hint">Select a date to view available time slots</div>';
-            const defaultDuration = document.querySelector('#durationPicker .picker-option[data-value="1"]');
+            updateSummary();
+        }
 
-            if (defaultDuration) {
-                defaultDuration.classList.add('selected');
-                document.getElementById('duration_hours').value = defaultDuration.dataset.value;
+        async function loadPricingCatalog() {
+            try {
+                const response = await fetch('/api/pricing');
+                pricingCatalog = await readJsonResponse(response, 'Unable to load pricing right now.');
+                renderDurationOptions();
+                renderAddOnOptions();
+            } catch (error) {
+                console.error('Error loading pricing catalog:', error);
+                showError(error.message);
+            }
+        }
+
+        function renderDurationOptions() {
+            const durationPicker = document.getElementById('durationPicker');
+            const packages = pricingCatalog.packages || [];
+            durationPicker.innerHTML = packages.map((pkg) => `
+                <div class="picker-option" data-value="${pkg.duration_hours}">
+                    ${pkg.duration_hours} Hour${pkg.duration_hours > 1 ? 's' : ''}<br>
+                    <strong>${formatMoney(pkg.price_per_person)}</strong>
+                </div>
+            `).join('');
+
+            const defaultPackage = packages.find((pkg) => pkg.duration_hours === 1) || packages[0];
+            if (defaultPackage) {
+                document.getElementById('duration_hours').value = defaultPackage.duration_hours;
+                const defaultOption = durationPicker.querySelector(`[data-value="${defaultPackage.duration_hours}"]`);
+                if (defaultOption) defaultOption.classList.add('selected');
+                document.getElementById('durationHint').textContent = `${defaultPackage.title}: ${defaultPackage.description}`;
+            }
+        }
+
+        function renderAddOnOptions() {
+            const addOnPicker = document.getElementById('addOnPicker');
+            const addOns = pricingCatalog.add_ons || [];
+
+            if (!addOns.length) {
+                addOnPicker.innerHTML = '<div class="input-hint">No add-ons are available right now.</div>';
+                document.getElementById('add_on_ids').value = '';
+                return;
             }
 
-            updateSummary();
+            addOnPicker.innerHTML = addOns.map((addOn) => `
+                <div class="addon-option" data-id="${addOn.id}">
+                    <strong>${addOn.icon || '✨'} ${addOn.name} • ${formatMoney(addOn.price)}</strong>
+                    <span>${addOn.description || ''}</span>
+                    <span>${addOn.charge_type === 'per_rider' ? 'Charged per rider' : 'Charged once per booking'}</span>
+                </div>
+            `).join('');
         }
 
         async function setupDatePicker() {
@@ -829,10 +928,15 @@
 
         function setupDurationPicker() {
             document.getElementById('durationPicker').addEventListener('click', (e) => {
-                if (e.target.classList.contains('picker-option')) {
+                const option = e.target.closest('.picker-option');
+                if (option) {
                     document.querySelectorAll('#durationPicker .picker-option').forEach(el => el.classList.remove('selected'));
-                    e.target.classList.add('selected');
-                    document.getElementById('duration_hours').value = e.target.dataset.value;
+                    option.classList.add('selected');
+                    document.getElementById('duration_hours').value = option.dataset.value;
+                    const selectedPackage = findPackageByDuration(option.dataset.value);
+                    document.getElementById('durationHint').textContent = selectedPackage
+                        ? `${selectedPackage.title}: ${selectedPackage.description}`
+                        : 'Choose the package that fits your visit best.';
                     updateSummary();
                 }
             });
@@ -877,6 +981,14 @@
             document.getElementById('phone').addEventListener('change', (e) => {
                 formData.phone = e.target.value;
                 document.getElementById('summaryPhone').textContent = e.target.value;
+            });
+
+            document.getElementById('addOnPicker').addEventListener('click', (e) => {
+                const option = e.target.closest('.addon-option');
+                if (!option) return;
+                option.classList.toggle('selected');
+                document.getElementById('add_on_ids').value = getSelectedAddOnIds().join(',');
+                updateSummary();
             });
         }
 
@@ -985,14 +1097,29 @@
             const time = formData.booking_time || '';
             const duration = parseFloat(document.getElementById('duration_hours').value) || 1;
             const riders = parseInt(document.getElementById('number_of_riders').value) || 1;
+            const breakdown = calculatePricingBreakdown(duration, riders, getSelectedAddOnIds());
 
             document.getElementById('summaryDateTime').textContent = date && time ? `${formatDateDisplay(date)} at ${time}` : '-';
             document.getElementById('summaryDuration').textContent = duration + ' hour(s)';
             document.getElementById('summaryRiders').textContent = riders;
+            document.getElementById('summaryPackage').textContent = breakdown.packageLabel;
+            document.getElementById('summaryTotal').textContent = formatMoney(breakdown.total);
 
-            const price = parseFloat(ranchSettings.trail_price) || 50;
-            const total = (duration * riders * price).toFixed(2);
-            document.getElementById('summaryTotal').textContent = '$' + total;
+            const discountRow = document.getElementById('discountRow');
+            if (breakdown.discountAmount > 0) {
+                discountRow.style.display = 'flex';
+                document.getElementById('summaryDiscount').textContent = `-${formatMoney(breakdown.discountAmount)}`;
+            } else {
+                discountRow.style.display = 'none';
+            }
+
+            const addOnsRow = document.getElementById('addOnsRow');
+            if (breakdown.addOnSummary.length > 0) {
+                addOnsRow.style.display = 'flex';
+                document.getElementById('summaryAddOns').textContent = breakdown.addOnSummary.join(', ');
+            } else {
+                addOnsRow.style.display = 'none';
+            }
         }
 
         function changeStep(direction) {
@@ -1062,6 +1189,7 @@
             data.set('number_of_horses', data.get('number_of_riders'));
             data.set('booking_date', document.getElementById('booking_date').value);
             data.set('booking_time', formData.booking_time);
+            data.set('add_on_ids', getSelectedAddOnIds().join(','));
 
             try {
                 const response = await fetch('/api/bookings', {
@@ -1104,6 +1232,49 @@
         function formatDateDisplay(dateStr) {
             const date = new Date(dateStr);
             return date.toLocaleDateString('en-US', {weekday: 'long', month: 'short', day: 'numeric'});
+        }
+
+        function formatMoney(value) {
+            return '$' + Number(value || 0).toFixed(2);
+        }
+
+        function findPackageByDuration(duration) {
+            const normalized = Number(duration);
+            return (pricingCatalog.packages || []).find((pkg) => Number(pkg.duration_hours) === normalized) || null;
+        }
+
+        function getSelectedAddOnIds() {
+            return Array.from(document.querySelectorAll('#addOnPicker .addon-option.selected'))
+                .map((option) => Number(option.dataset.id))
+                .filter((id) => Number.isInteger(id) && id > 0);
+        }
+
+        function calculatePricingBreakdown(duration, riders, addOnIds) {
+            const selectedPackage = findPackageByDuration(duration);
+            const packageSubtotal = selectedPackage ? Number(selectedPackage.price_per_person) * riders : 0;
+            const applicableDiscount = (pricingCatalog.group_discounts || []).find((discount) => {
+                const min = Number(discount.min_riders || 0);
+                const max = discount.max_riders === null ? null : Number(discount.max_riders);
+                return riders >= min && (max === null || riders <= max);
+            });
+            const discountAmount = applicableDiscount
+                ? Number((packageSubtotal * (Number(applicableDiscount.discount_percent) / 100)).toFixed(2))
+                : 0;
+            const addOns = (pricingCatalog.add_ons || []).filter((addOn) => addOnIds.includes(Number(addOn.id)));
+            const addOnSummary = addOns.map((addOn) => {
+                const total = addOn.charge_type === 'per_rider'
+                    ? Number(addOn.price) * riders
+                    : Number(addOn.price);
+                return `${addOn.name} (${formatMoney(total)})`;
+            });
+            const addOnsTotal = addOns.reduce((sum, addOn) => sum + (addOn.charge_type === 'per_rider' ? Number(addOn.price) * riders : Number(addOn.price)), 0);
+
+            return {
+                packageLabel: selectedPackage ? `${selectedPackage.title} (${formatMoney(selectedPackage.price_per_person)} per rider)` : '-',
+                discountAmount,
+                addOnSummary,
+                total: packageSubtotal - discountAmount + addOnsTotal,
+            };
         }
     </script>
 </body>

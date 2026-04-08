@@ -10,6 +10,7 @@ const { Pool } = require('pg');
 const authRoutes = require('./routes/auth');
 const bookingRoutes = require('./routes/bookings');
 const adminRoutes = require('./routes/admin');
+const pricingRoutes = require('./routes/pricing');
 const settingsRoutes = require('./routes/settings');
 const healthRoutes = require('./routes/health');
 
@@ -111,6 +112,7 @@ app.use('/api/health', healthRoutes);
 app.use('/api/auth', requireDatabaseReady, authRoutes);
 app.use('/api/bookings', requireDatabaseReady, bookingRoutes);
 app.use('/api/admin', requireDatabaseReady, adminRoutes);
+app.use('/api/pricing', requireDatabaseReady, pricingRoutes);
 app.use('/api/settings', requireDatabaseReady, settingsRoutes);
 
 // Error handling middleware

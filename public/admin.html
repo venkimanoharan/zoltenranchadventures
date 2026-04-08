@@ -713,8 +713,27 @@
                                 <input type="number" id="maxBookingsHour" min="1" required>
                             </div>
                             <div class="form-group">
-                                <label>Trail Ride Price (per horse/hour)</label>
+                                <label>Legacy Hourly Base Price</label>
                                 <input type="number" id="trailPrice" min="0" step="0.01" required>
+                            </div>
+                            <h3 style="margin: 24px 0 12px; color: var(--primary);">Package Pricing</h3>
+                            <div style="display: grid; grid-template-columns: repeat(2, minmax(180px, 1fr)); gap: 12px;">
+                                <div class="form-group">
+                                    <label>1 Hour Price</label>
+                                    <input type="number" id="packagePrice1h" min="0" step="0.01" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>2 Hour Price</label>
+                                    <input type="number" id="packagePrice2h" min="0" step="0.01" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>4 Hour Price</label>
+                                    <input type="number" id="packagePrice4h" min="0" step="0.01" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>8 Hour Price</label>
+                                    <input type="number" id="packagePrice8h" min="0" step="0.01" required>
+                                </div>
                             </div>
                             <h3 style="margin: 24px 0 12px; color: var(--primary);">Business Contact Details</h3>
                             <div class="form-group">
@@ -818,6 +837,65 @@
                             <tbody id="dateOverrideRows"></tbody>
                         </table>
                     </div>
+
+                    <hr style="margin: 25px 0; border: 0; border-top: 1px solid #eee;">
+
+                    <div>
+                        <h3 style="margin-bottom: 12px; color: var(--primary);">Add-On Pricing</h3>
+                        <form onsubmit="saveAddOn(event)" style="display:grid; grid-template-columns: 1.1fr 1.2fr 0.8fr 0.9fr 0.7fr 1.5fr auto auto; gap:10px; align-items:end; margin-bottom: 12px;">
+                            <input type="hidden" id="addonId">
+                            <input type="text" id="addonCode" placeholder="code" required>
+                            <input type="text" id="addonName" placeholder="Name" required>
+                            <input type="number" id="addonPrice" min="0" step="0.01" placeholder="Price" required>
+                            <select id="addonChargeType">
+                                <option value="per_booking">Per Booking</option>
+                                <option value="per_rider">Per Rider</option>
+                            </select>
+                            <input type="text" id="addonIcon" placeholder="Icon" maxlength="4">
+                            <input type="text" id="addonDescription" placeholder="Description">
+                            <button type="submit" class="btn btn-primary" id="saveAddonBtn">Save Add-On</button>
+                            <button type="button" class="btn btn-primary" style="background:#666;" onclick="resetAddOnForm()">Clear</button>
+                        </form>
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:left; padding:8px; border-bottom: 1px solid #eee;">Code</th>
+                                    <th style="text-align:left; padding:8px; border-bottom: 1px solid #eee;">Name</th>
+                                    <th style="text-align:left; padding:8px; border-bottom: 1px solid #eee;">Price</th>
+                                    <th style="text-align:left; padding:8px; border-bottom: 1px solid #eee;">Charge Type</th>
+                                    <th style="text-align:left; padding:8px; border-bottom: 1px solid #eee;">Description</th>
+                                    <th style="text-align:left; padding:8px; border-bottom: 1px solid #eee;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="addOnRows"></tbody>
+                        </table>
+                    </div>
+
+                    <hr style="margin: 25px 0; border: 0; border-top: 1px solid #eee;">
+
+                    <div>
+                        <h3 style="margin-bottom: 12px; color: var(--primary);">Group Discounts</h3>
+                        <form onsubmit="saveDiscount(event)" style="display:grid; grid-template-columns: 0.8fr 0.8fr 0.9fr 1.6fr auto auto; gap:10px; align-items:end; margin-bottom:12px;">
+                            <input type="hidden" id="discountId">
+                            <input type="number" id="discountMinRiders" min="1" placeholder="Min riders" required>
+                            <input type="number" id="discountMaxRiders" min="1" placeholder="Max riders">
+                            <input type="number" id="discountPercent" min="0" max="100" step="0.01" placeholder="Discount %" required>
+                            <input type="text" id="discountDescription" placeholder="Description">
+                            <button type="submit" class="btn btn-primary" id="saveDiscountBtn">Save Discount</button>
+                            <button type="button" class="btn btn-primary" style="background:#666;" onclick="resetDiscountForm()">Clear</button>
+                        </form>
+                        <table style="width:100%; border-collapse: collapse;">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:left; padding:8px; border-bottom: 1px solid #eee;">Rider Range</th>
+                                    <th style="text-align:left; padding:8px; border-bottom: 1px solid #eee;">Discount</th>
+                                    <th style="text-align:left; padding:8px; border-bottom: 1px solid #eee;">Description</th>
+                                    <th style="text-align:left; padding:8px; border-bottom: 1px solid #eee;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="discountRows"></tbody>
+                        </table>
+                    </div>
                 </div>
             </section>
         </div>
@@ -865,6 +943,7 @@
         let token = localStorage.getItem('adminToken');
         let bookingsData = [];
         let editingOverrideId = null;
+        let pricingCatalog = { packages: [], add_ons: [], group_discounts: [] };
         const DAY_LABELS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -1063,6 +1142,10 @@
                 document.getElementById('closeTime').value = settings.close_time || '18:00';
                 document.getElementById('maxBookingsHour').value = settings.max_bookings_per_hour || 5;
                 document.getElementById('trailPrice').value = settings.trail_price || 50;
+                document.getElementById('packagePrice1h').value = settings.package_price_1h || 50;
+                document.getElementById('packagePrice2h').value = settings.package_price_2h || 90;
+                document.getElementById('packagePrice4h').value = settings.package_price_4h || 150;
+                document.getElementById('packagePrice8h').value = settings.package_price_8h || 250;
                 document.getElementById('contactPhone').value = settings.contact_phone || '';
                 document.getElementById('contactEmail').value = settings.contact_email || '';
                 document.getElementById('bookingEmail').value = settings.booking_email || '';
@@ -1075,6 +1158,7 @@
 
                 await loadWeeklySchedule();
                 await loadDateOverrides();
+                await loadPricingCatalog();
             } catch (error) {
                 console.error('Error loading settings:', error);
             }
@@ -1094,6 +1178,10 @@
                         close_time: document.getElementById('closeTime').value,
                         max_bookings_per_hour: parseInt(document.getElementById('maxBookingsHour').value),
                         trail_price: parseFloat(document.getElementById('trailPrice').value),
+                        package_price_1h: parseFloat(document.getElementById('packagePrice1h').value),
+                        package_price_2h: parseFloat(document.getElementById('packagePrice2h').value),
+                        package_price_4h: parseFloat(document.getElementById('packagePrice4h').value),
+                        package_price_8h: parseFloat(document.getElementById('packagePrice8h').value),
                         contact_phone: document.getElementById('contactPhone').value.trim(),
                         contact_email: document.getElementById('contactEmail').value.trim(),
                         booking_email: document.getElementById('bookingEmail').value.trim(),
@@ -1300,6 +1388,154 @@
             } catch (error) {
                 alert('Error deleting override: ' + error.message);
             }
+        }
+
+        async function loadPricingCatalog() {
+            const response = await fetch('/api/pricing', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            pricingCatalog = await parseApiResponse(response);
+            renderAddOns();
+            renderDiscounts();
+        }
+
+        function renderAddOns() {
+            const tbody = document.getElementById('addOnRows');
+            tbody.innerHTML = (pricingCatalog.add_ons || []).map((addOn) => `
+                <tr>
+                    <td style="padding:8px; border-bottom:1px solid #f1f1f1;">${addOn.code}</td>
+                    <td style="padding:8px; border-bottom:1px solid #f1f1f1;">${addOn.icon || '✨'} ${addOn.name}</td>
+                    <td style="padding:8px; border-bottom:1px solid #f1f1f1;">$${Number(addOn.price).toFixed(2)}</td>
+                    <td style="padding:8px; border-bottom:1px solid #f1f1f1;">${addOn.charge_type}</td>
+                    <td style="padding:8px; border-bottom:1px solid #f1f1f1;">${addOn.description || '-'}</td>
+                    <td style="padding:8px; border-bottom:1px solid #f1f1f1; display:flex; gap:6px;">
+                        <button class="btn btn-primary btn-small" onclick='editAddOn(${JSON.stringify(addOn).replace(/'/g, "&#39;")})'>Edit</button>
+                        <button class="btn btn-primary btn-small" style="background:#e74c3c;" onclick="deleteAddOn(${addOn.id})">Delete</button>
+                    </td>
+                </tr>
+            `).join('') || '<tr><td colspan="6" style="padding:10px;">No add-ons configured</td></tr>';
+        }
+
+        function renderDiscounts() {
+            const tbody = document.getElementById('discountRows');
+            tbody.innerHTML = (pricingCatalog.group_discounts || []).map((discount) => `
+                <tr>
+                    <td style="padding:8px; border-bottom:1px solid #f1f1f1;">${discount.min_riders}+${discount.max_riders ? ` to ${discount.max_riders}` : ''}</td>
+                    <td style="padding:8px; border-bottom:1px solid #f1f1f1;">${Number(discount.discount_percent).toFixed(2)}%</td>
+                    <td style="padding:8px; border-bottom:1px solid #f1f1f1;">${discount.description || '-'}</td>
+                    <td style="padding:8px; border-bottom:1px solid #f1f1f1; display:flex; gap:6px;">
+                        <button class="btn btn-primary btn-small" onclick='editDiscount(${JSON.stringify(discount).replace(/'/g, "&#39;")})'>Edit</button>
+                        <button class="btn btn-primary btn-small" style="background:#e74c3c;" onclick="deleteDiscount(${discount.id})">Delete</button>
+                    </td>
+                </tr>
+            `).join('') || '<tr><td colspan="4" style="padding:10px;">No discounts configured</td></tr>';
+        }
+
+        function editAddOn(addOn) {
+            document.getElementById('addonId').value = addOn.id;
+            document.getElementById('addonCode').value = addOn.code;
+            document.getElementById('addonName').value = addOn.name;
+            document.getElementById('addonPrice').value = addOn.price;
+            document.getElementById('addonChargeType').value = addOn.charge_type;
+            document.getElementById('addonIcon').value = addOn.icon || '';
+            document.getElementById('addonDescription').value = addOn.description || '';
+            document.getElementById('saveAddonBtn').textContent = 'Update Add-On';
+        }
+
+        function resetAddOnForm() {
+            document.getElementById('addonId').value = '';
+            document.getElementById('addonCode').value = '';
+            document.getElementById('addonName').value = '';
+            document.getElementById('addonPrice').value = '';
+            document.getElementById('addonChargeType').value = 'per_booking';
+            document.getElementById('addonIcon').value = '';
+            document.getElementById('addonDescription').value = '';
+            document.getElementById('saveAddonBtn').textContent = 'Save Add-On';
+        }
+
+        async function saveAddOn(event) {
+            event.preventDefault();
+            const id = document.getElementById('addonId').value;
+            const payload = {
+                code: document.getElementById('addonCode').value.trim(),
+                name: document.getElementById('addonName').value.trim(),
+                price: parseFloat(document.getElementById('addonPrice').value),
+                charge_type: document.getElementById('addonChargeType').value,
+                icon: document.getElementById('addonIcon').value.trim() || '✨',
+                description: document.getElementById('addonDescription').value.trim(),
+                is_active: true,
+            };
+
+            const response = await fetch(id ? `/api/pricing/addons/${id}` : '/api/pricing/addons', {
+                method: id ? 'PUT' : 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(payload)
+            });
+            await parseApiResponse(response);
+            resetAddOnForm();
+            await loadPricingCatalog();
+        }
+
+        async function deleteAddOn(id) {
+            const response = await fetch(`/api/pricing/addons/${id}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            await parseApiResponse(response);
+            await loadPricingCatalog();
+        }
+
+        function editDiscount(discount) {
+            document.getElementById('discountId').value = discount.id;
+            document.getElementById('discountMinRiders').value = discount.min_riders;
+            document.getElementById('discountMaxRiders').value = discount.max_riders ?? '';
+            document.getElementById('discountPercent').value = discount.discount_percent;
+            document.getElementById('discountDescription').value = discount.description || '';
+            document.getElementById('saveDiscountBtn').textContent = 'Update Discount';
+        }
+
+        function resetDiscountForm() {
+            document.getElementById('discountId').value = '';
+            document.getElementById('discountMinRiders').value = '';
+            document.getElementById('discountMaxRiders').value = '';
+            document.getElementById('discountPercent').value = '';
+            document.getElementById('discountDescription').value = '';
+            document.getElementById('saveDiscountBtn').textContent = 'Save Discount';
+        }
+
+        async function saveDiscount(event) {
+            event.preventDefault();
+            const id = document.getElementById('discountId').value;
+            const payload = {
+                min_riders: parseInt(document.getElementById('discountMinRiders').value, 10),
+                max_riders: document.getElementById('discountMaxRiders').value || null,
+                discount_percent: parseFloat(document.getElementById('discountPercent').value),
+                description: document.getElementById('discountDescription').value.trim(),
+                is_active: true,
+            };
+            const response = await fetch(id ? `/api/pricing/discounts/${id}` : '/api/pricing/discounts', {
+                method: id ? 'PUT' : 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(payload)
+            });
+            await parseApiResponse(response);
+            resetDiscountForm();
+            await loadPricingCatalog();
+        }
+
+        async function deleteDiscount(id) {
+            const response = await fetch(`/api/pricing/discounts/${id}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            await parseApiResponse(response);
+            await loadPricingCatalog();
         }
 
         function openActionModal(bookingId, action) {

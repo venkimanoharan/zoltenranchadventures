@@ -6,6 +6,7 @@
     <meta name="description" content="Zolten Ranch Adventures - Premium horseback riding and equestrian experiences in San Antonio, Texas.">
     <meta name="keywords" content="horseback riding San Antonio, equestrian adventures, premium ranch experiences">
     <title>Zolten Ranch Adventures | Premium Equestrian Experiences</title>
+    <link rel="preload" as="image" href="/images/IMG_7073.JPG" fetchpriority="high">
     <link rel="icon" type="image/png" href="/images/logo.png">
     <link rel="stylesheet" href="/site-enhancements.css">
     <style>
@@ -135,15 +136,15 @@
                 linear-gradient(120deg, rgba(26, 12, 10, 0.3) 0%, rgba(26, 12, 10, 0.58) 40%, rgba(92, 14, 40, 0.82) 100%),
                 url('/images/IMG_7073.JPG') center center / cover no-repeat;
             color: var(--white);
-            padding: 160px 25px;
+            padding: clamp(96px, 12vw, 148px) 20px 88px;
             text-align: center;
             position: relative;
             overflow: hidden;
-            min-height: 700px;
+            min-height: min(84svh, 680px);
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: inset 0 0 100px rgba(0,0,0,0.3);
+            box-shadow: inset 0 0 70px rgba(0,0,0,0.24);
         }
 
         .hero::before {
@@ -170,20 +171,19 @@
         }
 
         .hero-content {
-            max-width: 1000px;
+            width: min(100%, 920px);
             position: relative;
             z-index: 1;
             animation: slideInDown 1s ease-out;
-            padding: 48px 44px;
+            padding: clamp(26px, 4vw, 44px);
             border-radius: 28px;
             background: linear-gradient(145deg, rgba(34, 17, 15, 0.3) 0%, rgba(92, 14, 40, 0.68) 100%);
             border: 1px solid rgba(255,255,255,0.2);
-            box-shadow: 0 28px 80px rgba(17, 9, 8, 0.35);
-            backdrop-filter: blur(10px);
+            box-shadow: 0 24px 54px rgba(17, 9, 8, 0.28);
         }
 
         .hero h1 {
-            font-size: 4.5em;
+            font-size: clamp(2.45rem, 6vw, 4.5rem);
             margin-bottom: 25px;
             font-weight: 800;
             letter-spacing: -0.5px;
@@ -193,7 +193,7 @@
         }
 
         .hero .subtitle {
-            font-size: 2em;
+            font-size: clamp(1.1rem, 3vw, 2rem);
             margin-bottom: 35px;
             font-weight: 300;
             opacity: 0.95;
@@ -202,7 +202,7 @@
         }
 
         .hero p {
-            font-size: 1.4em;
+            font-size: clamp(1rem, 2.4vw, 1.35rem);
             margin-bottom: 50px;
             opacity: 0.92;
             max-width: 750px;
@@ -620,9 +620,9 @@
             }
 
             .hero {
-                min-height: 620px;
-                padding: 110px 20px 100px;
-                background-position: 62% center;
+                min-height: min(78svh, 560px);
+                padding: 96px 18px 76px;
+                background-position: 68% center;
             }
 
             .hero-content {
@@ -631,7 +631,7 @@
             }
 
             .hero h1 {
-                font-size: 2.5em;
+                font-size: clamp(2rem, 10vw, 2.6rem);
             }
 
             .hero .subtitle {
@@ -733,8 +733,8 @@
         </div>
         <div class="trust-item">
             <div class="icon">✅</div>
-            <strong>Fully Insured</strong>
-            <span>Your Safety First</span>
+            <strong>Small Group Savings</strong>
+            <span>Automatic rider discounts</span>
         </div>
         <div class="trust-item">
             <div class="icon">👨‍👩‍👧‍👦</div>
