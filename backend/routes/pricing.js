@@ -2,7 +2,9 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const {
   getPricingCatalog,
+  invalidatePricingCache,
 } = require('../utils/pricingService');
+const { writePublicSiteDataSnapshot } = require('../utils/publicSiteDataService');
 
 const router = express.Router();
 
@@ -22,9 +24,16 @@ function verifyAdmin(req, res, next) {
   }
 }
 
+function refreshPublicSiteData(db) {
+  writePublicSiteDataSnapshot(db).catch((error) => {
+    console.error('Failed to refresh public site-data snapshot:', error);
+  });
+}
+
 router.get('/', async (req, res) => {
   try {
     const catalog = await getPricingCatalog(req.app.locals.db);
+    res.set('Cache-Control', 'public, max-age=60, s-maxage=300, stale-while-revalidate=600');
     res.json(catalog);
   } catch (error) {
     console.error('Get pricing catalog error:', error);
@@ -66,6 +75,8 @@ router.put('/packages', async (req, res) => {
 
     const query = `UPDATE ranch_settings SET ${updateFields.join(', ')} RETURNING *`;
     const result = await req.app.locals.db.query(query, updateValues);
+    invalidatePricingCache();
+    refreshPublicSiteData(req.app.locals.db);
 
     res.json({ settings: result.rows[0], message: 'Package pricing updated' });
   } catch (error) {
@@ -104,6 +115,8 @@ router.post('/addons', async (req, res) => {
        RETURNING *`,
       [code, name, name_es || null, description || null, description_es || null, numericPrice, charge_type, icon || '✨', Number(display_order) || 0, Boolean(is_active)]
     );
+    invalidatePricingCache();
+    refreshPublicSiteData(req.app.locals.db);
 
     res.status(201).json({ add_on: result.rows[0], message: 'Add-on created' });
   } catch (error) {
@@ -162,6 +175,9 @@ router.put('/addons/:id', async (req, res) => {
       return res.status(404).json({ error: 'Add-on not found' });
     }
 
+    invalidatePricingCache();
+  refreshPublicSiteData(req.app.locals.db);
+
     res.json({ add_on: result.rows[0], message: 'Add-on updated' });
   } catch (error) {
     console.error('Update add-on error:', error);
@@ -175,6 +191,8 @@ router.delete('/addons/:id', async (req, res) => {
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Add-on not found' });
     }
+    invalidatePricingCache();
+    refreshPublicSiteData(req.app.locals.db);
     res.json({ message: 'Add-on deleted' });
   } catch (error) {
     console.error('Delete add-on error:', error);
@@ -191,6 +209,8 @@ router.post('/discounts', async (req, res) => {
        RETURNING *`,
       [Number(min_riders), max_riders === null || max_riders === '' ? null : Number(max_riders), Number(discount_percent), description || null, description_es || null, Number(display_order) || 0, Boolean(is_active)]
     );
+    invalidatePricingCache();
+    refreshPublicSiteData(req.app.locals.db);
     res.status(201).json({ discount: result.rows[0], message: 'Discount created' });
   } catch (error) {
     console.error('Create discount error:', error);
@@ -220,6 +240,9 @@ router.put('/discounts/:id', async (req, res) => {
       return res.status(404).json({ error: 'Discount not found' });
     }
 
+    invalidatePricingCache();
+  refreshPublicSiteData(req.app.locals.db);
+
     res.json({ discount: result.rows[0], message: 'Discount updated' });
   } catch (error) {
     console.error('Update discount error:', error);
@@ -233,6 +256,8 @@ router.delete('/discounts/:id', async (req, res) => {
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Discount not found' });
     }
+    invalidatePricingCache();
+    refreshPublicSiteData(req.app.locals.db);
     res.json({ message: 'Discount deleted' });
   } catch (error) {
     console.error('Delete discount error:', error);

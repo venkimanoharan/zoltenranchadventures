@@ -873,8 +873,25 @@
 
         async function loadPricingCatalog() {
             try {
-                const response = await fetch('/api/pricing');
-                pricingCatalog = await readJsonResponse(response, translate('bookingLoadPricingError'));
+                const snapshot = await window.ZoltenPublicData?.getSnapshot?.().catch(() => null);
+                if (snapshot?.pricing) {
+                    pricingCatalog = snapshot.pricing;
+                    renderDurationOptions();
+                    renderAddOnOptions();
+                    return;
+                }
+
+                const cacheKey = 'zolten-public-pricing';
+                const cachedCatalog = window.ZoltenSiteCache?.getSessionJson(cacheKey, 300000);
+
+                if (cachedCatalog) {
+                    pricingCatalog = cachedCatalog;
+                } else {
+                    const response = await fetch('/api/pricing');
+                    pricingCatalog = await readJsonResponse(response, translate('bookingLoadPricingError'));
+                    window.ZoltenSiteCache?.setSessionJson(cacheKey, pricingCatalog, 300000);
+                }
+
                 renderDurationOptions();
                 renderAddOnOptions();
             } catch (error) {
@@ -951,8 +968,24 @@
 
         async function loadBlockedDates(from, to) {
             try {
-                const response = await fetch(`/api/settings/closed-dates?from=${from}&to=${to}`);
-                const data = await readJsonResponse(response, translate('bookingLoadDatesError'));
+                const snapshot = await window.ZoltenPublicData?.getSnapshot?.().catch(() => null);
+                if (snapshot?.closed_dates_range?.from && snapshot?.closed_dates_range?.to) {
+                    const rangeFrom = snapshot.closed_dates_range.from;
+                    const rangeTo = snapshot.closed_dates_range.to;
+                    if (from >= rangeFrom && to <= rangeTo) {
+                        blockedDates = new Set((snapshot.closed_dates || []).filter((date) => date >= from && date <= to));
+                        return;
+                    }
+                }
+
+                const cacheKey = `zolten-closed-dates:${from}:${to}`;
+                const cachedRange = window.ZoltenSiteCache?.getSessionJson(cacheKey, 900000);
+                const data = cachedRange || await (async () => {
+                    const response = await fetch(`/api/settings/closed-dates?from=${from}&to=${to}`);
+                    const payload = await readJsonResponse(response, translate('bookingLoadDatesError'));
+                    window.ZoltenSiteCache?.setSessionJson(cacheKey, payload, 900000);
+                    return payload;
+                })();
                 blockedDates = new Set(data.closed_dates || []);
             } catch (error) {
                 blockedDates = new Set();
@@ -1030,6 +1063,12 @@
 
         async function loadSettings() {
             try {
+                const snapshot = await window.ZoltenPublicData?.getSnapshot?.().catch(() => null);
+                if (snapshot?.settings) {
+                    ranchSettings = snapshot.settings;
+                    return;
+                }
+
                 const response = await fetch('/api/settings');
                 const data = await readJsonResponse(response, translate('bookingLoadSettingsError'));
                 ranchSettings = data.settings || data;

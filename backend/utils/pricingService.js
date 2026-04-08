@@ -1,3 +1,14 @@
+const PRICING_CACHE_TTL_MS = Number(process.env.PRICING_CACHE_TTL_MS || 300000);
+
+const pricingCache = {
+  catalog: null,
+  fetchedAt: 0,
+};
+
+function isPricingCacheFresh() {
+  return Boolean(pricingCache.fetchedAt) && (Date.now() - pricingCache.fetchedAt) < PRICING_CACHE_TTL_MS;
+}
+
 const PACKAGE_DEFINITIONS = [
   {
     duration_hours: 1,
@@ -84,7 +95,13 @@ function findApplicableDiscount(groupDiscounts, riders) {
   }) || null;
 }
 
-async function getPricingCatalog(db) {
+async function getPricingCatalog(db, options = {}) {
+  const { forceRefresh = false } = options;
+
+  if (!forceRefresh && pricingCache.catalog && isPricingCacheFresh()) {
+    return pricingCache.catalog;
+  }
+
   const settingsResult = await db.query(
     `SELECT
        package_price_1h,
@@ -118,7 +135,7 @@ async function getPricingCatalog(db) {
   const settings = settingsResult.rows[0];
   const packages = buildPackageCatalog(settings);
 
-  return {
+  pricingCache.catalog = {
     packages,
     add_ons: addOnsResult.rows.map((row) => ({
       ...row,
@@ -129,6 +146,15 @@ async function getPricingCatalog(db) {
       discount_percent: toNumber(row.discount_percent, 0),
     })),
   };
+
+  pricingCache.fetchedAt = Date.now();
+
+  return pricingCache.catalog;
+}
+
+function invalidatePricingCache() {
+  pricingCache.catalog = null;
+  pricingCache.fetchedAt = 0;
 }
 
 async function calculateBookingPricing(db, { durationHours, riders, addOnIds = [] }) {
@@ -177,5 +203,6 @@ module.exports = {
   calculateBookingPricing,
   findPackageForDuration,
   getPricingCatalog,
+  invalidatePricingCache,
   parseAddOnIds,
 };

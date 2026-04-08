@@ -79,6 +79,59 @@ function invalidateScheduleCache() {
   scheduleCache.weeklyScheduleFetchedAt = 0;
 }
 
+async function getClosedDatesInRange(db, from, to, options = {}) {
+  const start = new Date(`${from}T00:00:00`);
+  const end = new Date(`${to}T00:00:00`);
+
+  if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime()) || start > end) {
+    throw new Error('Invalid date range');
+  }
+
+  const [baseSettings, weekly, overridesResult] = await Promise.all([
+    getBaseSettings(db, options),
+    getWeeklySchedule(db, options),
+    db.query(
+      `SELECT override_date, is_closed
+       FROM date_overrides
+       WHERE override_date >= $1 AND override_date <= $2`,
+      [from, to]
+    )
+  ]);
+
+  const weeklyByDay = new Map(weekly.map((row) => [row.day_of_week, row]));
+  const overridesByDate = new Map(
+    overridesResult.rows.map((row) => [
+      row.override_date instanceof Date ? row.override_date.toISOString().slice(0, 10) : String(row.override_date).slice(0, 10),
+      row,
+    ])
+  );
+
+  const closedDates = [];
+  const cursor = new Date(start);
+
+  while (cursor <= end) {
+    const dateStr = cursor.toISOString().slice(0, 10);
+    const override = overridesByDate.get(dateStr);
+
+    if (override) {
+      if (override.is_closed) {
+        closedDates.push(dateStr);
+      }
+      cursor.setUTCDate(cursor.getUTCDate() + 1);
+      continue;
+    }
+
+    const weeklySettings = weeklyByDay.get(cursor.getUTCDay());
+    if ((weeklySettings && weeklySettings.is_closed) || (!weeklySettings && baseSettings.is_closed)) {
+      closedDates.push(dateStr);
+    }
+
+    cursor.setUTCDate(cursor.getUTCDate() + 1);
+  }
+
+  return closedDates;
+}
+
 async function resolveEffectiveSettings(db, dateStr, options = {}) {
   const base = await getBaseSettings(db, options);
   let effective = withDefaults(base);
@@ -113,6 +166,7 @@ async function resolveEffectiveSettings(db, dateStr, options = {}) {
 
 module.exports = {
   getBaseSettings,
+  getClosedDatesInRange,
   getWeeklySchedule,
   isTimeInWindow,
   invalidateScheduleCache,

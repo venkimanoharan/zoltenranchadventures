@@ -3,13 +3,22 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 const {
   getBaseSettings,
+  getClosedDatesInRange,
   getWeeklySchedule,
   invalidateScheduleCache,
   resolveEffectiveSettings,
 } = require('../utils/scheduleService');
+const { invalidatePricingCache } = require('../utils/pricingService');
+const { writePublicSiteDataSnapshot } = require('../utils/publicSiteDataService');
 
 function applyPublicCacheHeaders(res) {
   res.set('Cache-Control', 'public, max-age=60, s-maxage=300, stale-while-revalidate=600');
+}
+
+function refreshPublicSiteData(db) {
+  writePublicSiteDataSnapshot(db).catch((error) => {
+    console.error('Failed to refresh public site-data snapshot:', error);
+  });
 }
 
 const toDbTime = (value) => {
@@ -99,25 +108,9 @@ router.get('/closed-dates', async (req, res) => {
       return res.status(400).json({ error: 'from and to query params are required (YYYY-MM-DD)' });
     }
 
-    const start = new Date(`${from}T00:00:00`);
-    const end = new Date(`${to}T00:00:00`);
-    if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime()) || start > end) {
-      return res.status(400).json({ error: 'Invalid date range' });
-    }
+    const closed_dates = await getClosedDatesInRange(db, from, to);
 
-    const closed_dates = [];
-    const cursor = new Date(start);
-
-    while (cursor <= end) {
-      const dateStr = cursor.toISOString().slice(0, 10);
-      // eslint-disable-next-line no-await-in-loop
-      const effective = await resolveEffectiveSettings(db, dateStr);
-      if (effective.is_closed) {
-        closed_dates.push(dateStr);
-      }
-      cursor.setUTCDate(cursor.getUTCDate() + 1);
-    }
-
+    applyPublicCacheHeaders(res);
     res.json({ from, to, closed_dates });
   } catch (error) {
     console.error('Get closed dates error:', error);
@@ -260,6 +253,8 @@ router.put('/', async (req, res) => {
     const query = `UPDATE ranch_settings SET ${updateFields.join(', ')} RETURNING *`;
     const result = await db.query(query, updateParams);
     invalidateScheduleCache();
+    invalidatePricingCache();
+    refreshPublicSiteData(db);
 
     res.json({
       settings: result.rows[0],
@@ -312,6 +307,7 @@ router.put('/schedule/weekly/:day', async (req, res) => {
       ]
     );
     invalidateScheduleCache();
+    refreshPublicSiteData(db);
 
     res.json({ schedule: result.rows[0], message: 'Weekly schedule updated' });
   } catch (error) {
@@ -398,6 +394,7 @@ router.post('/schedule/overrides', async (req, res) => {
       ]
     );
     invalidateScheduleCache();
+    refreshPublicSiteData(db);
 
     res.status(201).json({ override: result.rows[0], message: 'Date override saved' });
   } catch (error) {
@@ -411,6 +408,7 @@ router.delete('/schedule/overrides/:id', async (req, res) => {
     const db = req.app.locals.db;
     await db.query('DELETE FROM date_overrides WHERE id = $1', [req.params.id]);
     invalidateScheduleCache();
+    refreshPublicSiteData(db);
     res.json({ message: 'Date override deleted' });
   } catch (error) {
     console.error('Delete date override error:', error);

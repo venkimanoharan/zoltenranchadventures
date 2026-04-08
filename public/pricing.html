@@ -675,8 +675,22 @@
 
         async function loadPricing() {
             try {
-                const response = await fetch('/api/pricing');
-                const catalog = await response.json();
+                const snapshot = await window.ZoltenPublicData?.getSnapshot?.().catch(() => null);
+                if (snapshot?.pricing) {
+                    renderPackages(snapshot.pricing.packages || []);
+                    renderAddOns(snapshot.pricing.add_ons || []);
+                    renderDiscounts(snapshot.pricing.group_discounts || []);
+                    return;
+                }
+
+                const cacheKey = 'zolten-public-pricing';
+                const cachedCatalog = window.ZoltenSiteCache?.getSessionJson(cacheKey, 300000);
+                const catalog = cachedCatalog || await (async () => {
+                    const response = await fetch('/api/pricing');
+                    const data = await response.json();
+                    window.ZoltenSiteCache?.setSessionJson(cacheKey, data, 300000);
+                    return data;
+                })();
                 renderPackages(catalog.packages || []);
                 renderAddOns(catalog.add_ons || []);
                 renderDiscounts(catalog.group_discounts || []);

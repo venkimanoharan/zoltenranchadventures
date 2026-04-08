@@ -4,6 +4,7 @@ const router = express.Router();
 const { sendBookingConfirmation, sendAdminNotification } = require('../utils/emailService');
 const { calculateBookingPricing, parseAddOnIds } = require('../utils/pricingService');
 const { resolveEffectiveSettings, isTimeInWindow } = require('../utils/scheduleService');
+const { getCachedAvailability, invalidateAvailabilityCache, setCachedAvailability } = require('../utils/availabilityCache');
 
 function timeToMinutes(timeValue) {
   const raw = String(timeValue || '').slice(0, 5);
@@ -191,6 +192,7 @@ router.post('/', [
     }
 
     booking.pricing_breakdown = pricing;
+    invalidateAvailabilityCache(booking_date);
 
     // Fire-and-forget emails without impacting API response reliability.
     sendBookingConfirmation(booking, settings).catch((emailError) => {
@@ -236,14 +238,24 @@ router.get('/availability/:date', async (req, res) => {
     const { date } = req.params;
     const db = req.app.locals.db;
 
+    const cachedPayload = getCachedAvailability(date);
+    if (cachedPayload) {
+      res.set('Cache-Control', 'public, max-age=10, stale-while-revalidate=30');
+      return res.json(cachedPayload);
+    }
+
     const settings = await resolveEffectiveSettings(db, date);
+    let payload;
     if (settings.is_closed) {
-      return res.json({
+      payload = {
         date,
         closed: true,
         settings,
         slots: []
-      });
+      };
+      setCachedAvailability(date, payload);
+      res.set('Cache-Control', 'public, max-age=10, stale-while-revalidate=30');
+      return res.json(payload);
     }
 
     // Get booked slots
@@ -275,7 +287,10 @@ router.get('/availability/:date', async (req, res) => {
       });
     }
 
-    res.json({ slots, date, closed: false, settings });
+    payload = { slots, date, closed: false, settings };
+    setCachedAvailability(date, payload);
+    res.set('Cache-Control', 'public, max-age=10, stale-while-revalidate=30');
+    res.json(payload);
   } catch (error) {
     console.error('Get availability error:', error);
     res.status(500).json({ error: 'Failed to fetch availability' });

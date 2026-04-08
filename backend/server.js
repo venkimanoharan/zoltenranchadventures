@@ -13,6 +13,7 @@ const adminRoutes = require('./routes/admin');
 const pricingRoutes = require('./routes/pricing');
 const settingsRoutes = require('./routes/settings');
 const healthRoutes = require('./routes/health');
+const { writePublicSiteDataSnapshot } = require('./utils/publicSiteDataService');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -44,6 +45,11 @@ app.use(express.static(resolvePublicDir(), {
 
     if (['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.css', '.js'].includes(extension)) {
       res.setHeader('Cache-Control', 'public, max-age=86400, stale-while-revalidate=604800');
+      return;
+    }
+
+    if (extension === '.json') {
+      res.setHeader('Cache-Control', 'public, max-age=300, stale-while-revalidate=600');
       return;
     }
 
@@ -103,6 +109,12 @@ async function initializeDatabase() {
     const initSql = fs.readFileSync(initSqlPath, 'utf8');
 
     await pool.query(initSql);
+
+    try {
+      await writePublicSiteDataSnapshot(pool);
+    } catch (snapshotError) {
+      console.error('Failed to write public site-data snapshot:', snapshotError);
+    }
 
     dbState.ready = true;
     dbState.lastError = null;

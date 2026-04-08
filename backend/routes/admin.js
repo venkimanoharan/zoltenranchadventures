@@ -2,6 +2,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 const { sendCancellationEmail, sendRescheduleEmail } = require('../utils/emailService');
+const { invalidateAvailabilityCache } = require('../utils/availabilityCache');
 
 // Admin authentication middleware
 const verifyAdmin = (req, res, next) => {
@@ -94,6 +95,8 @@ router.put('/bookings/:id/confirm', async (req, res) => {
       [id, 'confirmed', 'pending', 'confirmed', req.user.id, 'Booking confirmed by admin']
     );
 
+    invalidateAvailabilityCache(result.rows[0].booking_date);
+
     res.json({ booking: result.rows[0], message: 'Booking confirmed' });
   } catch (error) {
     console.error('Confirm booking error:', error);
@@ -131,6 +134,8 @@ router.put('/bookings/:id/cancel', async (req, res) => {
 
     // Send cancellation email to customer
     sendCancellationEmail(currentBooking.rows[0]);
+
+    invalidateAvailabilityCache(result.rows[0].booking_date);
 
     res.json({ booking: result.rows[0], message: 'Booking cancelled and customer notified' });
   } catch (error) {
@@ -187,6 +192,9 @@ router.put('/bookings/:id/reschedule', async (req, res) => {
 
     // Send reschedule email to customer
     sendRescheduleEmail(currentBooking.rows[0], booking_date, booking_time);
+
+    invalidateAvailabilityCache(currentBooking.rows[0].booking_date);
+    invalidateAvailabilityCache(booking_date);
 
     res.json({ booking: result.rows[0], message: 'Booking rescheduled and customer notified' });
   } catch (error) {

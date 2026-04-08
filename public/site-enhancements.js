@@ -2,6 +2,42 @@
   const STORAGE_KEY = 'zolten-site-language';
   const BUSINESS_SETTINGS_CACHE_KEY = 'zolten-business-settings';
   const BUSINESS_SETTINGS_CACHE_TTL_MS = 300000;
+  const PUBLIC_SITE_DATA_CACHE_KEY = 'zolten-public-site-data';
+  const PUBLIC_SITE_DATA_CACHE_TTL_MS = 300000;
+
+  function buildCachePayload(value, ttlMs) {
+    return {
+      cachedAt: Date.now(),
+      ttlMs,
+      value,
+    };
+  }
+
+  function readSessionCache(key, fallbackTtlMs = BUSINESS_SETTINGS_CACHE_TTL_MS) {
+    try {
+      const raw = window.sessionStorage.getItem(key);
+      if (!raw) return null;
+
+      const parsed = JSON.parse(raw);
+      const ttlMs = Number(parsed.ttlMs || fallbackTtlMs);
+      if (!parsed.cachedAt || (Date.now() - parsed.cachedAt) > ttlMs) {
+        window.sessionStorage.removeItem(key);
+        return null;
+      }
+
+      return parsed.value;
+    } catch (_error) {
+      return null;
+    }
+  }
+
+  function writeSessionCache(key, value, ttlMs = BUSINESS_SETTINGS_CACHE_TTL_MS) {
+    try {
+      window.sessionStorage.setItem(key, JSON.stringify(buildCachePayload(value, ttlMs)));
+    } catch (_error) {
+      // Ignore storage failures and continue without client caching.
+    }
+  }
 
   const TRANSLATIONS = {
     en: {
@@ -688,35 +724,33 @@
   let cachedWeeklySchedule = [];
 
   function readBusinessSettingsCache() {
-    try {
-      const raw = window.sessionStorage.getItem(BUSINESS_SETTINGS_CACHE_KEY);
-      if (!raw) return null;
+    const cached = readSessionCache(BUSINESS_SETTINGS_CACHE_KEY);
+    if (!cached) return null;
 
-      const parsed = JSON.parse(raw);
-      if (!parsed.cachedAt || (Date.now() - parsed.cachedAt) > BUSINESS_SETTINGS_CACHE_TTL_MS) {
-        window.sessionStorage.removeItem(BUSINESS_SETTINGS_CACHE_KEY);
-        return null;
-      }
-
-      return {
-        settings: parsed.settings || null,
-        weekly: Array.isArray(parsed.weekly) ? parsed.weekly : [],
-      };
-    } catch (_error) {
-      return null;
-    }
+    return {
+      settings: cached.settings || null,
+      weekly: Array.isArray(cached.weekly) ? cached.weekly : [],
+    };
   }
 
   function writeBusinessSettingsCache(settings, weekly) {
-    try {
-      window.sessionStorage.setItem(BUSINESS_SETTINGS_CACHE_KEY, JSON.stringify({
-        cachedAt: Date.now(),
-        settings,
-        weekly,
-      }));
-    } catch (_error) {
-      // Ignore storage failures and continue without client caching.
+    writeSessionCache(BUSINESS_SETTINGS_CACHE_KEY, { settings, weekly }, BUSINESS_SETTINGS_CACHE_TTL_MS);
+  }
+
+  async function fetchPublicSiteData(forceRefresh = false) {
+    if (!forceRefresh) {
+      const cached = readSessionCache(PUBLIC_SITE_DATA_CACHE_KEY, PUBLIC_SITE_DATA_CACHE_TTL_MS);
+      if (cached) return cached;
     }
+
+    const response = await fetch('/site-data.json');
+    if (!response.ok) {
+      throw new Error('Failed to fetch public site data');
+    }
+
+    const payload = await response.json();
+    writeSessionCache(PUBLIC_SITE_DATA_CACHE_KEY, payload, PUBLIC_SITE_DATA_CACHE_TTL_MS);
+    return payload;
   }
 
   const TEXT_KEYS = {
@@ -999,6 +1033,20 @@
       return cached;
     }
 
+    try {
+      const siteData = await fetchPublicSiteData();
+      if (siteData?.settings) {
+        const snapshotSettings = {
+          settings: siteData.settings,
+          weekly: siteData.weekly || [],
+        };
+        writeBusinessSettingsCache(snapshotSettings.settings, snapshotSettings.weekly);
+        return snapshotSettings;
+      }
+    } catch (_error) {
+      // Fall back to API routes when the generated site snapshot is not ready.
+    }
+
     const response = await fetch('/api/settings?include_schedule=1');
     if (!response.ok) throw new Error('Failed to fetch settings');
     const payload = await response.json();
@@ -1114,6 +1162,21 @@
       return value;
     },
     applyLanguage
+  };
+
+  window.ZoltenSiteCache = {
+    getSessionJson(key, ttlMs) {
+      return readSessionCache(key, ttlMs);
+    },
+    setSessionJson(key, value, ttlMs) {
+      writeSessionCache(key, value, ttlMs);
+    }
+  };
+
+  window.ZoltenPublicData = {
+    getSnapshot(forceRefresh = false) {
+      return fetchPublicSiteData(forceRefresh);
+    }
   };
 
   document.addEventListener('DOMContentLoaded', async () => {
