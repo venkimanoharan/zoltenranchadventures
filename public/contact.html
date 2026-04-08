@@ -132,15 +132,6 @@
             display: none;
         }
 
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 1.8rem;
-            color: var(--primary);
-            cursor: pointer;
-        }
-
         .page-hero {
             margin-top: 90px;
             height: 50vh;
@@ -434,27 +425,6 @@
                 padding: 1rem 2rem;
             }
 
-            .nav-links {
-                position: fixed;
-                top: 80px;
-                left: -100%;
-                width: 100%;
-                height: calc(100vh - 80px);
-                background: white;
-                flex-direction: column;
-                padding: 3rem;
-                transition: left 0.3s ease;
-                gap: 2rem;
-            }
-
-            .nav-links.active {
-                left: 0;
-            }
-
-            .mobile-menu-btn {
-                display: block;
-            }
-
             .logo-container img {
                 height: 45px;
             }
@@ -509,7 +479,6 @@
                     <span>Adventures Await</span>
                 </div>
             </div>
-            <button class="mobile-menu-btn" aria-label="Toggle menu">☰</button>
             <ul class="nav-links">
                 <li><a href="/">Home</a></li>
                 <li><a href="/horseback-riding.html">Experiences</a></li>

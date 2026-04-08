@@ -102,13 +102,13 @@ async function getPricingCatalog(db) {
 
   const [addOnsResult, discountsResult] = await Promise.all([
     db.query(
-      `SELECT id, code, name, description, price, charge_type, icon, display_order, is_active
+      `SELECT id, code, name, name_es, description, description_es, price, charge_type, icon, display_order, is_active
        FROM pricing_addons
        WHERE is_active = TRUE
        ORDER BY display_order ASC, id ASC`
     ),
     db.query(
-      `SELECT id, min_riders, max_riders, discount_percent, description, display_order, is_active
+      `SELECT id, min_riders, max_riders, discount_percent, description, description_es, display_order, is_active
        FROM group_discounts
        WHERE is_active = TRUE
        ORDER BY min_riders ASC, id ASC`

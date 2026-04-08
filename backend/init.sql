@@ -98,7 +98,9 @@ CREATE TABLE IF NOT EXISTS pricing_addons (
     id SERIAL PRIMARY KEY,
     code VARCHAR(120) UNIQUE NOT NULL,
     name VARCHAR(255) NOT NULL,
+    name_es VARCHAR(255),
     description TEXT,
+    description_es TEXT,
     price DECIMAL(10, 2) NOT NULL CHECK (price >= 0),
     charge_type VARCHAR(32) NOT NULL DEFAULT 'per_booking' CHECK (charge_type IN ('per_booking', 'per_rider')),
     icon VARCHAR(16) DEFAULT '✨',
@@ -114,11 +116,16 @@ CREATE TABLE IF NOT EXISTS group_discounts (
     max_riders INTEGER CHECK (max_riders IS NULL OR max_riders >= min_riders),
     discount_percent DECIMAL(5, 2) NOT NULL CHECK (discount_percent >= 0 AND discount_percent <= 100),
     description VARCHAR(255),
+    description_es VARCHAR(255),
     display_order INTEGER DEFAULT 0,
     is_active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+ALTER TABLE pricing_addons ADD COLUMN IF NOT EXISTS name_es VARCHAR(255);
+ALTER TABLE pricing_addons ADD COLUMN IF NOT EXISTS description_es TEXT;
+ALTER TABLE group_discounts ADD COLUMN IF NOT EXISTS description_es VARCHAR(255);
 
 CREATE TABLE IF NOT EXISTS booking_add_ons (
     id SERIAL PRIMARY KEY,
@@ -196,24 +203,24 @@ SELECT
     'Open (call ahead)'
 WHERE NOT EXISTS (SELECT 1 FROM ranch_settings);
 
-INSERT INTO pricing_addons (code, name, description, price, charge_type, icon, display_order)
+INSERT INTO pricing_addons (code, name, name_es, description, description_es, price, charge_type, icon, display_order)
 SELECT * FROM (VALUES
-    ('photos', 'Professional Photos', 'A polished photo set from your visit.', 25.00, 'per_booking', '📸', 1),
-    ('birthday', 'Birthday Setup', 'Decor and celebration setup for birthday groups.', 50.00, 'per_booking', '🎂', 2),
-    ('lunch', 'Gourmet Lunch', 'Fresh ranch-style lunch for each guest.', 30.00, 'per_rider', '🍱', 3),
-    ('lesson', 'Riding Lesson', 'A guided fundamentals lesson before the ride.', 40.00, 'per_rider', '🎓', 4),
-    ('private-guide', 'Private Guide', 'Dedicated guide for your booking only.', 60.00, 'per_booking', '🏠', 5),
-    ('transport', 'Transport Service', 'Pickup and drop-off coordination.', 75.00, 'per_booking', '🚐', 6)
-) AS seed(code, name, description, price, charge_type, icon, display_order)
+    ('photos', 'Professional Photos', 'Fotos profesionales', 'A polished photo set from your visit.', 'Un set de fotos profesional de tu visita.', 25.00, 'per_booking', '📸', 1),
+    ('birthday', 'Birthday Setup', 'Montaje de cumpleanos', 'Decor and celebration setup for birthday groups.', 'Decoracion y montaje de celebracion para grupos de cumpleanos.', 50.00, 'per_booking', '🎂', 2),
+    ('lunch', 'Gourmet Lunch', 'Almuerzo gourmet', 'Fresh ranch-style lunch for each guest.', 'Almuerzo fresco estilo rancho para cada invitado.', 30.00, 'per_rider', '🍱', 3),
+    ('lesson', 'Riding Lesson', 'Leccion de equitacion', 'A guided fundamentals lesson before the ride.', 'Una leccion guiada de fundamentos antes del paseo.', 40.00, 'per_rider', '🎓', 4),
+    ('private-guide', 'Private Guide', 'Guia privado', 'Dedicated guide for your booking only.', 'Guia dedicado solo para tu reserva.', 60.00, 'per_booking', '🏠', 5),
+    ('transport', 'Transport Service', 'Servicio de transporte', 'Pickup and drop-off coordination.', 'Coordinacion de recogida y regreso.', 75.00, 'per_booking', '🚐', 6)
+) AS seed(code, name, name_es, description, description_es, price, charge_type, icon, display_order)
 WHERE NOT EXISTS (SELECT 1 FROM pricing_addons);
 
-INSERT INTO group_discounts (min_riders, max_riders, discount_percent, description, display_order)
+INSERT INTO group_discounts (min_riders, max_riders, discount_percent, description, description_es, display_order)
 SELECT * FROM (VALUES
-    (6, 10, 10.00, 'Great for small groups', 1),
-    (11, 20, 15.00, 'Perfect for families', 2),
-    (21, 50, 20.00, 'Corporate events', 3),
-    (51, NULL, 25.00, 'Large private groups', 4)
-) AS seed(min_riders, max_riders, discount_percent, description, display_order)
+    (6, 10, 10.00, 'Great for small groups', 'Ideal para grupos pequenos', 1),
+    (11, 20, 15.00, 'Perfect for families', 'Perfecto para familias', 2),
+    (21, 50, 20.00, 'Corporate events', 'Eventos corporativos', 3),
+    (51, NULL, 25.00, 'Large private groups', 'Grupos privados grandes', 4)
+) AS seed(min_riders, max_riders, discount_percent, description, description_es, display_order)
 WHERE NOT EXISTS (SELECT 1 FROM group_discounts);
 
 -- Seed weekly schedule from global defaults

@@ -115,15 +115,6 @@
             display: none;
         }
 
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 1.8rem;
-            color: var(--primary);
-            cursor: pointer;
-        }
-
         .page-hero {
             margin-top: 90px;
             height: 50vh;
@@ -414,27 +405,6 @@
                 padding: 1rem 2rem;
             }
 
-            .nav-links {
-                position: fixed;
-                top: 80px;
-                left: -100%;
-                width: 100%;
-                height: calc(100vh - 80px);
-                background: white;
-                flex-direction: column;
-                padding: 3rem;
-                transition: left 0.3s ease;
-                gap: 2rem;
-            }
-
-            .nav-links.active {
-                left: 0;
-            }
-
-            .mobile-menu-btn {
-                display: block;
-            }
-
             .logo-container img {
                 height: 45px;
             }
@@ -484,7 +454,6 @@
                     <span>Adventures Await</span>
                 </div>
             </div>
-            <button class="mobile-menu-btn" aria-label="Toggle menu">☰</button>
             <ul class="nav-links">
                 <li><a href="/">Home</a></li>
                 <li><a href="/horseback-riding.html">Experiences</a></li>
@@ -501,23 +470,23 @@
         <img src="./images/building.jpg" alt="Zolten Ranch Gallery" class="page-hero-image">
         <div class="page-hero-overlay"></div>
         <div class="page-hero-content">
-            <h2>Photo Gallery</h2>
-            <p>Experience ranch life through our lens</p>
+            <h2 data-page-i18n="galleryHeroTitle">Photo Gallery</h2>
+            <p data-page-i18n="galleryHeroBody">Experience ranch life through our lens</p>
         </div>
     </section>
 
     <section class="gallery-section">
         <div class="section-intro">
-            <h3>Explore Our Ranch</h3>
-            <p>Browse through photos of our beautiful facilities, friendly animals, and happy visitors enjoying their ranch adventures</p>
+            <h3 data-page-i18n="galleryIntroTitle">Explore Our Ranch</h3>
+            <p data-page-i18n="galleryIntroBody">Browse through photos of our beautiful facilities, friendly animals, and happy visitors enjoying their ranch adventures</p>
         </div>
 
         <div class="filter-buttons">
-            <button class="filter-btn active" data-filter="all">All Photos</button>
-            <button class="filter-btn" data-filter="facilities">Facilities</button>
-            <button class="filter-btn" data-filter="animals">Animals</button>
-            <button class="filter-btn" data-filter="activities">Activities</button>
-            <button class="filter-btn" data-filter="events">Events</button>
+            <button class="filter-btn active" data-filter="all" data-page-i18n="galleryFilterAll">All Photos</button>
+            <button class="filter-btn" data-filter="facilities" data-page-i18n="galleryFilterFacilities">Facilities</button>
+            <button class="filter-btn" data-filter="animals" data-page-i18n="galleryFilterAnimals">Animals</button>
+            <button class="filter-btn" data-filter="activities" data-page-i18n="galleryFilterActivities">Activities</button>
+            <button class="filter-btn" data-filter="events" data-page-i18n="galleryFilterEvents">Events</button>
         </div>
 
         <div class="gallery-grid">
@@ -732,8 +701,8 @@
     </section>
 
     <section class="cta-section">
-        <h3>Ready to Create Your Own Memories?</h3>
-        <p>Visit us and experience everything you've seen in these photos!</p>
+        <h3 data-page-i18n="galleryCtaTitle">Ready to Create Your Own Memories?</h3>
+        <p data-page-i18n="galleryCtaBody">Visit us and experience everything you've seen in these photos!</p>
         <a href="contact.html" class="btn">Book Your Visit</a>
     </section>
 
@@ -779,6 +748,112 @@
 
     <script src="/site-enhancements.js"></script>
     <script>
+        const PAGE_TRANSLATIONS = {
+            en: {
+                galleryHeroTitle: 'Photo Gallery',
+                galleryHeroBody: 'Experience ranch life through our lens',
+                galleryIntroTitle: 'Explore Our Ranch',
+                galleryIntroBody: 'Browse through photos of our beautiful facilities, friendly animals, and happy visitors enjoying their ranch adventures',
+                galleryFilterAll: 'All Photos',
+                galleryFilterFacilities: 'Facilities',
+                galleryFilterAnimals: 'Animals',
+                galleryFilterActivities: 'Activities',
+                galleryFilterEvents: 'Events',
+                galleryCtaTitle: 'Ready to Create Your Own Memories?',
+                galleryCtaBody: "Visit us and experience everything you've seen in these photos!"
+            },
+            es: {
+                galleryHeroTitle: 'Galeria de fotos',
+                galleryHeroBody: 'Vive la vida de rancho a traves de nuestra mirada',
+                galleryIntroTitle: 'Explora nuestro rancho',
+                galleryIntroBody: 'Mira fotos de nuestras hermosas instalaciones, amigables animales y visitantes disfrutando sus aventuras en el rancho',
+                galleryFilterAll: 'Todas las fotos',
+                galleryFilterFacilities: 'Instalaciones',
+                galleryFilterAnimals: 'Animales',
+                galleryFilterActivities: 'Actividades',
+                galleryFilterEvents: 'Eventos',
+                galleryCtaTitle: 'Listo para crear tus propios recuerdos?',
+                galleryCtaBody: 'Visitanos y vive todo lo que has visto en estas fotos.'
+            }
+        };
+
+        const GALLERY_CAPTIONS = {
+            en: [
+                ['Our Facilities', 'Modern ranch building with comfortable spaces'],
+                ['Meet Our Animals', 'Friendly animals waiting to greet you'],
+                ['Ranch Adventures', 'Fun and memorable moments at the ranch'],
+                ['Outdoor Fun', 'Enjoying our beautiful outdoor spaces'],
+                ['Active Adventures', 'Exciting activities for all ages'],
+                ['Animal Interaction', 'Close moments with our ranch animals'],
+                ['Petting Zoo Fun', 'Hands-on experiences with animals'],
+                ['Happy Visitors', 'Creating wonderful memories together'],
+                ['Family Fun', 'Quality time at Zolten Ranch'],
+                ['Our Animals', 'Meet our friendly ranch family'],
+                ['Guest Adventure', 'Unforgettable moments at the ranch'],
+                ['Animal Friends', 'Connecting with nature and animals'],
+                ['Outdoor Adventure', 'Embracing the beauty of ranch life'],
+                ['Trail Rides', 'Scenic horseback riding experiences'],
+                ['Action Moment', 'Thrilling ranch experiences'],
+                ['Event Venue', 'Perfect spaces for your special events'],
+                ['Beautiful Grounds', 'Picturesque setting for gatherings'],
+                ['Animal Friends', 'Delightful animal interactions'],
+                ['Visitors Enjoying Ranch', 'Happy moments on our ranch'],
+                ['Experience the Ranch', 'Adventure awaits at every corner'],
+                ['Pure Fun', 'Laughter and joy at the ranch'],
+                ['Our Animals Up Close', 'Discover our ranch family members'],
+                ['Animals at Play', 'Playful moments with our herd'],
+                ['Animal Fun', 'Joyful animal interactions'],
+                ['Moments of Joy', 'Creating lasting memories'],
+                ['Ranch Life', 'Experience the best of ranch living']
+            ],
+            es: [
+                ['Nuestras instalaciones', 'Edificio moderno del rancho con espacios comodos'],
+                ['Conoce a nuestros animales', 'Animales amigables listos para recibirte'],
+                ['Aventuras de rancho', 'Momentos divertidos e inolvidables en el rancho'],
+                ['Diversion al aire libre', 'Disfrutando nuestros hermosos espacios exteriores'],
+                ['Aventuras activas', 'Actividades emocionantes para todas las edades'],
+                ['Interaccion con animales', 'Momentos cercanos con nuestros animales'],
+                ['Diversion en el zoologico', 'Experiencias practicas con animales'],
+                ['Visitantes felices', 'Creando recuerdos maravillosos juntos'],
+                ['Diversion familiar', 'Tiempo de calidad en Zolten Ranch'],
+                ['Nuestros animales', 'Conoce a nuestra amigable familia del rancho'],
+                ['Aventura del visitante', 'Momentos inolvidables en el rancho'],
+                ['Amigos animales', 'Conectando con la naturaleza y los animales'],
+                ['Aventura al aire libre', 'Disfrutando la belleza de la vida de rancho'],
+                ['Paseos por senderos', 'Experiencias escenicas de cabalgata'],
+                ['Momento de accion', 'Experiencias emocionantes de rancho'],
+                ['Lugar para eventos', 'Espacios perfectos para tus eventos especiales'],
+                ['Hermosos jardines', 'Un entorno pintoresco para reuniones'],
+                ['Amigos animales', 'Encantadoras interacciones con animales'],
+                ['Visitantes disfrutando el rancho', 'Momentos felices en nuestro rancho'],
+                ['Vive el rancho', 'La aventura te espera en cada rincón'],
+                ['Diversion total', 'Risas y alegria en el rancho'],
+                ['Nuestros animales de cerca', 'Descubre a los miembros de nuestra familia del rancho'],
+                ['Animales jugando', 'Momentos juguetones con nuestro rebaño'],
+                ['Diversion animal', 'Interacciones alegres con animales'],
+                ['Momentos de alegria', 'Creando recuerdos duraderos'],
+                ['Vida de rancho', 'Disfruta lo mejor de la vida en el rancho']
+            ]
+        };
+
+        function applyGalleryTranslations() {
+            const lang = window.ZoltenSiteI18n?.getLanguage?.() || 'en';
+            document.querySelectorAll('[data-page-i18n]').forEach((node) => {
+                const key = node.getAttribute('data-page-i18n');
+                const value = PAGE_TRANSLATIONS[lang]?.[key] || PAGE_TRANSLATIONS.en[key];
+                if (value) node.textContent = value;
+            });
+
+            document.querySelectorAll('.gallery-overlay').forEach((overlay, index) => {
+                const entry = GALLERY_CAPTIONS[lang]?.[index] || GALLERY_CAPTIONS.en[index];
+                if (!entry) return;
+                const title = overlay.querySelector('h4');
+                const body = overlay.querySelector('p');
+                if (title) title.textContent = entry[0];
+                if (body) body.textContent = entry[1];
+            });
+        }
+
         // Gallery filtering
         const filterButtons = document.querySelectorAll('.filter-btn');
         const galleryItems = document.querySelectorAll('.gallery-item');
@@ -822,6 +897,9 @@
                 lightbox.classList.remove('active');
             }
         });
+
+        document.addEventListener('DOMContentLoaded', applyGalleryTranslations);
+        window.addEventListener('zolten:languagechange', applyGalleryTranslations);
     </script>
 </body>
 </html>

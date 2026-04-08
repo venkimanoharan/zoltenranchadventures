@@ -79,7 +79,9 @@ router.post('/addons', async (req, res) => {
     const {
       code,
       name,
+      name_es,
       description,
+      description_es,
       price,
       charge_type = 'per_booking',
       icon = '✨',
@@ -97,10 +99,10 @@ router.post('/addons', async (req, res) => {
     }
 
     const result = await req.app.locals.db.query(
-      `INSERT INTO pricing_addons (code, name, description, price, charge_type, icon, display_order, is_active, updated_at)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW())
+      `INSERT INTO pricing_addons (code, name, name_es, description, description_es, price, charge_type, icon, display_order, is_active, updated_at)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, NOW())
        RETURNING *`,
-      [code, name, description || null, numericPrice, charge_type, icon || '✨', Number(display_order) || 0, Boolean(is_active)]
+      [code, name, name_es || null, description || null, description_es || null, numericPrice, charge_type, icon || '✨', Number(display_order) || 0, Boolean(is_active)]
     );
 
     res.status(201).json({ add_on: result.rows[0], message: 'Add-on created' });
@@ -116,7 +118,9 @@ router.put('/addons/:id', async (req, res) => {
     const {
       code,
       name,
+      name_es,
       description,
+      description_es,
       price,
       charge_type,
       icon,
@@ -128,19 +132,23 @@ router.put('/addons/:id', async (req, res) => {
       `UPDATE pricing_addons
        SET code = $1,
            name = $2,
-           description = $3,
-           price = $4,
-           charge_type = $5,
-           icon = $6,
-           display_order = $7,
-           is_active = $8,
+           name_es = $3,
+           description = $4,
+           description_es = $5,
+           price = $6,
+           charge_type = $7,
+           icon = $8,
+           display_order = $9,
+           is_active = $10,
            updated_at = NOW()
-       WHERE id = $9
+       WHERE id = $11
        RETURNING *`,
       [
         code,
         name,
+        name_es || null,
         description || null,
+        description_es || null,
         Number(price),
         charge_type,
         icon || '✨',
@@ -176,12 +184,12 @@ router.delete('/addons/:id', async (req, res) => {
 
 router.post('/discounts', async (req, res) => {
   try {
-    const { min_riders, max_riders = null, discount_percent, description, display_order = 0, is_active = true } = req.body;
+    const { min_riders, max_riders = null, discount_percent, description, description_es, display_order = 0, is_active = true } = req.body;
     const result = await req.app.locals.db.query(
-      `INSERT INTO group_discounts (min_riders, max_riders, discount_percent, description, display_order, is_active, updated_at)
-       VALUES ($1, $2, $3, $4, $5, $6, NOW())
+      `INSERT INTO group_discounts (min_riders, max_riders, discount_percent, description, description_es, display_order, is_active, updated_at)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, NOW())
        RETURNING *`,
-      [Number(min_riders), max_riders === null || max_riders === '' ? null : Number(max_riders), Number(discount_percent), description || null, Number(display_order) || 0, Boolean(is_active)]
+      [Number(min_riders), max_riders === null || max_riders === '' ? null : Number(max_riders), Number(discount_percent), description || null, description_es || null, Number(display_order) || 0, Boolean(is_active)]
     );
     res.status(201).json({ discount: result.rows[0], message: 'Discount created' });
   } catch (error) {
@@ -192,19 +200,20 @@ router.post('/discounts', async (req, res) => {
 
 router.put('/discounts/:id', async (req, res) => {
   try {
-    const { min_riders, max_riders = null, discount_percent, description, display_order = 0, is_active = true } = req.body;
+    const { min_riders, max_riders = null, discount_percent, description, description_es, display_order = 0, is_active = true } = req.body;
     const result = await req.app.locals.db.query(
       `UPDATE group_discounts
        SET min_riders = $1,
            max_riders = $2,
            discount_percent = $3,
            description = $4,
-           display_order = $5,
-           is_active = $6,
+           description_es = $5,
+           display_order = $6,
+           is_active = $7,
            updated_at = NOW()
-       WHERE id = $7
+       WHERE id = $8
        RETURNING *`,
-      [Number(min_riders), max_riders === null || max_riders === '' ? null : Number(max_riders), Number(discount_percent), description || null, Number(display_order) || 0, Boolean(is_active), req.params.id]
+      [Number(min_riders), max_riders === null || max_riders === '' ? null : Number(max_riders), Number(discount_percent), description || null, description_es || null, Number(display_order) || 0, Boolean(is_active), req.params.id]
     );
 
     if (result.rows.length === 0) {

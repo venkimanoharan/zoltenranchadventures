@@ -132,15 +132,6 @@
             display: none;
         }
 
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 1.8rem;
-            color: var(--primary);
-            cursor: pointer;
-        }
-
         .page-hero {
             margin-top: 90px;
             height: 60vh;
@@ -412,27 +403,6 @@
                 padding: 1rem 2rem;
             }
 
-            .nav-links {
-                position: fixed;
-                top: 80px;
-                left: -100%;
-                width: 100%;
-                height: calc(100vh - 80px);
-                background: white;
-                flex-direction: column;
-                padding: 3rem;
-                transition: left 0.3s ease;
-                gap: 2rem;
-            }
-
-            .nav-links.active {
-                left: 0;
-            }
-
-            .mobile-menu-btn {
-                display: block;
-            }
-
             .logo-container img {
                 height: 45px;
             }
@@ -477,7 +447,6 @@
                     <span>Adventures Await</span>
                 </div>
             </div>
-            <button class="mobile-menu-btn" aria-label="Toggle menu">☰</button>
             <ul class="nav-links">
                 <li><a href="/">Home</a></li>
                 <li><a href="/horseback-riding.html" class="active">Experiences</a></li>
@@ -494,59 +463,59 @@
         <img src="./images/building.jpg" alt="Horseback Riding at Zolten Ranch" class="page-hero-image">
         <div class="page-hero-overlay"></div>
         <div class="page-hero-content">
-            <h2>Horseback Riding</h2>
-            <p>Explore scenic trails on gentle, well-trained horses</p>
+            <h2 data-page-i18n="horseHeroTitle">Horseback Riding</h2>
+            <p data-page-i18n="horseHeroBody">Explore scenic trails on gentle, well-trained horses</p>
         </div>
     </section>
 
     <section class="content-section">
         <div class="section-intro">
-            <h3>Trail Riding Adventures</h3>
-            <p>Experience the beauty of our ranch from horseback. Whether you're a first-time rider or an experienced equestrian, our guided trail rides offer the perfect opportunity to connect with nature and enjoy the peaceful Texas landscape.</p>
+            <h3 data-page-i18n="horseIntroTitle">Trail Riding Adventures</h3>
+            <p data-page-i18n="horseIntroBody">Experience the beauty of our ranch from horseback. Whether you're a first-time rider or an experienced equestrian, our guided trail rides offer the perfect opportunity to connect with nature and enjoy the peaceful Texas landscape.</p>
         </div>
 
         <div class="two-column">
             <img src="./images/building.jpg" alt="Ranch trails">
             <div class="column-content">
-                <h4>Scenic Trail Experiences</h4>
-                <p>Our carefully maintained trails wind through beautiful terrain, offering stunning views and a peaceful escape from the everyday hustle. Each ride is led by our experienced guides who ensure your safety and comfort throughout the journey.</p>
-                <p>We provide gentle, well-trained horses that are perfect for riders of all skill levels. Our horses are carefully matched to each rider's experience and comfort level, ensuring everyone has an enjoyable experience.</p>
+                <h4 data-page-i18n="horseScenicTitle">Scenic Trail Experiences</h4>
+                <p data-page-i18n="horseScenicBody1">Our carefully maintained trails wind through beautiful terrain, offering stunning views and a peaceful escape from the everyday hustle. Each ride is led by our experienced guides who ensure your safety and comfort throughout the journey.</p>
+                <p data-page-i18n="horseScenicBody2">We provide gentle, well-trained horses that are perfect for riders of all skill levels. Our horses are carefully matched to each rider's experience and comfort level, ensuring everyone has an enjoyable experience.</p>
             </div>
         </div>
 
         <div class="features-list">
             <div class="feature-box">
-                <h5><span class="feature-icon">🐴</span> All Skill Levels</h5>
-                <p>From first-timers to experienced riders, everyone is welcome. Our guides provide instruction and support throughout your ride.</p>
+                <h5 data-page-i18n="horseFeature1Title"><span class="feature-icon">🐴</span> All Skill Levels</h5>
+                <p data-page-i18n="horseFeature1Body">From first-timers to experienced riders, everyone is welcome. Our guides provide instruction and support throughout your ride.</p>
             </div>
             <div class="feature-box">
-                <h5><span class="feature-icon">👨‍👩‍👧‍👦</span> Family Friendly</h5>
-                <p>Perfect for families! Children 6 and older can participate with parental supervision. We make it fun for all ages.</p>
+                <h5 data-page-i18n="horseFeature2Title"><span class="feature-icon">👨‍👩‍👧‍👦</span> Family Friendly</h5>
+                <p data-page-i18n="horseFeature2Body">Perfect for families! Children 6 and older can participate with parental supervision. We make it fun for all ages.</p>
             </div>
             <div class="feature-box">
-                <h5><span class="feature-icon">🌳</span> Beautiful Scenery</h5>
-                <p>Ride through picturesque landscapes and enjoy the natural beauty of our ranch and surrounding areas.</p>
+                <h5 data-page-i18n="horseFeature3Title"><span class="feature-icon">🌳</span> Beautiful Scenery</h5>
+                <p data-page-i18n="horseFeature3Body">Ride through picturesque landscapes and enjoy the natural beauty of our ranch and surrounding areas.</p>
             </div>
             <div class="feature-box">
-                <h5><span class="feature-icon">✓</span> Safety First</h5>
-                <p>All riders are provided with helmets and safety equipment. Our guides are trained in safety procedures and first aid.</p>
+                <h5 data-page-i18n="horseFeature4Title"><span class="feature-icon">✓</span> Safety First</h5>
+                <p data-page-i18n="horseFeature4Body">All riders are provided with helmets and safety equipment. Our guides are trained in safety procedures and first aid.</p>
             </div>
             <div class="feature-box">
-                <h5><span class="feature-icon">⏰</span> Flexible Timing</h5>
-                <p>Choose from various ride durations to fit your schedule. Morning and afternoon rides available daily.</p>
+                <h5 data-page-i18n="horseFeature5Title"><span class="feature-icon">⏰</span> Flexible Timing</h5>
+                <p data-page-i18n="horseFeature5Body">Choose from various ride durations to fit your schedule. Morning and afternoon rides available daily.</p>
             </div>
             <div class="feature-box">
-                <h5><span class="feature-icon">📸</span> Photo Opportunities</h5>
-                <p>Capture memories with beautiful photo opportunities along the trail and with your horse.</p>
+                <h5 data-page-i18n="horseFeature6Title"><span class="feature-icon">📸</span> Photo Opportunities</h5>
+                <p data-page-i18n="horseFeature6Body">Capture memories with beautiful photo opportunities along the trail and with your horse.</p>
             </div>
         </div>
 
         <div class="two-column">
             <div class="column-content">
-                <h4>What to Expect</h4>
-                <p>Your horseback riding adventure begins with a safety orientation and introduction to your horse. Our guides will help you mount and ensure you're comfortable before heading out on the trail.</p>
-                <p>We provide all necessary equipment including helmets and riding gear. We recommend wearing long pants and closed-toe shoes. Don't forget sunscreen and water!</p>
-                <p>Each ride is paced according to the group's experience level, with plenty of opportunities to take in the scenery and enjoy the experience.</p>
+                <h4 data-page-i18n="horseExpectTitle">What to Expect</h4>
+                <p data-page-i18n="horseExpectBody1">Your horseback riding adventure begins with a safety orientation and introduction to your horse. Our guides will help you mount and ensure you're comfortable before heading out on the trail.</p>
+                <p data-page-i18n="horseExpectBody2">We provide all necessary equipment including helmets and riding gear. We recommend wearing long pants and closed-toe shoes. Don't forget sunscreen and water!</p>
+                <p data-page-i18n="horseExpectBody3">Each ride is paced according to the group's experience level, with plenty of opportunities to take in the scenery and enjoy the experience.</p>
             </div>
             <img src="./images/building.jpg" alt="Riders on trail">
         </div>
@@ -555,8 +524,8 @@
     <section class="pricing-section">
         <div class="content-section">
             <div class="section-intro">
-                <h3>Ride Packages</h3>
-                <p>Choose the perfect ride for your adventure</p>
+                <h3 data-page-i18n="horsePackagesTitle">Ride Packages</h3>
+                <p data-page-i18n="horsePackagesBody">Choose the perfect ride for your adventure</p>
             </div>
             <div class="pricing-cards">
                 <div class="pricing-card">
@@ -600,8 +569,8 @@
     </section>
 
     <section class="cta-section">
-        <h3>Ready to Saddle Up?</h3>
-        <p>Book your horseback riding adventure today and create memories that will last a lifetime</p>
+        <h3 data-page-i18n="horseCtaTitle">Ready to Saddle Up?</h3>
+        <p data-page-i18n="horseCtaBody">Book your horseback riding adventure today and create memories that will last a lifetime</p>
         <a href="contact.html" class="btn btn-light">Book Your Ride</a>
     </section>
 
@@ -639,5 +608,79 @@
     </footer>
 
     <script src="/site-enhancements.js"></script>
+    <script>
+        const PAGE_TRANSLATIONS = {
+            en: {
+                horseHeroTitle: 'Horseback Riding',
+                horseHeroBody: 'Explore scenic trails on gentle, well-trained horses',
+                horseIntroTitle: 'Trail Riding Adventures',
+                horseIntroBody: "Experience the beauty of our ranch from horseback. Whether you're a first-time rider or an experienced equestrian, our guided trail rides offer the perfect opportunity to connect with nature and enjoy the peaceful Texas landscape.",
+                horseScenicTitle: 'Scenic Trail Experiences',
+                horseScenicBody1: 'Our carefully maintained trails wind through beautiful terrain, offering stunning views and a peaceful escape from the everyday hustle. Each ride is led by our experienced guides who ensure your safety and comfort throughout the journey.',
+                horseScenicBody2: "We provide gentle, well-trained horses that are perfect for riders of all skill levels. Our horses are carefully matched to each rider's experience and comfort level, ensuring everyone has an enjoyable experience.",
+                horseFeature1Title: '<span class="feature-icon">🐴</span> All Skill Levels',
+                horseFeature1Body: 'From first-timers to experienced riders, everyone is welcome. Our guides provide instruction and support throughout your ride.',
+                horseFeature2Title: '<span class="feature-icon">👨‍👩‍👧‍👦</span> Family Friendly',
+                horseFeature2Body: 'Perfect for families! Children 6 and older can participate with parental supervision. We make it fun for all ages.',
+                horseFeature3Title: '<span class="feature-icon">🌳</span> Beautiful Scenery',
+                horseFeature3Body: 'Ride through picturesque landscapes and enjoy the natural beauty of our ranch and surrounding areas.',
+                horseFeature4Title: '<span class="feature-icon">✓</span> Safety First',
+                horseFeature4Body: 'All riders are provided with helmets and safety equipment. Our guides are trained in safety procedures and first aid.',
+                horseFeature5Title: '<span class="feature-icon">⏰</span> Flexible Timing',
+                horseFeature5Body: 'Choose from various ride durations to fit your schedule. Morning and afternoon rides available daily.',
+                horseFeature6Title: '<span class="feature-icon">📸</span> Photo Opportunities',
+                horseFeature6Body: 'Capture memories with beautiful photo opportunities along the trail and with your horse.',
+                horseExpectTitle: 'What to Expect',
+                horseExpectBody1: 'Your horseback riding adventure begins with a safety orientation and introduction to your horse. Our guides will help you mount and ensure you\'re comfortable before heading out on the trail.',
+                horseExpectBody2: 'We provide all necessary equipment including helmets and riding gear. We recommend wearing long pants and closed-toe shoes. Don\'t forget sunscreen and water!',
+                horseExpectBody3: 'Each ride is paced according to the group\'s experience level, with plenty of opportunities to take in the scenery and enjoy the experience.',
+                horsePackagesTitle: 'Ride Packages',
+                horsePackagesBody: 'Choose the perfect ride for your adventure',
+                horseCtaTitle: 'Ready to Saddle Up?',
+                horseCtaBody: 'Book your horseback riding adventure today and create memories that will last a lifetime'
+            },
+            es: {
+                horseHeroTitle: 'Paseos a caballo',
+                horseHeroBody: 'Explora senderos escenicos en caballos nobles y bien entrenados',
+                horseIntroTitle: 'Aventuras por senderos',
+                horseIntroBody: 'Experimenta la belleza de nuestro rancho desde la silla de montar. Ya seas principiante o jinete con experiencia, nuestros paseos guiados te ofrecen la oportunidad perfecta para conectar con la naturaleza y disfrutar el tranquilo paisaje texano.',
+                horseScenicTitle: 'Experiencias en senderos escenicos',
+                horseScenicBody1: 'Nuestros senderos cuidadosamente mantenidos recorren un terreno hermoso, con vistas impresionantes y una escapada tranquila del ritmo diario. Cada paseo esta guiado por personal con experiencia que cuida tu seguridad y comodidad durante todo el recorrido.',
+                horseScenicBody2: 'Ofrecemos caballos nobles y bien entrenados, ideales para jinetes de todos los niveles. Asignamos cada caballo segun la experiencia y comodidad de cada persona para que todos disfruten el paseo.',
+                horseFeature1Title: '<span class="feature-icon">🐴</span> Todos los niveles',
+                horseFeature1Body: 'Desde principiantes hasta jinetes experimentados, todos son bienvenidos. Nuestros guias te orientan y apoyan durante todo el paseo.',
+                horseFeature2Title: '<span class="feature-icon">👨‍👩‍👧‍👦</span> Ideal para familias',
+                horseFeature2Body: 'Perfecto para familias. Ninos de 6 anos en adelante pueden participar con supervision de sus padres. Lo hacemos divertido para todas las edades.',
+                horseFeature3Title: '<span class="feature-icon">🌳</span> Paisajes hermosos',
+                horseFeature3Body: 'Recorre paisajes pintorescos y disfruta la belleza natural de nuestro rancho y sus alrededores.',
+                horseFeature4Title: '<span class="feature-icon">✓</span> Seguridad primero',
+                horseFeature4Body: 'Todos los jinetes reciben casco y equipo de seguridad. Nuestros guias estan capacitados en procedimientos de seguridad y primeros auxilios.',
+                horseFeature5Title: '<span class="feature-icon">⏰</span> Horarios flexibles',
+                horseFeature5Body: 'Elige entre varias duraciones segun tu agenda. Hay paseos por la manana y la tarde todos los dias.',
+                horseFeature6Title: '<span class="feature-icon">📸</span> Oportunidades para fotos',
+                horseFeature6Body: 'Captura recuerdos con hermosas oportunidades para fotos a lo largo del sendero y junto a tu caballo.',
+                horseExpectTitle: 'Que esperar',
+                horseExpectBody1: 'Tu aventura comienza con una orientacion de seguridad y una presentacion de tu caballo. Nuestros guias te ayudaran a montar y a sentirte comodo antes de salir al sendero.',
+                horseExpectBody2: 'Proporcionamos todo el equipo necesario, incluidos cascos y equipo de monta. Recomendamos usar pantalon largo y calzado cerrado. No olvides protector solar y agua.',
+                horseExpectBody3: 'Cada paseo se ajusta al nivel de experiencia del grupo, con muchas oportunidades para admirar el paisaje y disfrutar la experiencia.',
+                horsePackagesTitle: 'Paquetes de paseo',
+                horsePackagesBody: 'Elige el paseo perfecto para tu aventura',
+                horseCtaTitle: 'Listo para montar?',
+                horseCtaBody: 'Reserva hoy tu aventura a caballo y crea recuerdos que duraran toda la vida'
+            }
+        };
+
+        function applyPageTranslations() {
+            const lang = window.ZoltenSiteI18n?.getLanguage?.() || 'en';
+            document.querySelectorAll('[data-page-i18n]').forEach((node) => {
+                const key = node.getAttribute('data-page-i18n');
+                const value = PAGE_TRANSLATIONS[lang]?.[key] || PAGE_TRANSLATIONS.en[key];
+                if (value) node.innerHTML = value;
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', applyPageTranslations);
+        window.addEventListener('zolten:languagechange', applyPageTranslations);
+    </script>
 </body>
 </html>

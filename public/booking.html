@@ -589,26 +589,26 @@
 
     <div class="container">
         <div class="booking-container">
-            <h1>🐎 Trail Ride Booking</h1>
-            <p class="subtitle">Reserve your adventure at Zolten Ranch</p>
+            <h1 data-i18n="bookingTitle">🐎 Trail Ride Booking</h1>
+            <p class="subtitle" data-i18n="bookingSubtitle">Reserve your adventure at Zolten Ranch</p>
 
             <!-- Progress Steps -->
             <div class="progress-steps">
                 <div class="step active completed" data-step="1">
                     <div class="step-number">1</div>
-                    <div class="step-label">Your Info</div>
+                    <div class="step-label" data-i18n="bookingStepInfo">Your Info</div>
                 </div>
                 <div class="step" data-step="2">
                     <div class="step-number">2</div>
-                    <div class="step-label">Date & Time</div>
+                    <div class="step-label" data-i18n="bookingStepDate">Date & Time</div>
                 </div>
                 <div class="step" data-step="3">
                     <div class="step-number">3</div>
-                    <div class="step-label">Details</div>
+                    <div class="step-label" data-i18n="bookingStepDetails">Details</div>
                 </div>
                 <div class="step" data-step="4">
                     <div class="step-number">4</div>
-                    <div class="step-label">Review</div>
+                    <div class="step-label" data-i18n="bookingStepReview">Review</div>
                 </div>
             </div>
 
@@ -619,30 +619,30 @@
             <form id="bookingForm" novalidate>
                 <!-- Step 1: Personal Information -->
                 <div class="form-section" data-step="1">
-                    <h3>👤 Your Information</h3>
+                    <h3 data-i18n="bookingInfoTitle">👤 Your Information</h3>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="name">Full Name <span class="required">*</span></label>
-                            <input type="text" id="name" name="name" required placeholder="John Doe">
+                            <label for="name"><span data-i18n="bookingNameLabel">Full Name</span> <span class="required">*</span></label>
+                            <input type="text" id="name" name="name" required placeholder="John Doe" data-i18n-placeholder="bookingNamePlaceholder">
                         </div>
                         <div class="form-group">
-                            <label for="email">Email Address <span class="required">*</span></label>
-                            <input type="email" id="email" name="email" required placeholder="john@example.com">
+                            <label for="email"><span data-i18n="bookingEmailLabel">Email Address</span> <span class="required">*</span></label>
+                            <input type="email" id="email" name="email" required placeholder="john@example.com" data-i18n-placeholder="bookingEmailPlaceholder">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="phone">Phone Number <span class="required">*</span></label>
-                            <input type="tel" id="phone" name="phone" required placeholder="(555) 123-4567">
+                            <label for="phone"><span data-i18n="bookingPhoneLabel">Phone Number</span> <span class="required">*</span></label>
+                            <input type="tel" id="phone" name="phone" required placeholder="(555) 123-4567" data-i18n-placeholder="bookingPhonePlaceholder">
                         </div>
                         <div class="form-group">
-                            <label for="age_group">Age Group <span class="required">*</span></label>
+                            <label for="age_group"><span data-i18n="bookingAgeGroupLabel">Age Group</span> <span class="required">*</span></label>
                             <select id="age_group" name="age_group" required>
-                                <option value="">Select your age group</option>
-                                <option value="child">Child (5-12)</option>
-                                <option value="teen">Teen (13-17)</option>
-                                <option value="adult">Adult (18-65)</option>
-                                <option value="senior">Senior (65+)</option>
+                                <option value="" data-i18n="bookingAgeSelect">Select your age group</option>
+                                <option value="child" data-i18n="bookingAgeChild">Child (5-12)</option>
+                                <option value="teen" data-i18n="bookingAgeTeen">Teen (13-17)</option>
+                                <option value="adult" data-i18n="bookingAgeAdult">Adult (18-65)</option>
+                                <option value="senior" data-i18n="bookingAgeSenior">Senior (65+)</option>
                             </select>
                         </div>
                     </div>
@@ -650,18 +650,18 @@
 
                 <!-- Step 2: Date & Time -->
                 <div class="form-section hidden" data-step="2">
-                    <h3>📅 Select Date & Time</h3>
+                    <h3 data-i18n="bookingDateTitle">📅 Select Date & Time</h3>
                     <div class="form-row full">
                         <div class="form-group">
-                            <label for="booking_date">Preferred Date <span class="required">*</span></label>
+                            <label for="booking_date"><span data-i18n="bookingDateLabel">Preferred Date</span> <span class="required">*</span></label>
                             <input type="date" id="booking_date" name="booking_date" required>
-                            <div class="input-hint">Select a date 1-30 days in advance</div>
+                            <div class="input-hint" data-i18n="bookingDateHint">Select a date 1-30 days in advance</div>
                         </div>
                     </div>
 
                     <div class="form-row full">
                         <div class="form-group">
-                            <label>Preferred Time <span class="required">*</span></label>
+                            <label><span data-i18n="bookingTimeLabel">Preferred Time</span> <span class="required">*</span></label>
                             <div class="time-picker" id="timePicker"></div>
                             <div id="bookingTime" style="display:none;"></div>
                         </div>
@@ -672,20 +672,20 @@
 
                 <!-- Step 3: Experience Details -->
                 <div class="form-section hidden" data-step="3">
-                    <h3>🐴 Experience Details</h3>
+                    <h3 data-i18n="bookingDetailsTitle">🐴 Experience Details</h3>
                     
                     <div class="form-row full">
                         <div class="form-group">
-                            <label>Duration <span class="required">*</span></label>
+                            <label><span data-i18n="bookingDurationLabel">Duration</span> <span class="required">*</span></label>
                             <div class="duration-picker" id="durationPicker"></div>
                             <input type="hidden" id="duration_hours" name="duration_hours" required>
-                            <div class="input-hint" id="durationHint">Loading package pricing...</div>
+                            <div class="input-hint" id="durationHint" data-i18n="bookingDurationHintLoading">Loading package pricing...</div>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Number of Riders <span class="required">*</span></label>
+                            <label><span data-i18n="bookingRidersLabel">Number of Riders</span> <span class="required">*</span></label>
                             <div class="counter-picker" id="riderCounter"></div>
                             <input type="hidden" id="number_of_riders" name="number_of_riders" value="1" required>
                             <input type="hidden" id="number_of_horses" name="number_of_horses" value="1">
@@ -694,93 +694,93 @@
 
                     <div class="form-row full">
                         <div class="form-group">
-                            <label for="riding_experience">Riding Experience <span class="required">*</span></label>
+                            <label for="riding_experience"><span data-i18n="bookingExperienceLabel">Riding Experience</span> <span class="required">*</span></label>
                             <select id="riding_experience" name="riding_experience" required>
-                                <option value="">Select your experience level</option>
-                                <option value="beginner">Beginner - First time</option>
-                                <option value="intermediate">Intermediate - Ridden before</option>
-                                <option value="advanced">Advanced - Regular rider</option>
+                                <option value="" data-i18n="bookingExperienceSelect">Select your experience level</option>
+                                <option value="beginner" data-i18n="bookingExperienceBeginner">Beginner - First time</option>
+                                <option value="intermediate" data-i18n="bookingExperienceIntermediate">Intermediate - Ridden before</option>
+                                <option value="advanced" data-i18n="bookingExperienceAdvanced">Advanced - Regular rider</option>
                             </select>
                         </div>
                     </div>
 
                     <div class="form-row full">
                         <div class="form-group">
-                            <label>Optional Add-Ons</label>
+                            <label data-i18n="bookingAddOnsLabel">Optional Add-Ons</label>
                             <div class="addon-grid" id="addOnPicker"></div>
                             <input type="hidden" id="add_on_ids" name="add_on_ids">
-                            <div class="input-hint">Choose any extras you want included in your booking.</div>
+                            <div class="input-hint" data-i18n="bookingAddOnsHint">Choose any extras you want included in your booking.</div>
                         </div>
                     </div>
 
                     <div class="form-row full">
                         <div class="form-group">
-                            <label for="special_requests">Special Requests or Dietary Needs</label>
-                            <textarea id="special_requests" name="special_requests" placeholder="Tell us about any special accommodations you need..."></textarea>
-                            <div class="input-hint">Including any dietary restrictions for meals</div>
+                            <label for="special_requests" data-i18n="bookingRequestsLabel">Special Requests or Dietary Needs</label>
+                            <textarea id="special_requests" name="special_requests" placeholder="Tell us about any special accommodations you need..." data-i18n-placeholder="bookingRequestsPlaceholder"></textarea>
+                            <div class="input-hint" data-i18n="bookingRequestsHint">Including any dietary restrictions for meals</div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Step 4: Review & Confirm -->
                 <div class="form-section hidden" data-step="4">
-                    <h3>✅ Review Your Booking</h3>
+                    <h3 data-i18n="bookingReviewTitle">✅ Review Your Booking</h3>
                     <div class="summary">
-                        <h3>Booking Summary</h3>
+                        <h3 data-i18n="bookingSummaryTitle">Booking Summary</h3>
                         <div class="summary-row">
-                            <strong>Name:</strong>
+                            <strong data-i18n="bookingSummaryName">Name:</strong>
                             <span id="summaryName">-</span>
                         </div>
                         <div class="summary-row">
-                            <strong>Email:</strong>
+                            <strong data-i18n="bookingSummaryEmail">Email:</strong>
                             <span id="summaryEmail">-</span>
                         </div>
                         <div class="summary-row">
-                            <strong>Phone:</strong>
+                            <strong data-i18n="bookingSummaryPhone">Phone:</strong>
                             <span id="summaryPhone">-</span>
                         </div>
                         <div class="summary-row" style="border-top: 2px solid var(--border); padding-top: 15px; margin-top: 15px;">
-                            <strong>Date & Time:</strong>
+                            <strong data-i18n="bookingSummaryDateTime">Date & Time:</strong>
                             <span id="summaryDateTime">-</span>
                         </div>
                         <div class="summary-row">
-                            <strong>Duration:</strong>
+                            <strong data-i18n="bookingSummaryDuration">Duration:</strong>
                             <span id="summaryDuration">-</span>
                         </div>
                         <div class="summary-row">
-                            <strong>Riders:</strong>
+                            <strong data-i18n="bookingSummaryRiders">Riders:</strong>
                             <span id="summaryRiders">-</span>
                         </div>
                         <div class="summary-row">
-                            <strong>Package:</strong>
+                            <strong data-i18n="bookingSummaryPackage">Package:</strong>
                             <span id="summaryPackage">-</span>
                         </div>
                         <div class="summary-row" id="discountRow" style="display:none;">
-                            <strong>Group Discount:</strong>
+                            <strong data-i18n="bookingSummaryDiscount">Group Discount:</strong>
                             <span class="price" id="summaryDiscount">-$0.00</span>
                         </div>
                         <div class="summary-row" id="addOnsRow" style="display:none;">
-                            <strong>Add-Ons:</strong>
+                            <strong data-i18n="bookingSummaryAddOns">Add-Ons:</strong>
                             <span id="summaryAddOns">None</span>
                         </div>
 
                         <div class="summary-row total" style="border-top: 2px solid var(--border); padding-top: 10px; margin-top: 15px;">
-                            <strong>Total Price:</strong>
+                            <strong data-i18n="bookingSummaryTotal">Total Price:</strong>
                             <span class="price" id="summaryTotal">$0.00</span>
                         </div>
                     </div>
                     <div style="margin-top: 20px; padding: 15px; background: rgba(39, 174, 96, 0.1); border-radius: 6px; border-left: 4px solid #27ae60;">
-                        <strong style="color: #27ae60;">✓ Booking Confirmation</strong>
-                        <p style="margin-top: 10px; color: #555; font-size: 0.95em;">We'll send you a confirmation email with all the details and a link to reschedule if needed.</p>
+                        <strong style="color: #27ae60;" data-i18n="bookingConfirmationTitle">✓ Booking Confirmation</strong>
+                        <p style="margin-top: 10px; color: #555; font-size: 0.95em;" data-i18n="bookingConfirmationBody">We'll send you a confirmation email with all the details and a link to reschedule if needed.</p>
                     </div>
                 </div>
 
                 <!-- Navigation Buttons -->
                 <div class="button-group">
-                    <button type="button" class="btn btn-secondary" id="prevBtn" onclick="changeStep(-1)" style="display: none;">← Previous</button>
+                    <button type="button" class="btn btn-secondary" id="prevBtn" onclick="changeStep(-1)" style="display: none;" data-i18n="bookingPrev">← Previous</button>
                     <div style="flex: 1;"></div>
-                    <button type="button" class="btn" id="nextBtn" onclick="changeStep(1)">Next →</button>
-                    <button type="submit" class="btn" id="submitBtn" style="display: none;">🎟️ Complete Booking</button>
+                    <button type="button" class="btn" id="nextBtn" onclick="changeStep(1)" data-i18n="bookingNext">Next →</button>
+                    <button type="submit" class="btn" id="submitBtn" style="display: none;" data-i18n="bookingComplete">🎟️ Complete Booking</button>
                 </div>
             </form>
         </div>
@@ -799,6 +799,36 @@
         let ranchSettings = {trail_price: 50, max_bookings_per_hour: 5};
         let pricingCatalog = { packages: [], add_ons: [], group_discounts: [] };
         let blockedDates = new Set();
+        const PACKAGE_COPY = {
+            1: { title: 'pricingPackage1Title', description: 'pricingPackage1Description' },
+            2: { title: 'pricingPackage2Title', description: 'pricingPackage2Description' },
+            4: { title: 'pricingPackage4Title', description: 'pricingPackage4Description' },
+            8: { title: 'pricingPackage8Title', description: 'pricingPackage8Description' }
+        };
+
+        function currentLanguage() {
+            return window.ZoltenSiteI18n?.getLanguage?.() || document.documentElement.lang || 'en';
+        }
+
+        function translate(key, replacements = {}) {
+            return window.ZoltenSiteI18n?.translate?.(key, replacements, currentLanguage()) || key;
+        }
+
+        function translateHours(key, hours) {
+            const template = translate(key, { hours });
+            const [singular, plural] = String(template).split('|');
+            return Number(hours) === 1 ? singular : (plural || singular);
+        }
+
+        function packageDisplayCopy(selectedPackage) {
+            if (!selectedPackage) return null;
+
+            const copy = PACKAGE_COPY[Number(selectedPackage.duration_hours)] || {};
+            return {
+                title: copy.title ? translate(copy.title) : selectedPackage.title,
+                description: copy.description ? translate(copy.description) : selectedPackage.description
+            };
+        }
 
         function getApiErrorMessage(data, fallbackMessage) {
             return data?.error || data?.message || data?.errors?.[0]?.msg || fallbackMessage;
@@ -833,14 +863,15 @@
 
         function initializeForm() {
             const timePickerContainer = document.getElementById('timePicker');
-            timePickerContainer.innerHTML = '<div class="input-hint">Select a date to view available time slots</div>';
+            timePickerContainer.innerHTML = `<div class="input-hint">${translate('bookingTimeHint')}</div>`;
+            document.getElementById('summaryAddOns').textContent = translate('bookingSummaryNone');
             updateSummary();
         }
 
         async function loadPricingCatalog() {
             try {
                 const response = await fetch('/api/pricing');
-                pricingCatalog = await readJsonResponse(response, 'Unable to load pricing right now.');
+                pricingCatalog = await readJsonResponse(response, translate('bookingLoadPricingError'));
                 renderDurationOptions();
                 renderAddOnOptions();
             } catch (error) {
@@ -854,7 +885,7 @@
             const packages = pricingCatalog.packages || [];
             durationPicker.innerHTML = packages.map((pkg) => `
                 <div class="picker-option" data-value="${pkg.duration_hours}">
-                    ${pkg.duration_hours} Hour${pkg.duration_hours > 1 ? 's' : ''}<br>
+                    ${translateHours('bookingDurationOption', pkg.duration_hours)}<br>
                     <strong>${formatMoney(pkg.price_per_person)}</strong>
                 </div>
             `).join('');
@@ -864,7 +895,8 @@
                 document.getElementById('duration_hours').value = defaultPackage.duration_hours;
                 const defaultOption = durationPicker.querySelector(`[data-value="${defaultPackage.duration_hours}"]`);
                 if (defaultOption) defaultOption.classList.add('selected');
-                document.getElementById('durationHint').textContent = `${defaultPackage.title}: ${defaultPackage.description}`;
+                const defaultPackageCopy = packageDisplayCopy(defaultPackage);
+                document.getElementById('durationHint').textContent = `${defaultPackageCopy.title}: ${defaultPackageCopy.description}`;
             }
         }
 
@@ -873,16 +905,16 @@
             const addOns = pricingCatalog.add_ons || [];
 
             if (!addOns.length) {
-                addOnPicker.innerHTML = '<div class="input-hint">No add-ons are available right now.</div>';
+                addOnPicker.innerHTML = `<div class="input-hint">${translate('bookingNoAddOns')}</div>`;
                 document.getElementById('add_on_ids').value = '';
                 return;
             }
 
             addOnPicker.innerHTML = addOns.map((addOn) => `
                 <div class="addon-option" data-id="${addOn.id}">
-                    <strong>${addOn.icon || '✨'} ${addOn.name} • ${formatMoney(addOn.price)}</strong>
-                    <span>${addOn.description || ''}</span>
-                    <span>${addOn.charge_type === 'per_rider' ? 'Charged per rider' : 'Charged once per booking'}</span>
+                    <strong>${addOn.icon || '✨'} ${getLocalizedAddOnName(addOn)} • ${formatMoney(addOn.price)}</strong>
+                    <span>${getLocalizedAddOnDescription(addOn) || ''}</span>
+                    <span>${addOn.charge_type === 'per_rider' ? translate('bookingAddOnPerRider') : translate('bookingAddOnPerBooking')}</span>
                 </div>
             `).join('');
         }
@@ -905,7 +937,7 @@
                     dateInput.value = '';
                     formData.booking_time = '';
                     document.getElementById('bookingTime').value = '';
-                    showError('This date is closed. Please choose another date.');
+                    showError(translate('bookingDateClosed'));
                     updateSummary();
                     return;
                 }
@@ -917,7 +949,7 @@
         async function loadBlockedDates(from, to) {
             try {
                 const response = await fetch(`/api/settings/closed-dates?from=${from}&to=${to}`);
-                const data = await readJsonResponse(response, 'Unable to load unavailable dates right now.');
+                const data = await readJsonResponse(response, translate('bookingLoadDatesError'));
                 blockedDates = new Set(data.closed_dates || []);
             } catch (error) {
                 blockedDates = new Set();
@@ -934,9 +966,10 @@
                     option.classList.add('selected');
                     document.getElementById('duration_hours').value = option.dataset.value;
                     const selectedPackage = findPackageByDuration(option.dataset.value);
+                    const selectedPackageCopy = packageDisplayCopy(selectedPackage);
                     document.getElementById('durationHint').textContent = selectedPackage
-                        ? `${selectedPackage.title}: ${selectedPackage.description}`
-                        : 'Choose the package that fits your visit best.';
+                        ? `${selectedPackageCopy.title}: ${selectedPackageCopy.description}`
+                        : translate('bookingPackageHintFallback');
                     updateSummary();
                 }
             });
@@ -995,7 +1028,7 @@
         async function loadSettings() {
             try {
                 const response = await fetch('/api/settings');
-                const data = await readJsonResponse(response, 'Booking is temporarily unavailable while the ranch schedule loads.');
+                const data = await readJsonResponse(response, translate('bookingLoadSettingsError'));
                 ranchSettings = data.settings || data;
             } catch (error) {
                 console.error('Error loading settings:', error);
@@ -1018,7 +1051,7 @@
 
             try {
                 const response = await fetch(`/api/bookings/availability/${date}`);
-                const data = await readJsonResponse(response, 'Unable to check availability right now. Please try again in a moment.');
+                const data = await readJsonResponse(response, translate('bookingAvailabilityError'));
                 const statusDiv = document.getElementById('availabilityStatus');
                 const timePickerContainer = document.getElementById('timePicker');
                 statusDiv.style.display = 'block';
@@ -1034,7 +1067,7 @@
                     formData.booking_time = '';
                     document.getElementById('bookingTime').value = '';
                     statusDiv.className = 'availability-status unavailable';
-                    statusDiv.textContent = '✗ Ranch is closed on this date. Please choose another day.';
+                    statusDiv.textContent = translate('bookingDateClosedStatus');
                     updateSummary();
                     return;
                 }
@@ -1045,8 +1078,8 @@
                     const option = document.createElement('div');
                     option.className = 'picker-option';
                     option.textContent = slot.available
-                        ? `${slot.time} (${slot.remaining_riders} rider spots left)`
-                        : `${slot.time} (Full)`;
+                        ? translate('bookingSlotRemaining', { time: slot.time, count: slot.remaining_riders })
+                        : translate('bookingSlotFull', { time: slot.time });
 
                     if (slot.available) {
                         availableCount += 1;
@@ -1069,13 +1102,13 @@
 
                 if (availableCount > 3) {
                     statusDiv.className = 'availability-status available';
-                    statusDiv.textContent = `✓ ${availableCount} time slots available - Book now!`;
+                    statusDiv.textContent = translate('bookingAvailableSlots', { count: availableCount });
                 } else if (availableCount > 0) {
                     statusDiv.className = 'availability-status limited';
-                    statusDiv.textContent = `⚠ Only ${availableCount} time slots available - Book soon!`;
+                    statusDiv.textContent = translate('bookingLimitedSlots', { count: availableCount });
                 } else {
                     statusDiv.className = 'availability-status unavailable';
-                    statusDiv.textContent = '✗ All slots are at rider capacity for this date - Try another day/time';
+                    statusDiv.textContent = translate('bookingNoSlots');
                 }
 
                 updateSummary();
@@ -1083,7 +1116,7 @@
                 console.error('Error checking availability:', error);
                 formData.booking_time = '';
                 document.getElementById('bookingTime').value = '';
-                document.getElementById('timePicker').innerHTML = '<div class="input-hint">Availability could not be loaded. Please try again shortly.</div>';
+                document.getElementById('timePicker').innerHTML = `<div class="input-hint">${translate('bookingAvailabilityLoadFailed')}</div>`;
                 const statusDiv = document.getElementById('availabilityStatus');
                 statusDiv.style.display = 'block';
                 statusDiv.className = 'availability-status unavailable';
@@ -1099,8 +1132,8 @@
             const riders = parseInt(document.getElementById('number_of_riders').value) || 1;
             const breakdown = calculatePricingBreakdown(duration, riders, getSelectedAddOnIds());
 
-            document.getElementById('summaryDateTime').textContent = date && time ? `${formatDateDisplay(date)} at ${time}` : '-';
-            document.getElementById('summaryDuration').textContent = duration + ' hour(s)';
+            document.getElementById('summaryDateTime').textContent = date && time ? `${formatDateDisplay(date)} ${currentLanguage() === 'es' ? 'a las' : 'at'} ${time}` : '-';
+            document.getElementById('summaryDuration').textContent = translateHours('bookingDurationSummary', duration);
             document.getElementById('summaryRiders').textContent = riders;
             document.getElementById('summaryPackage').textContent = breakdown.packageLabel;
             document.getElementById('summaryTotal').textContent = formatMoney(breakdown.total);
@@ -1119,6 +1152,7 @@
                 document.getElementById('summaryAddOns').textContent = breakdown.addOnSummary.join(', ');
             } else {
                 addOnsRow.style.display = 'none';
+                document.getElementById('summaryAddOns').textContent = translate('bookingSummaryNone');
             }
         }
 
@@ -1153,7 +1187,9 @@
             const required = document.querySelectorAll(`.form-section[data-step="${step}"] [required]`);
             for (let field of required) {
                 if (!field.value) {
-                    showError(`Please fill in ${field.previousElementSibling?.textContent || 'all required fields'}`);
+                    showError(translate('bookingFillRequired', {
+                        field: field.previousElementSibling?.textContent || translate('bookingFillAllFields')
+                    }));
                     field.classList.add('error');
                     field.focus();
                     return false;
@@ -1162,7 +1198,7 @@
                 field.classList.remove('error');
 
                 if (field.type === 'email' && !field.checkValidity()) {
-                    showError('Please enter a valid email address.');
+                    showError(translate('bookingEmailInvalid'));
                     field.classList.add('error');
                     field.focus();
                     return false;
@@ -1170,7 +1206,7 @@
             }
 
             if (step === 2 && !formData.booking_time) {
-                showError('Please select a booking time.');
+                showError(translate('bookingSelectTime'));
                 return false;
             }
 
@@ -1199,7 +1235,7 @@
 
                 const result = await response.json();
                 if (response.ok) {
-                    showSuccess('✓ Booking confirmed! Check your email for details.');
+                    showSuccess(translate('bookingConfirmed'));
                     formElement.reset();
                     setTimeout(() => window.location.href = '/', 3000);
                 } else {
@@ -1207,7 +1243,7 @@
                     showError(apiError);
                 }
             } catch (error) {
-                showError('Error submitting booking: ' + error.message);
+                showError(translate('bookingSubmitError', { message: error.message }));
             }
         }
 
@@ -1231,11 +1267,20 @@
 
         function formatDateDisplay(dateStr) {
             const date = new Date(dateStr);
-            return date.toLocaleDateString('en-US', {weekday: 'long', month: 'short', day: 'numeric'});
+            const locale = currentLanguage() === 'es' ? 'es-ES' : 'en-US';
+            return date.toLocaleDateString(locale, {weekday: 'long', month: 'short', day: 'numeric'});
         }
 
         function formatMoney(value) {
             return '$' + Number(value || 0).toFixed(2);
+        }
+
+        function getLocalizedAddOnName(addOn) {
+            return currentLanguage() === 'es' && addOn.name_es ? addOn.name_es : addOn.name;
+        }
+
+        function getLocalizedAddOnDescription(addOn) {
+            return currentLanguage() === 'es' && addOn.description_es ? addOn.description_es : addOn.description;
         }
 
         function findPackageByDuration(duration) {
@@ -1265,17 +1310,32 @@
                 const total = addOn.charge_type === 'per_rider'
                     ? Number(addOn.price) * riders
                     : Number(addOn.price);
-                return `${addOn.name} (${formatMoney(total)})`;
+                return `${getLocalizedAddOnName(addOn)} (${formatMoney(total)})`;
             });
             const addOnsTotal = addOns.reduce((sum, addOn) => sum + (addOn.charge_type === 'per_rider' ? Number(addOn.price) * riders : Number(addOn.price)), 0);
+            const selectedPackageCopy = packageDisplayCopy(selectedPackage);
 
             return {
-                packageLabel: selectedPackage ? `${selectedPackage.title} (${formatMoney(selectedPackage.price_per_person)} per rider)` : '-',
+                packageLabel: selectedPackage ? `${selectedPackageCopy.title} (${translate('bookingPerRiderPrice', { price: formatMoney(selectedPackage.price_per_person) })})` : translate('bookingPackageFallback'),
                 discountAmount,
                 addOnSummary,
                 total: packageSubtotal - discountAmount + addOnsTotal,
             };
         }
+
+        window.addEventListener('zolten:languagechange', async () => {
+            initializeForm();
+            renderDurationOptions();
+            renderAddOnOptions();
+
+            if (document.getElementById('booking_date').value) {
+                await checkAvailability();
+            } else {
+                document.getElementById('timePicker').innerHTML = `<div class="input-hint">${translate('bookingTimeHint')}</div>`;
+            }
+
+            updateSummary();
+        });
     </script>
 </body>
 </html>

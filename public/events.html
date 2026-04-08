@@ -132,15 +132,6 @@
             display: none;
         }
 
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 1.8rem;
-            color: var(--primary);
-            cursor: pointer;
-        }
-
         .page-hero {
             margin-top: 90px;
             height: 60vh;
@@ -421,27 +412,6 @@
                 padding: 1rem 2rem;
             }
 
-            .nav-links {
-                position: fixed;
-                top: 80px;
-                left: -100%;
-                width: 100%;
-                height: calc(100vh - 80px);
-                background: white;
-                flex-direction: column;
-                padding: 3rem;
-                transition: left 0.3s ease;
-                gap: 2rem;
-            }
-
-            .nav-links.active {
-                left: 0;
-            }
-
-            .mobile-menu-btn {
-                display: block;
-            }
-
             .logo-container img {
                 height: 45px;
             }
@@ -485,7 +455,6 @@
                     <span>Adventures Await</span>
                 </div>
             </div>
-            <button class="mobile-menu-btn" aria-label="Toggle menu">☰</button>
             <ul class="nav-links">
                 <li><a href="/">Home</a></li>
                 <li><a href="/horseback-riding.html" class="active">Experiences</a></li>
@@ -502,15 +471,15 @@
         <img src="./images/building.jpg" alt="Events at Zolten Ranch" class="page-hero-image">
         <div class="page-hero-overlay"></div>
         <div class="page-hero-content">
-            <h2>Special Events</h2>
-            <p>Create unforgettable memories at our beautiful ranch</p>
+            <h2 data-page-i18n="eventsHeroTitle">Special Events</h2>
+            <p data-page-i18n="eventsHeroBody">Create unforgettable memories at our beautiful ranch</p>
         </div>
     </section>
 
     <section class="content-section">
         <div class="section-intro">
-            <h3>Your Perfect Venue</h3>
-            <p>From intimate gatherings to large celebrations, Zolten Ranch Adventures provides a unique and memorable setting for your special occasion. Our beautiful facilities and natural surroundings create the perfect backdrop for any event.</p>
+            <h3 data-page-i18n="eventsVenueTitle">Your Perfect Venue</h3>
+            <p data-page-i18n="eventsVenueBody">From intimate gatherings to large celebrations, Zolten Ranch Adventures provides a unique and memorable setting for your special occasion. Our beautiful facilities and natural surroundings create the perfect backdrop for any event.</p>
         </div>
 
         <div class="event-types">
@@ -518,14 +487,14 @@
                 <img src="./images/building.jpg" alt="Birthday Party" class="event-image">
                 <div class="event-content">
                     <div class="event-icon">🎂</div>
-                    <h4>Birthday Parties</h4>
-                    <p>Make your child's birthday unforgettable with a ranch-themed celebration they'll never forget!</p>
+                    <h4 data-page-i18n="eventsBirthdayTitle">Birthday Parties</h4>
+                    <p data-page-i18n="eventsBirthdayBody">Make your child's birthday unforgettable with a ranch-themed celebration they'll never forget!</p>
                     <ul class="event-features">
-                        <li>Petting zoo access</li>
-                        <li>Pony rides available</li>
-                        <li>Dedicated party area</li>
-                        <li>Tables and seating included</li>
-                        <li>Optional add-ons available</li>
+                        <li data-page-i18n="eventsBirthdayFeature1">Petting zoo access</li>
+                        <li data-page-i18n="eventsBirthdayFeature2">Pony rides available</li>
+                        <li data-page-i18n="eventsBirthdayFeature3">Dedicated party area</li>
+                        <li data-page-i18n="eventsBirthdayFeature4">Tables and seating included</li>
+                        <li data-page-i18n="eventsBirthdayFeature5">Optional add-ons available</li>
                     </ul>
                     <a href="contact.html" class="btn">Plan Your Party</a>
                 </div>
@@ -535,14 +504,14 @@
                 <img src="./images/building.jpg" alt="Corporate Event" class="event-image">
                 <div class="event-content">
                     <div class="event-icon">💼</div>
-                    <h4>Corporate Events</h4>
-                    <p>Team building activities and corporate retreats in a unique outdoor setting that breaks the mold.</p>
+                    <h4 data-page-i18n="eventsCorporateTitle">Corporate Events</h4>
+                    <p data-page-i18n="eventsCorporateBody">Team building activities and corporate retreats in a unique outdoor setting that breaks the mold.</p>
                     <ul class="event-features">
-                        <li>Team building activities</li>
-                        <li>Meeting space available</li>
-                        <li>Catering options</li>
-                        <li>Customizable packages</li>
-                        <li>Professional environment</li>
+                        <li data-page-i18n="eventsCorporateFeature1">Team building activities</li>
+                        <li data-page-i18n="eventsCorporateFeature2">Meeting space available</li>
+                        <li data-page-i18n="eventsCorporateFeature3">Catering options</li>
+                        <li data-page-i18n="eventsCorporateFeature4">Customizable packages</li>
+                        <li data-page-i18n="eventsCorporateFeature5">Professional environment</li>
                     </ul>
                     <a href="contact.html" class="btn">Request Info</a>
                 </div>
@@ -552,14 +521,14 @@
                 <img src="./images/building.jpg" alt="School Field Trip" class="event-image">
                 <div class="event-content">
                     <div class="event-icon">🎓</div>
-                    <h4>School Field Trips</h4>
-                    <p>Educational and fun experiences for students of all ages. Perfect for agricultural and science programs.</p>
+                    <h4 data-page-i18n="eventsSchoolTitle">School Field Trips</h4>
+                    <p data-page-i18n="eventsSchoolBody">Educational and fun experiences for students of all ages. Perfect for agricultural and science programs.</p>
                     <ul class="event-features">
-                        <li>Educational programs</li>
-                        <li>Animal interaction</li>
-                        <li>Supervised activities</li>
-                        <li>Group discounts</li>
-                        <li>Learning materials provided</li>
+                        <li data-page-i18n="eventsSchoolFeature1">Educational programs</li>
+                        <li data-page-i18n="eventsSchoolFeature2">Animal interaction</li>
+                        <li data-page-i18n="eventsSchoolFeature3">Supervised activities</li>
+                        <li data-page-i18n="eventsSchoolFeature4">Group discounts</li>
+                        <li data-page-i18n="eventsSchoolFeature5">Learning materials provided</li>
                     </ul>
                     <a href="contact.html" class="btn">Book Field Trip</a>
                 </div>
@@ -569,14 +538,14 @@
                 <img src="./images/building.jpg" alt="Family Reunion" class="event-image">
                 <div class="event-content">
                     <div class="event-icon">👨‍👩‍👧‍👦</div>
-                    <h4>Family Gatherings</h4>
-                    <p>Reunions, celebrations, and get-togethers with activities that bring families closer together.</p>
+                    <h4 data-page-i18n="eventsFamilyTitle">Family Gatherings</h4>
+                    <p data-page-i18n="eventsFamilyBody">Reunions, celebrations, and get-togethers with activities that bring families closer together.</p>
                     <ul class="event-features">
-                        <li>Large group accommodations</li>
-                        <li>Multiple activity options</li>
-                        <li>Picnic areas</li>
-                        <li>All-ages entertainment</li>
-                        <li>Flexible scheduling</li>
+                        <li data-page-i18n="eventsFamilyFeature1">Large group accommodations</li>
+                        <li data-page-i18n="eventsFamilyFeature2">Multiple activity options</li>
+                        <li data-page-i18n="eventsFamilyFeature3">Picnic areas</li>
+                        <li data-page-i18n="eventsFamilyFeature4">All-ages entertainment</li>
+                        <li data-page-i18n="eventsFamilyFeature5">Flexible scheduling</li>
                     </ul>
                     <a href="contact.html" class="btn">Plan Your Gathering</a>
                 </div>
@@ -586,14 +555,14 @@
                 <img src="./images/building.jpg" alt="Wedding" class="event-image">
                 <div class="event-content">
                     <div class="event-icon">💒</div>
-                    <h4>Weddings & Engagements</h4>
-                    <p>Say "I do" in a rustic, romantic setting with natural beauty all around you.</p>
+                    <h4 data-page-i18n="eventsWeddingTitle">Weddings & Engagements</h4>
+                    <p data-page-i18n="eventsWeddingBody">Say "I do" in a rustic, romantic setting with natural beauty all around you.</p>
                     <ul class="event-features">
-                        <li>Indoor & outdoor options</li>
-                        <li>Scenic photo locations</li>
-                        <li>Reception space</li>
-                        <li>Vendor accommodations</li>
-                        <li>Customizable packages</li>
+                        <li data-page-i18n="eventsWeddingFeature1">Indoor & outdoor options</li>
+                        <li data-page-i18n="eventsWeddingFeature2">Scenic photo locations</li>
+                        <li data-page-i18n="eventsWeddingFeature3">Reception space</li>
+                        <li data-page-i18n="eventsWeddingFeature4">Vendor accommodations</li>
+                        <li data-page-i18n="eventsWeddingFeature5">Customizable packages</li>
                     </ul>
                     <a href="contact.html" class="btn">Wedding Inquiry</a>
                 </div>
@@ -603,23 +572,23 @@
                 <img src="./images/building.jpg" alt="Private Event" class="event-image">
                 <div class="event-content">
                     <div class="event-icon">🎉</div>
-                    <h4>Private Events</h4>
-                    <p>Whatever your occasion, we can create a custom experience tailored to your needs.</p>
+                    <h4 data-page-i18n="eventsPrivateTitle">Private Events</h4>
+                    <p data-page-i18n="eventsPrivateBody">Whatever your occasion, we can create a custom experience tailored to your needs.</p>
                     <ul class="event-features">
-                        <li>Fully customizable</li>
-                        <li>Exclusive use options</li>
-                        <li>Personalized activities</li>
-                        <li>Flexible catering</li>
-                        <li>Special requests welcome</li>
+                        <li data-page-i18n="eventsPrivateFeature1">Fully customizable</li>
+                        <li data-page-i18n="eventsPrivateFeature2">Exclusive use options</li>
+                        <li data-page-i18n="eventsPrivateFeature3">Personalized activities</li>
+                        <li data-page-i18n="eventsPrivateFeature4">Flexible catering</li>
+                        <li data-page-i18n="eventsPrivateFeature5">Special requests welcome</li>
                     </ul>
-                    <a href="contact.html" class="btn">Contact Us</a>
+                    <a href="contact.html" class="btn" data-page-i18n="eventsPrivateCta">Contact Us</a>
                 </div>
             </div>
         </div>
 
         <div class="pricing-highlight">
-            <h4>Starting at $350 for 2 Hours</h4>
-            <p>Packages can be customized to include horseback riding, petting zoo access, and more!<br>Contact us for detailed pricing and availability.</p>
+            <h4 data-page-i18n="eventsPricingTitle">Starting at $350 for 2 Hours</h4>
+            <p data-page-i18n="eventsPricingBody">Packages can be customized to include horseback riding, petting zoo access, and more!<br>Contact us for detailed pricing and availability.</p>
             <a href="contact.html" class="btn btn-light">Get Custom Quote</a>
         </div>
     </section>
@@ -627,47 +596,47 @@
     <section class="amenities-section">
         <div class="content-section">
             <div class="section-intro">
-                <h3>Our Facilities & Amenities</h3>
-                <p>Everything you need for a successful and memorable event</p>
+                <h3 data-page-i18n="eventsAmenitiesTitle">Our Facilities & Amenities</h3>
+                <p data-page-i18n="eventsAmenitiesBody">Everything you need for a successful and memorable event</p>
             </div>
             <div class="amenities-grid">
                 <div class="amenity-box">
                     <div class="amenity-icon">🏢</div>
-                    <h5>Modern Facilities</h5>
-                    <p>Brand new, climate-controlled indoor spaces perfect for any season.</p>
+                    <h5 data-page-i18n="eventsAmenity1Title">Modern Facilities</h5>
+                    <p data-page-i18n="eventsAmenity1Body">Brand new, climate-controlled indoor spaces perfect for any season.</p>
                 </div>
                 <div class="amenity-box">
                     <div class="amenity-icon">🪑</div>
-                    <h5>Tables & Seating</h5>
-                    <p>Ample seating for your guests with both indoor and outdoor options.</p>
+                    <h5 data-page-i18n="eventsAmenity2Title">Tables & Seating</h5>
+                    <p data-page-i18n="eventsAmenity2Body">Ample seating for your guests with both indoor and outdoor options.</p>
                 </div>
                 <div class="amenity-box">
                     <div class="amenity-icon">🚻</div>
-                    <h5>Restroom Facilities</h5>
-                    <p>Clean, modern restrooms easily accessible from all event areas.</p>
+                    <h5 data-page-i18n="eventsAmenity3Title">Restroom Facilities</h5>
+                    <p data-page-i18n="eventsAmenity3Body">Clean, modern restrooms easily accessible from all event areas.</p>
                 </div>
                 <div class="amenity-box">
                     <div class="amenity-icon">🅿️</div>
-                    <h5>Parking</h5>
-                    <p>Spacious parking area for cars and buses with easy access.</p>
+                    <h5 data-page-i18n="eventsAmenity4Title">Parking</h5>
+                    <p data-page-i18n="eventsAmenity4Body">Spacious parking area for cars and buses with easy access.</p>
                 </div>
                 <div class="amenity-box">
                     <div class="amenity-icon">🎵</div>
-                    <h5>Sound System</h5>
-                    <p>PA system available for announcements, music, or presentations.</p>
+                    <h5 data-page-i18n="eventsAmenity5Title">Sound System</h5>
+                    <p data-page-i18n="eventsAmenity5Body">PA system available for announcements, music, or presentations.</p>
                 </div>
                 <div class="amenity-box">
                     <div class="amenity-icon">🍽️</div>
-                    <h5>Catering Options</h5>
-                    <p>Work with our preferred caterers or bring your own.</p>
+                    <h5 data-page-i18n="eventsAmenity6Title">Catering Options</h5>
+                    <p data-page-i18n="eventsAmenity6Body">Work with our preferred caterers or bring your own.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <section class="cta-section">
-        <h3>Ready to Plan Your Event?</h3>
-        <p>Contact us today to check availability and start planning your perfect celebration!</p>
+        <h3 data-page-i18n="eventsCtaTitle">Ready to Plan Your Event?</h3>
+        <p data-page-i18n="eventsCtaBody">Contact us today to check availability and start planning your perfect celebration!</p>
         <a href="contact.html" class="btn btn-light">Book Your Event</a>
     </section>
 
@@ -705,5 +674,157 @@
     </footer>
 
     <script src="/site-enhancements.js"></script>
+    <script>
+        const PAGE_TRANSLATIONS = {
+            en: {
+                eventsHeroTitle: 'Special Events',
+                eventsHeroBody: 'Create unforgettable memories at our beautiful ranch',
+                eventsVenueTitle: 'Your Perfect Venue',
+                eventsVenueBody: 'From intimate gatherings to large celebrations, Zolten Ranch Adventures provides a unique and memorable setting for your special occasion. Our beautiful facilities and natural surroundings create the perfect backdrop for any event.',
+                eventsBirthdayTitle: 'Birthday Parties',
+                eventsBirthdayBody: "Make your child's birthday unforgettable with a ranch-themed celebration they'll never forget!",
+                eventsBirthdayFeature1: 'Petting zoo access',
+                eventsBirthdayFeature2: 'Pony rides available',
+                eventsBirthdayFeature3: 'Dedicated party area',
+                eventsBirthdayFeature4: 'Tables and seating included',
+                eventsBirthdayFeature5: 'Optional add-ons available',
+                eventsCorporateTitle: 'Corporate Events',
+                eventsCorporateBody: 'Team building activities and corporate retreats in a unique outdoor setting that breaks the mold.',
+                eventsCorporateFeature1: 'Team building activities',
+                eventsCorporateFeature2: 'Meeting space available',
+                eventsCorporateFeature3: 'Catering options',
+                eventsCorporateFeature4: 'Customizable packages',
+                eventsCorporateFeature5: 'Professional environment',
+                eventsSchoolTitle: 'School Field Trips',
+                eventsSchoolBody: 'Educational and fun experiences for students of all ages. Perfect for agricultural and science programs.',
+                eventsSchoolFeature1: 'Educational programs',
+                eventsSchoolFeature2: 'Animal interaction',
+                eventsSchoolFeature3: 'Supervised activities',
+                eventsSchoolFeature4: 'Group discounts',
+                eventsSchoolFeature5: 'Learning materials provided',
+                eventsFamilyTitle: 'Family Gatherings',
+                eventsFamilyBody: 'Reunions, celebrations, and get-togethers with activities that bring families closer together.',
+                eventsFamilyFeature1: 'Large group accommodations',
+                eventsFamilyFeature2: 'Multiple activity options',
+                eventsFamilyFeature3: 'Picnic areas',
+                eventsFamilyFeature4: 'All-ages entertainment',
+                eventsFamilyFeature5: 'Flexible scheduling',
+                eventsWeddingTitle: 'Weddings & Engagements',
+                eventsWeddingBody: 'Say "I do" in a rustic, romantic setting with natural beauty all around you.',
+                eventsWeddingFeature1: 'Indoor & outdoor options',
+                eventsWeddingFeature2: 'Scenic photo locations',
+                eventsWeddingFeature3: 'Reception space',
+                eventsWeddingFeature4: 'Vendor accommodations',
+                eventsWeddingFeature5: 'Customizable packages',
+                eventsPrivateTitle: 'Private Events',
+                eventsPrivateBody: 'Whatever your occasion, we can create a custom experience tailored to your needs.',
+                eventsPrivateFeature1: 'Fully customizable',
+                eventsPrivateFeature2: 'Exclusive use options',
+                eventsPrivateFeature3: 'Personalized activities',
+                eventsPrivateFeature4: 'Flexible catering',
+                eventsPrivateFeature5: 'Special requests welcome',
+                eventsPrivateCta: 'Contact Us',
+                eventsPricingTitle: 'Starting at $350 for 2 Hours',
+                eventsPricingBody: 'Packages can be customized to include horseback riding, petting zoo access, and more!<br>Contact us for detailed pricing and availability.',
+                eventsAmenitiesTitle: 'Our Facilities & Amenities',
+                eventsAmenitiesBody: 'Everything you need for a successful and memorable event',
+                eventsAmenity1Title: 'Modern Facilities',
+                eventsAmenity1Body: 'Brand new, climate-controlled indoor spaces perfect for any season.',
+                eventsAmenity2Title: 'Tables & Seating',
+                eventsAmenity2Body: 'Ample seating for your guests with both indoor and outdoor options.',
+                eventsAmenity3Title: 'Restroom Facilities',
+                eventsAmenity3Body: 'Clean, modern restrooms easily accessible from all event areas.',
+                eventsAmenity4Title: 'Parking',
+                eventsAmenity4Body: 'Spacious parking area for cars and buses with easy access.',
+                eventsAmenity5Title: 'Sound System',
+                eventsAmenity5Body: 'PA system available for announcements, music, or presentations.',
+                eventsAmenity6Title: 'Catering Options',
+                eventsAmenity6Body: 'Work with our preferred caterers or bring your own.',
+                eventsCtaTitle: 'Ready to Plan Your Event?',
+                eventsCtaBody: 'Contact us today to check availability and start planning your perfect celebration!'
+            },
+            es: {
+                eventsHeroTitle: 'Eventos especiales',
+                eventsHeroBody: 'Crea recuerdos inolvidables en nuestro hermoso rancho',
+                eventsVenueTitle: 'Tu lugar ideal',
+                eventsVenueBody: 'Desde reuniones intimas hasta grandes celebraciones, Zolten Ranch Adventures ofrece un entorno unico y memorable para tu ocasion especial. Nuestras instalaciones y el paisaje natural crean el escenario perfecto para cualquier evento.',
+                eventsBirthdayTitle: 'Fiestas de cumpleanos',
+                eventsBirthdayBody: 'Haz que el cumpleanos de tu hijo sea inolvidable con una celebracion tematica de rancho que nunca olvidara.',
+                eventsBirthdayFeature1: 'Acceso al zoologico interactivo',
+                eventsBirthdayFeature2: 'Paseos en poni disponibles',
+                eventsBirthdayFeature3: 'Area exclusiva para la fiesta',
+                eventsBirthdayFeature4: 'Mesas y asientos incluidos',
+                eventsBirthdayFeature5: 'Extras opcionales disponibles',
+                eventsCorporateTitle: 'Eventos corporativos',
+                eventsCorporateBody: 'Actividades de integracion y retiros corporativos en un entorno al aire libre que rompe con lo tradicional.',
+                eventsCorporateFeature1: 'Actividades de integracion',
+                eventsCorporateFeature2: 'Espacio para reuniones disponible',
+                eventsCorporateFeature3: 'Opciones de catering',
+                eventsCorporateFeature4: 'Paquetes personalizables',
+                eventsCorporateFeature5: 'Ambiente profesional',
+                eventsSchoolTitle: 'Excursiones escolares',
+                eventsSchoolBody: 'Experiencias educativas y divertidas para estudiantes de todas las edades. Ideales para programas de agricultura y ciencias.',
+                eventsSchoolFeature1: 'Programas educativos',
+                eventsSchoolFeature2: 'Interaccion con animales',
+                eventsSchoolFeature3: 'Actividades supervisadas',
+                eventsSchoolFeature4: 'Descuentos para grupos',
+                eventsSchoolFeature5: 'Materiales de aprendizaje incluidos',
+                eventsFamilyTitle: 'Reuniones familiares',
+                eventsFamilyBody: 'Reencuentros, celebraciones y convivencias con actividades que acercan a toda la familia.',
+                eventsFamilyFeature1: 'Espacio para grupos grandes',
+                eventsFamilyFeature2: 'Multiples opciones de actividades',
+                eventsFamilyFeature3: 'Areas de picnic',
+                eventsFamilyFeature4: 'Entretenimiento para todas las edades',
+                eventsFamilyFeature5: 'Horarios flexibles',
+                eventsWeddingTitle: 'Bodas y compromisos',
+                eventsWeddingBody: 'Da el si en un ambiente rustico y romantico rodeado de belleza natural.',
+                eventsWeddingFeature1: 'Opciones interiores y exteriores',
+                eventsWeddingFeature2: 'Lugares escenicos para fotos',
+                eventsWeddingFeature3: 'Espacio para recepcion',
+                eventsWeddingFeature4: 'Facilidades para proveedores',
+                eventsWeddingFeature5: 'Paquetes personalizables',
+                eventsPrivateTitle: 'Eventos privados',
+                eventsPrivateBody: 'Sea cual sea tu ocasion, podemos crear una experiencia personalizada segun tus necesidades.',
+                eventsPrivateFeature1: 'Totalmente personalizable',
+                eventsPrivateFeature2: 'Opciones de uso exclusivo',
+                eventsPrivateFeature3: 'Actividades personalizadas',
+                eventsPrivateFeature4: 'Catering flexible',
+                eventsPrivateFeature5: 'Solicitudes especiales bienvenidas',
+                eventsPrivateCta: 'Contactanos',
+                eventsPricingTitle: 'Desde $350 por 2 horas',
+                eventsPricingBody: 'Los paquetes se pueden personalizar para incluir paseos a caballo, acceso al zoologico interactivo y mas.<br>Contactanos para precios detallados y disponibilidad.',
+                eventsAmenitiesTitle: 'Instalaciones y amenidades',
+                eventsAmenitiesBody: 'Todo lo que necesitas para un evento exitoso y memorable',
+                eventsAmenity1Title: 'Instalaciones modernas',
+                eventsAmenity1Body: 'Espacios interiores nuevos y climatizados, perfectos para cualquier temporada.',
+                eventsAmenity2Title: 'Mesas y asientos',
+                eventsAmenity2Body: 'Amplios asientos para tus invitados con opciones interiores y exteriores.',
+                eventsAmenity3Title: 'Banos',
+                eventsAmenity3Body: 'Banos limpios y modernos con acceso sencillo desde todas las areas del evento.',
+                eventsAmenity4Title: 'Estacionamiento',
+                eventsAmenity4Body: 'Amplio estacionamiento para autos y autobuses con facil acceso.',
+                eventsAmenity5Title: 'Sistema de sonido',
+                eventsAmenity5Body: 'Sistema PA disponible para anuncios, musica o presentaciones.',
+                eventsAmenity6Title: 'Opciones de catering',
+                eventsAmenity6Body: 'Trabaja con nuestros proveedores recomendados o trae el tuyo.',
+                eventsCtaTitle: 'Listo para planear tu evento?',
+                eventsCtaBody: 'Contactanos hoy para revisar disponibilidad y comenzar a planear tu celebracion perfecta.'
+            }
+        };
+
+        function applyPageTranslations() {
+            const lang = window.ZoltenSiteI18n?.getLanguage?.() || 'en';
+            document.querySelectorAll('[data-page-i18n]').forEach((node) => {
+                const key = node.getAttribute('data-page-i18n');
+                const value = PAGE_TRANSLATIONS[lang]?.[key] || PAGE_TRANSLATIONS.en[key];
+                if (value) {
+                    node.innerHTML = value;
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', applyPageTranslations);
+        window.addEventListener('zolten:languagechange', applyPageTranslations);
+    </script>
 </body>
 </html>

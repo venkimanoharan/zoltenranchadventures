@@ -64,6 +64,20 @@
             gap: 20px;
         }
 
+        .mobile-admin-nav-btn {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 12px;
+            background: rgba(255,255,255,0.16);
+            color: var(--white);
+            font-size: 1.25rem;
+            cursor: pointer;
+        }
+
         .header-brand {
             display: flex;
             align-items: center;
@@ -101,6 +115,32 @@
             display: flex;
             align-items: center;
             gap: 25px;
+        }
+
+        .admin-lang-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.14);
+            border: 1px solid rgba(255,255,255,0.22);
+        }
+
+        .admin-lang-toggle button {
+            border: none;
+            background: transparent;
+            color: rgba(255,255,255,0.82);
+            font-weight: 700;
+            font-size: 0.8rem;
+            padding: 6px 10px;
+            border-radius: 999px;
+            cursor: pointer;
+        }
+
+        .admin-lang-toggle button.is-active {
+            background: rgba(255,255,255,0.92);
+            color: var(--primary);
         }
 
         .user-status {
@@ -154,6 +194,10 @@
             padding: 20px 0;
             overflow-y: auto;
             box-shadow: 2px 0 8px rgba(0,0,0,0.05);
+        }
+
+        .mobile-admin-backdrop {
+            display: none;
         }
 
         .sidebar-menu {
@@ -304,6 +348,56 @@
             border-radius: 10px;
             box-shadow: 0 3px 10px rgba(0,0,0,0.08);
             overflow: hidden;
+        }
+
+        .table-scroll {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .settings-grid-two,
+        .settings-grid-city,
+        .override-form-grid,
+        .addon-form-grid,
+        .discount-form-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .settings-grid-two {
+            grid-template-columns: repeat(2, minmax(180px, 1fr));
+        }
+
+        .settings-grid-city {
+            grid-template-columns: 1.3fr 0.7fr 0.8fr;
+        }
+
+        .override-form-grid {
+            grid-template-columns: repeat(6, minmax(100px, 1fr));
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .addon-form-grid {
+            grid-template-columns: 1fr 1.1fr 1.1fr 0.8fr 0.9fr 0.7fr 1.3fr 1.3fr auto auto;
+            gap: 10px;
+            align-items: end;
+            margin-bottom: 12px;
+        }
+
+        .discount-form-grid {
+            grid-template-columns: 0.8fr 0.8fr 0.9fr 1.3fr 1.3fr auto auto;
+            gap: 10px;
+            align-items: end;
+            margin-bottom: 12px;
+        }
+
+        .full-span-3 {
+            grid-column: span 3;
+        }
+
+        .full-span-2 {
+            grid-column: span 2;
         }
 
         .table-header {
@@ -492,6 +586,10 @@
                 padding: 14px 18px;
             }
 
+            .mobile-admin-nav-btn {
+                display: inline-flex;
+            }
+
             .header-brand img {
                 width: 38px;
                 height: 38px;
@@ -504,10 +602,53 @@
 
             .admin-layout {
                 grid-template-columns: 1fr;
+                grid-template-rows: auto 1fr;
+                min-height: calc(100vh - 70px);
             }
 
             .sidebar {
-                display: none;
+                display: block;
+                position: fixed;
+                top: 70px;
+                left: 0;
+                bottom: 0;
+                width: min(82vw, 320px);
+                z-index: 1200;
+                transform: translateX(-102%);
+                transition: transform 0.22s ease;
+                border-right-width: 1px;
+            }
+
+            body.admin-nav-open .sidebar {
+                transform: translateX(0);
+            }
+
+            .mobile-admin-backdrop {
+                display: block;
+                position: fixed;
+                inset: 70px 0 0 0;
+                background: rgba(0, 0, 0, 0.32);
+                opacity: 0;
+                pointer-events: none;
+                z-index: 1100;
+                transition: opacity 0.22s ease;
+            }
+
+            body.admin-nav-open .mobile-admin-backdrop {
+                opacity: 1;
+                pointer-events: auto;
+            }
+
+            .main-content {
+                grid-column: 1 / -1 !important;
+                grid-row: 2 !important;
+                padding: 20px 16px;
+            }
+
+            .section-header {
+                gap: 12px;
+                align-items: flex-start;
+                flex-direction: column;
             }
 
             .stats-grid {
@@ -518,8 +659,54 @@
                 grid-template-columns: 1fr;
             }
 
+            .chart-container,
+            .stat-card,
+            .table-container {
+                border-radius: 14px;
+            }
+
+            .table-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+            }
+
+            .table-filters {
+                flex-direction: column;
+            }
+
+            .table-scroll {
+                overflow-x: auto;
+            }
+
+            .settings-grid-two,
+            .settings-grid-city,
+            .override-form-grid,
+            .addon-form-grid,
+            .discount-form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full-span-3,
+            .full-span-2 {
+                grid-column: auto;
+            }
+
+            .override-form-grid .btn,
+            .addon-form-grid .btn,
+            .discount-form-grid .btn,
+            .section-header .btn {
+                width: 100%;
+            }
+
+            .modal-content {
+                width: calc(100% - 24px);
+                padding: 22px 18px;
+            }
+
             table {
                 font-size: 0.9em;
+                min-width: 720px;
             }
 
             td, th {
@@ -532,6 +719,7 @@
     <!-- Header -->
     <div class="admin-header">
         <div class="header-left">
+            <button class="mobile-admin-nav-btn" type="button" aria-label="Toggle admin menu" aria-controls="adminSidebar" aria-expanded="false" onclick="toggleAdminNav()">☰</button>
             <a href="/" class="header-brand" aria-label="Return to Zolten Ranch home">
                 <img src="/images/logo.png" alt="Zolten Ranch Logo">
                 <div class="header-title">
@@ -541,6 +729,10 @@
             </a>
         </div>
         <div class="header-right">
+            <div class="admin-lang-toggle" aria-label="Admin language toggle">
+                <button type="button" data-admin-lang="en">EN</button>
+                <button type="button" data-admin-lang="es">ES</button>
+            </div>
             <a href="/" class="site-link">View Site</a>
             <div class="user-status">
                 <span class="status-dot"></span>
@@ -550,9 +742,11 @@
         </div>
     </div>
 
+    <div class="mobile-admin-backdrop" onclick="closeAdminNav()"></div>
+
     <div class="admin-layout" style="grid-template-rows: 70px 1fr;">
         <!-- Sidebar -->
-        <div class="sidebar" style="grid-column: 1; grid-row: 2;">
+        <div class="sidebar" id="adminSidebar" style="grid-column: 1; grid-row: 2;">
             <ul class="sidebar-menu">
                 <li><a href="#" onclick="showSection('dashboard')" class="menu-item active" data-section="dashboard">📊 Dashboard</a></li>
                 <li><a href="#" onclick="showSection('bookings')" class="menu-item" data-section="bookings">📅 Bookings</a></li>
@@ -627,6 +821,7 @@
                         <button class="btn btn-primary btn-small" onclick="loadBookings()">🔄 Reload</button>
                     </div>
 
+                    <div class="table-scroll">
                     <table>
                         <thead>
                             <tr>
@@ -646,6 +841,7 @@
                             <tr><td colspan="10" style="text-align: center; padding: 30px;">Loading...</td></tr>
                         </tbody>
                     </table>
+                    </div>
                 </div>
             </section>
 
@@ -717,7 +913,7 @@
                                 <input type="number" id="trailPrice" min="0" step="0.01" required>
                             </div>
                             <h3 style="margin: 24px 0 12px; color: var(--primary);">Package Pricing</h3>
-                            <div style="display: grid; grid-template-columns: repeat(2, minmax(180px, 1fr)); gap: 12px;">
+                            <div class="settings-grid-two">
                                 <div class="form-group">
                                     <label>1 Hour Price</label>
                                     <input type="number" id="packagePrice1h" min="0" step="0.01" required>
@@ -752,7 +948,7 @@
                                 <label>Street Address</label>
                                 <input type="text" id="streetAddress" placeholder="9536 Hildebrandt">
                             </div>
-                            <div style="display: grid; grid-template-columns: 1.3fr 0.7fr 0.8fr; gap: 12px;">
+                            <div class="settings-grid-city">
                                 <div class="form-group">
                                     <label>City</label>
                                     <input type="text" id="cityName" placeholder="San Antonio">
@@ -783,6 +979,7 @@
                     <div>
                         <h3 style="margin-bottom: 12px; color: var(--primary);">Weekly Schedule</h3>
                         <div class="input-hint" style="margin-bottom: 12px;">Customize hours, capacity, and price by day of week.</div>
+                        <div class="table-scroll">
                         <table style="width: 100%; border-collapse: collapse; margin-bottom: 12px;">
                             <thead>
                                 <tr>
@@ -796,6 +993,7 @@
                             </thead>
                             <tbody id="weeklyScheduleRows"></tbody>
                         </table>
+                        </div>
                         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                             <button class="btn btn-primary" onclick="applyGlobalDefaultsToWeekly()">↺ Copy Global To All Days</button>
                             <button class="btn btn-primary" onclick="setAllDaysClosed(true)" style="background: #e74c3c;">Close All Days</button>
@@ -809,7 +1007,7 @@
                     <div>
                         <h3 style="margin-bottom: 12px; color: var(--primary);">Date Overrides</h3>
                         <div class="input-hint" style="margin-bottom: 12px;">Set holiday closures or special hours/pricing for specific dates.</div>
-                        <form onsubmit="addDateOverride(event)" style="display: grid; grid-template-columns: repeat(6, minmax(100px, 1fr)); gap: 10px; margin-bottom: 12px;">
+                        <form onsubmit="addDateOverride(event)" class="override-form-grid">
                             <input type="date" id="overrideDate" required>
                             <input type="time" id="overrideOpenTime" placeholder="Open">
                             <input type="time" id="overrideCloseTime" placeholder="Close">
@@ -818,10 +1016,11 @@
                             <label style="display: flex; align-items: center; gap: 6px; margin: 0;">
                                 <input type="checkbox" id="overrideClosed"> Closed
                             </label>
-                            <input type="text" id="overrideNotes" placeholder="Notes (optional)" style="grid-column: span 3;">
-                            <button type="submit" class="btn btn-primary" id="saveOverrideBtn" style="grid-column: span 2;">➕ Save Override</button>
+                            <input type="text" id="overrideNotes" class="full-span-3" placeholder="Notes (optional)">
+                            <button type="submit" class="btn btn-primary full-span-2" id="saveOverrideBtn">➕ Save Override</button>
                             <button type="button" class="btn btn-primary" id="cancelOverrideEditBtn" onclick="cancelOverrideEdit()" style="display:none; background:#666;">Cancel Edit</button>
                         </form>
+                        <div class="table-scroll">
                         <table style="width: 100%; border-collapse: collapse;">
                             <thead>
                                 <tr>
@@ -836,16 +1035,18 @@
                             </thead>
                             <tbody id="dateOverrideRows"></tbody>
                         </table>
+                        </div>
                     </div>
 
                     <hr style="margin: 25px 0; border: 0; border-top: 1px solid #eee;">
 
                     <div>
                         <h3 style="margin-bottom: 12px; color: var(--primary);">Add-On Pricing</h3>
-                        <form onsubmit="saveAddOn(event)" style="display:grid; grid-template-columns: 1.1fr 1.2fr 0.8fr 0.9fr 0.7fr 1.5fr auto auto; gap:10px; align-items:end; margin-bottom: 12px;">
+                        <form onsubmit="saveAddOn(event)" class="addon-form-grid">
                             <input type="hidden" id="addonId">
                             <input type="text" id="addonCode" placeholder="code" required>
                             <input type="text" id="addonName" placeholder="Name" required>
+                            <input type="text" id="addonNameEs" placeholder="Nombre (ES)">
                             <input type="number" id="addonPrice" min="0" step="0.01" placeholder="Price" required>
                             <select id="addonChargeType">
                                 <option value="per_booking">Per Booking</option>
@@ -853,48 +1054,57 @@
                             </select>
                             <input type="text" id="addonIcon" placeholder="Icon" maxlength="4">
                             <input type="text" id="addonDescription" placeholder="Description">
+                            <input type="text" id="addonDescriptionEs" placeholder="Descripcion (ES)">
                             <button type="submit" class="btn btn-primary" id="saveAddonBtn">Save Add-On</button>
                             <button type="button" class="btn btn-primary" style="background:#666;" onclick="resetAddOnForm()">Clear</button>
                         </form>
+                        <div class="table-scroll">
                         <table style="width: 100%; border-collapse: collapse;">
                             <thead>
                                 <tr>
                                     <th style="text-align:left; padding:8px; border-bottom: 1px solid #eee;">Code</th>
                                     <th style="text-align:left; padding:8px; border-bottom: 1px solid #eee;">Name</th>
+                                    <th style="text-align:left; padding:8px; border-bottom: 1px solid #eee;">Nombre (ES)</th>
                                     <th style="text-align:left; padding:8px; border-bottom: 1px solid #eee;">Price</th>
                                     <th style="text-align:left; padding:8px; border-bottom: 1px solid #eee;">Charge Type</th>
                                     <th style="text-align:left; padding:8px; border-bottom: 1px solid #eee;">Description</th>
+                                    <th style="text-align:left; padding:8px; border-bottom: 1px solid #eee;">Descripcion (ES)</th>
                                     <th style="text-align:left; padding:8px; border-bottom: 1px solid #eee;">Action</th>
                                 </tr>
                             </thead>
                             <tbody id="addOnRows"></tbody>
                         </table>
+                        </div>
                     </div>
 
                     <hr style="margin: 25px 0; border: 0; border-top: 1px solid #eee;">
 
                     <div>
                         <h3 style="margin-bottom: 12px; color: var(--primary);">Group Discounts</h3>
-                        <form onsubmit="saveDiscount(event)" style="display:grid; grid-template-columns: 0.8fr 0.8fr 0.9fr 1.6fr auto auto; gap:10px; align-items:end; margin-bottom:12px;">
+                        <form onsubmit="saveDiscount(event)" class="discount-form-grid">
                             <input type="hidden" id="discountId">
                             <input type="number" id="discountMinRiders" min="1" placeholder="Min riders" required>
                             <input type="number" id="discountMaxRiders" min="1" placeholder="Max riders">
                             <input type="number" id="discountPercent" min="0" max="100" step="0.01" placeholder="Discount %" required>
                             <input type="text" id="discountDescription" placeholder="Description">
+                            <input type="text" id="discountDescriptionEs" placeholder="Descripcion (ES)">
                             <button type="submit" class="btn btn-primary" id="saveDiscountBtn">Save Discount</button>
                             <button type="button" class="btn btn-primary" style="background:#666;" onclick="resetDiscountForm()">Clear</button>
                         </form>
+                        <div class="table-scroll">
                         <table style="width:100%; border-collapse: collapse;">
                             <thead>
                                 <tr>
                                     <th style="text-align:left; padding:8px; border-bottom: 1px solid #eee;">Rider Range</th>
                                     <th style="text-align:left; padding:8px; border-bottom: 1px solid #eee;">Discount</th>
                                     <th style="text-align:left; padding:8px; border-bottom: 1px solid #eee;">Description</th>
+                                    <th style="text-align:left; padding:8px; border-bottom: 1px solid #eee;">Descripcion (ES)</th>
                                     <th style="text-align:left; padding:8px; border-bottom: 1px solid #eee;">Action</th>
                                 </tr>
                             </thead>
                             <tbody id="discountRows"></tbody>
                         </table>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -940,25 +1150,508 @@
     </div>
 
     <script>
+        const ADMIN_LANGUAGE_KEY = 'zolten-site-language';
+        const ADMIN_TRANSLATIONS = {
+            en: {
+                adminOperationsDashboard: 'Operations Dashboard',
+                adminViewSite: 'View Site',
+                adminLogout: 'Logout',
+                adminDashboard: '📊 Dashboard',
+                adminBookings: '📅 Bookings',
+                adminAnalytics: '📈 Analytics',
+                adminSettings: '⚙️ Settings',
+                adminDashboardOverview: 'Dashboard Overview',
+                adminRefresh: '🔄 Refresh',
+                adminTotalBookings: 'Total Bookings',
+                adminThisMonth: '↑ This month',
+                adminPendingConfirmations: 'Pending Confirmations',
+                adminAwaitingAction: 'Awaiting action',
+                adminConfirmedRides: 'Confirmed Rides',
+                adminReadyToGo: '✓ Ready to go',
+                adminRevenueThisMonth: 'Revenue This Month',
+                adminTotalEarnings: 'Total earnings',
+                adminBookingsTrend: 'Bookings Trend (7 Days)',
+                adminBookingStatus: 'Booking Status',
+                adminManageBookings: 'Manage Bookings',
+                adminAllStatus: 'All Status',
+                adminPending: 'Pending',
+                adminConfirmed: 'Confirmed',
+                adminCancelled: 'Cancelled',
+                adminReload: '🔄 Reload',
+                adminLoading: 'Loading...',
+                adminBusinessAnalytics: 'Business Analytics',
+                adminAverageBookingValue: 'Average Booking Value',
+                adminPerReservation: 'Per reservation',
+                adminOccupancyRate: 'Occupancy Rate',
+                adminAvailableSlots: 'Available slots',
+                adminCustomerSatisfaction: 'Customer Satisfaction',
+                adminOutOfFive: 'Out of 5',
+                adminTotalGuests: 'Total Guests',
+                adminAllTime: 'All time',
+                adminRevenueByMonth: 'Revenue by Month',
+                adminPeakHours: 'Peak Hours',
+                adminRanchSettings: 'Ranch Settings',
+                adminGlobalDefaults: 'Global Defaults',
+                adminOpeningTime: 'Opening Time',
+                adminClosingTime: 'Closing Time',
+                adminMaxRidersHour: 'Max Riders Per Hour',
+                adminLegacyPrice: 'Legacy Hourly Base Price',
+                adminPackagePricing: 'Package Pricing',
+                adminBusinessContact: 'Business Contact Details',
+                adminContactPhone: 'Contact Phone',
+                adminContactEmail: 'Contact Email',
+                adminBookingEmail: 'Booking Email',
+                adminStreetAddress: 'Street Address',
+                adminCity: 'City',
+                adminState: 'State',
+                adminZip: 'ZIP',
+                adminHoursNote: 'Hours Note',
+                adminHolidayHours: 'Holiday Hours Note',
+                adminSaveSettings: '💾 Save Settings',
+                adminWeeklySchedule: 'Weekly Schedule',
+                adminWeeklyScheduleHint: 'Customize hours, capacity, and price by day of week.',
+                adminDay: 'Day',
+                adminOpen: 'Open',
+                adminClose: 'Close',
+                adminPrice: 'Price',
+                adminClosed: 'Closed',
+                adminCopyGlobal: '↺ Copy Global To All Days',
+                adminCloseAllDays: 'Close All Days',
+                adminOpenAllDays: 'Open All Days',
+                adminSaveWeeklySchedule: '💾 Save Weekly Schedule',
+                adminDateOverrides: 'Date Overrides',
+                adminDateOverridesHint: 'Set holiday closures or special hours/pricing for specific dates.',
+                adminStatus: 'Status',
+                adminNotes: 'Notes',
+                adminAction: 'Action',
+                adminSaveOverride: '➕ Save Override',
+                adminCancelEdit: 'Cancel Edit',
+                adminAddOnPricing: 'Add-On Pricing',
+                adminNameEs: 'Nombre (ES)',
+                adminDescriptionEs: 'Descripcion (ES)',
+                adminChargeType: 'Charge Type',
+                adminDescription: 'Description',
+                adminCode: 'Code',
+                adminName: 'Name',
+                adminSaveAddOn: 'Save Add-On',
+                adminClear: 'Clear',
+                adminGroupDiscounts: 'Group Discounts',
+                adminRiderRange: 'Rider Range',
+                adminDiscount: 'Discount',
+                adminSaveDiscount: 'Save Discount',
+                adminBookingDetails: 'Booking Details',
+                adminReasonForCancellation: 'Reason for Cancellation',
+                adminNewDate: 'New Date',
+                adminNewTime: 'New Time',
+                adminSubmit: 'Submit',
+                adminLoginTitle: '🔐 Admin Login',
+                adminUsername: 'Username',
+                adminPassword: 'Password',
+                adminLogin: 'Login',
+                adminLoginFailed: 'Login failed',
+                adminErrorPrefix: 'Error: ',
+                adminSessionExpired: 'Your admin session expired. Please log in again.',
+                adminRequestFailed: 'Request failed',
+                adminNoBookings: 'No bookings found',
+                adminBookingsLoadFailed: 'Failed to load bookings. Please log in again and retry.',
+                adminSettingsSaved: '✓ Settings saved successfully!',
+                adminSettingsSaveError: 'Error saving settings: ',
+                adminWeeklySaved: '✓ Weekly schedule saved successfully!',
+                adminWeeklySaveError: 'Error saving weekly schedule: ',
+                adminNoDateOverrides: 'No date overrides',
+                adminOverrideUpdated: '✓ Date override updated!',
+                adminOverrideSaved: '✓ Date override saved!',
+                adminOverrideSaveError: 'Error saving date override: ',
+                adminOverrideDeleteError: 'Error deleting override: ',
+                adminNoAddOnsConfigured: 'No add-ons configured',
+                adminNoDiscountsConfigured: 'No discounts configured',
+                adminEdit: 'Edit',
+                adminDelete: 'Delete',
+                adminUpdateAddOn: 'Update Add-On',
+                adminUpdateDiscount: 'Update Discount',
+                adminConfirmBooking: 'Confirm Booking',
+                adminCancelBooking: 'Cancel Booking',
+                adminRescheduleBooking: 'Reschedule Booking',
+                adminActionCompleted: '✓ Action completed!',
+                adminActionFailed: 'Action failed',
+                adminBookingsChartLabel: 'Bookings',
+                adminConfirmedLabel: 'Confirmed',
+                adminPendingLabel: 'Pending',
+                adminCancelledLabel: 'Cancelled'
+            },
+            es: {
+                adminOperationsDashboard: 'Panel de operaciones',
+                adminViewSite: 'Ver sitio',
+                adminLogout: 'Salir',
+                adminDashboard: '📊 Panel',
+                adminBookings: '📅 Reservas',
+                adminAnalytics: '📈 Analitica',
+                adminSettings: '⚙️ Configuracion',
+                adminDashboardOverview: 'Resumen del panel',
+                adminRefresh: '🔄 Actualizar',
+                adminTotalBookings: 'Reservas totales',
+                adminThisMonth: '↑ Este mes',
+                adminPendingConfirmations: 'Confirmaciones pendientes',
+                adminAwaitingAction: 'Esperando accion',
+                adminConfirmedRides: 'Paseos confirmados',
+                adminReadyToGo: '✓ Listos',
+                adminRevenueThisMonth: 'Ingresos de este mes',
+                adminTotalEarnings: 'Ganancias totales',
+                adminBookingsTrend: 'Tendencia de reservas (7 dias)',
+                adminBookingStatus: 'Estado de reservas',
+                adminManageBookings: 'Gestionar reservas',
+                adminAllStatus: 'Todos los estados',
+                adminPending: 'Pendiente',
+                adminConfirmed: 'Confirmado',
+                adminCancelled: 'Cancelado',
+                adminReload: '🔄 Recargar',
+                adminLoading: 'Cargando...',
+                adminBusinessAnalytics: 'Analitica del negocio',
+                adminAverageBookingValue: 'Valor promedio por reserva',
+                adminPerReservation: 'Por reserva',
+                adminOccupancyRate: 'Tasa de ocupacion',
+                adminAvailableSlots: 'Espacios disponibles',
+                adminCustomerSatisfaction: 'Satisfaccion del cliente',
+                adminOutOfFive: 'De 5',
+                adminTotalGuests: 'Total de invitados',
+                adminAllTime: 'Historico',
+                adminRevenueByMonth: 'Ingresos por mes',
+                adminPeakHours: 'Horas pico',
+                adminRanchSettings: 'Configuracion del rancho',
+                adminGlobalDefaults: 'Valores globales',
+                adminOpeningTime: 'Hora de apertura',
+                adminClosingTime: 'Hora de cierre',
+                adminMaxRidersHour: 'Maximo de jinetes por hora',
+                adminLegacyPrice: 'Precio base heredado por hora',
+                adminPackagePricing: 'Precios de paquetes',
+                adminBusinessContact: 'Datos de contacto del negocio',
+                adminContactPhone: 'Telefono de contacto',
+                adminContactEmail: 'Correo de contacto',
+                adminBookingEmail: 'Correo de reservas',
+                adminStreetAddress: 'Direccion',
+                adminCity: 'Ciudad',
+                adminState: 'Estado',
+                adminZip: 'Codigo postal',
+                adminHoursNote: 'Nota de horario',
+                adminHolidayHours: 'Nota de dias festivos',
+                adminSaveSettings: '💾 Guardar configuracion',
+                adminWeeklySchedule: 'Horario semanal',
+                adminWeeklyScheduleHint: 'Personaliza horario, capacidad y precio por dia.',
+                adminDay: 'Dia',
+                adminOpen: 'Abre',
+                adminClose: 'Cierra',
+                adminPrice: 'Precio',
+                adminClosed: 'Cerrado',
+                adminCopyGlobal: '↺ Copiar global a todos los dias',
+                adminCloseAllDays: 'Cerrar todos los dias',
+                adminOpenAllDays: 'Abrir todos los dias',
+                adminSaveWeeklySchedule: '💾 Guardar horario semanal',
+                adminDateOverrides: 'Excepciones por fecha',
+                adminDateOverridesHint: 'Define cierres festivos u horarios y precios especiales para fechas concretas.',
+                adminStatus: 'Estado',
+                adminNotes: 'Notas',
+                adminAction: 'Accion',
+                adminSaveOverride: '➕ Guardar excepcion',
+                adminCancelEdit: 'Cancelar edicion',
+                adminAddOnPricing: 'Precios de extras',
+                adminNameEs: 'Nombre (ES)',
+                adminDescriptionEs: 'Descripcion (ES)',
+                adminChargeType: 'Tipo de cobro',
+                adminDescription: 'Descripcion',
+                adminCode: 'Codigo',
+                adminName: 'Nombre',
+                adminSaveAddOn: 'Guardar extra',
+                adminClear: 'Limpiar',
+                adminGroupDiscounts: 'Descuentos grupales',
+                adminRiderRange: 'Rango de jinetes',
+                adminDiscount: 'Descuento',
+                adminSaveDiscount: 'Guardar descuento',
+                adminBookingDetails: 'Detalles de reserva',
+                adminReasonForCancellation: 'Motivo de cancelacion',
+                adminNewDate: 'Nueva fecha',
+                adminNewTime: 'Nueva hora',
+                adminSubmit: 'Enviar',
+                adminLoginTitle: '🔐 Acceso administrativo',
+                adminUsername: 'Usuario',
+                adminPassword: 'Contrasena',
+                adminLogin: 'Entrar',
+                adminLoginFailed: 'Error al iniciar sesion',
+                adminErrorPrefix: 'Error: ',
+                adminSessionExpired: 'Tu sesion administrativa expiro. Vuelve a iniciar sesion.',
+                adminRequestFailed: 'La solicitud fallo',
+                adminNoBookings: 'No se encontraron reservas',
+                adminBookingsLoadFailed: 'No se pudieron cargar las reservas. Vuelve a iniciar sesion e intenta otra vez.',
+                adminSettingsSaved: '✓ Configuracion guardada correctamente',
+                adminSettingsSaveError: 'Error al guardar configuracion: ',
+                adminWeeklySaved: '✓ Horario semanal guardado correctamente',
+                adminWeeklySaveError: 'Error al guardar horario semanal: ',
+                adminNoDateOverrides: 'No hay excepciones por fecha',
+                adminOverrideUpdated: '✓ Excepcion actualizada',
+                adminOverrideSaved: '✓ Excepcion guardada',
+                adminOverrideSaveError: 'Error al guardar la excepcion: ',
+                adminOverrideDeleteError: 'Error al eliminar la excepcion: ',
+                adminNoAddOnsConfigured: 'No hay extras configurados',
+                adminNoDiscountsConfigured: 'No hay descuentos configurados',
+                adminEdit: 'Editar',
+                adminDelete: 'Eliminar',
+                adminUpdateAddOn: 'Actualizar extra',
+                adminUpdateDiscount: 'Actualizar descuento',
+                adminConfirmBooking: 'Confirmar reserva',
+                adminCancelBooking: 'Cancelar reserva',
+                adminRescheduleBooking: 'Reagendar reserva',
+                adminActionCompleted: '✓ Accion completada',
+                adminActionFailed: 'La accion fallo',
+                adminBookingsChartLabel: 'Reservas',
+                adminConfirmedLabel: 'Confirmadas',
+                adminPendingLabel: 'Pendientes',
+                adminCancelledLabel: 'Canceladas'
+            }
+        };
+
+        const ADMIN_TEXT_KEYS = {
+            'Operations Dashboard': 'adminOperationsDashboard',
+            'View Site': 'adminViewSite',
+            'Logout': 'adminLogout',
+            '📊 Dashboard': 'adminDashboard',
+            '📅 Bookings': 'adminBookings',
+            '📈 Analytics': 'adminAnalytics',
+            '⚙️ Settings': 'adminSettings',
+            'Dashboard Overview': 'adminDashboardOverview',
+            '🔄 Refresh': 'adminRefresh',
+            'Total Bookings': 'adminTotalBookings',
+            '↑ This month': 'adminThisMonth',
+            'Pending Confirmations': 'adminPendingConfirmations',
+            'Awaiting action': 'adminAwaitingAction',
+            'Confirmed Rides': 'adminConfirmedRides',
+            '✓ Ready to go': 'adminReadyToGo',
+            'Revenue This Month': 'adminRevenueThisMonth',
+            'Total earnings': 'adminTotalEarnings',
+            'Bookings Trend (7 Days)': 'adminBookingsTrend',
+            'Booking Status': 'adminBookingStatus',
+            'Manage Bookings': 'adminManageBookings',
+            'All Status': 'adminAllStatus',
+            'Pending': 'adminPending',
+            'Confirmed': 'adminConfirmed',
+            'Cancelled': 'adminCancelled',
+            '🔄 Reload': 'adminReload',
+            'Loading...': 'adminLoading',
+            'Business Analytics': 'adminBusinessAnalytics',
+            'Average Booking Value': 'adminAverageBookingValue',
+            'Per reservation': 'adminPerReservation',
+            'Occupancy Rate': 'adminOccupancyRate',
+            'Available slots': 'adminAvailableSlots',
+            'Customer Satisfaction': 'adminCustomerSatisfaction',
+            'Out of 5': 'adminOutOfFive',
+            'Total Guests': 'adminTotalGuests',
+            'All time': 'adminAllTime',
+            'Revenue by Month': 'adminRevenueByMonth',
+            'Peak Hours': 'adminPeakHours',
+            'Ranch Settings': 'adminRanchSettings',
+            'Global Defaults': 'adminGlobalDefaults',
+            'Opening Time': 'adminOpeningTime',
+            'Closing Time': 'adminClosingTime',
+            'Max Riders Per Hour': 'adminMaxRidersHour',
+            'Legacy Hourly Base Price': 'adminLegacyPrice',
+            'Package Pricing': 'adminPackagePricing',
+            'Business Contact Details': 'adminBusinessContact',
+            'Contact Phone': 'adminContactPhone',
+            'Contact Email': 'adminContactEmail',
+            'Booking Email': 'adminBookingEmail',
+            'Street Address': 'adminStreetAddress',
+            'City': 'adminCity',
+            'State': 'adminState',
+            'ZIP': 'adminZip',
+            'Hours Note': 'adminHoursNote',
+            'Holiday Hours Note': 'adminHolidayHours',
+            '💾 Save Settings': 'adminSaveSettings',
+            'Weekly Schedule': 'adminWeeklySchedule',
+            'Customize hours, capacity, and price by day of week.': 'adminWeeklyScheduleHint',
+            'Day': 'adminDay',
+            'Open': 'adminOpen',
+            'Close': 'adminClose',
+            'Price': 'adminPrice',
+            'Closed': 'adminClosed',
+            '↺ Copy Global To All Days': 'adminCopyGlobal',
+            'Close All Days': 'adminCloseAllDays',
+            'Open All Days': 'adminOpenAllDays',
+            '💾 Save Weekly Schedule': 'adminSaveWeeklySchedule',
+            'Date Overrides': 'adminDateOverrides',
+            'Set holiday closures or special hours/pricing for specific dates.': 'adminDateOverridesHint',
+            'Status': 'adminStatus',
+            'Notes': 'adminNotes',
+            'Action': 'adminAction',
+            '➕ Save Override': 'adminSaveOverride',
+            'Cancel Edit': 'adminCancelEdit',
+            'Add-On Pricing': 'adminAddOnPricing',
+            'Code': 'adminCode',
+            'Name': 'adminName',
+            'Nombre (ES)': 'adminNameEs',
+            'Charge Type': 'adminChargeType',
+            'Description': 'adminDescription',
+            'Descripcion (ES)': 'adminDescriptionEs',
+            'Save Add-On': 'adminSaveAddOn',
+            'Clear': 'adminClear',
+            'Group Discounts': 'adminGroupDiscounts',
+            'Rider Range': 'adminRiderRange',
+            'Discount': 'adminDiscount',
+            'Save Discount': 'adminSaveDiscount',
+            'Booking Details': 'adminBookingDetails',
+            'Reason for Cancellation': 'adminReasonForCancellation',
+            'New Date': 'adminNewDate',
+            'New Time': 'adminNewTime',
+            'Submit': 'adminSubmit',
+            '🔐 Admin Login': 'adminLoginTitle',
+            'Username': 'adminUsername',
+            'Password': 'adminPassword',
+            'Login': 'adminLogin'
+        };
+
+        const ADMIN_PLACEHOLDER_KEYS = {
+            '210-769-4164': 'adminContactPhone',
+            'info@zoltenranch.com': 'adminContactEmail',
+            'booking@zoltenranch.com': 'adminBookingEmail',
+            '9536 Hildebrandt': 'adminStreetAddress',
+            'San Antonio': 'adminCity',
+            'TX': 'adminState',
+            '78222': 'adminZip',
+            'Last entry at 4:00 PM': 'adminHoursNote',
+            'Open (call ahead)': 'adminHolidayHours',
+            'Open': 'adminOpen',
+            'Close': 'adminClose',
+            'Max/Hr': 'adminMaxRidersHour',
+            'Notes (optional)': 'adminNotes',
+            'code': 'adminCode',
+            'Name': 'adminName',
+            'Nombre (ES)': 'adminNameEs',
+            'Price': 'adminPrice',
+            'Description': 'adminDescription',
+            'Descripcion (ES)': 'adminDescriptionEs',
+            'Min riders': 'adminRiderRange',
+            'Max riders': 'adminRiderRange',
+            'Discount %': 'adminDiscount',
+            'Enter reason...': 'adminReasonForCancellation'
+        };
+
         let token = localStorage.getItem('adminToken');
         let bookingsData = [];
         let editingOverrideId = null;
         let pricingCatalog = { packages: [], add_ons: [], group_discounts: [] };
-        const DAY_LABELS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const DAY_LABELS = {
+            en: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+            es: ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado']
+        };
+
+        function getAdminLanguage() {
+            return localStorage.getItem(ADMIN_LANGUAGE_KEY) === 'es' ? 'es' : 'en';
+        }
+
+        function setAdminLanguage(lang) {
+            localStorage.setItem(ADMIN_LANGUAGE_KEY, lang === 'es' ? 'es' : 'en');
+        }
+
+        function adminT(key) {
+            const lang = getAdminLanguage();
+            return ADMIN_TRANSLATIONS[lang]?.[key] || ADMIN_TRANSLATIONS.en[key] || key;
+        }
+
+        function applyAdminLanguage() {
+            document.documentElement.lang = getAdminLanguage();
+
+            document.querySelectorAll('.admin-lang-toggle button').forEach((button) => {
+                button.classList.toggle('is-active', button.dataset.adminLang === getAdminLanguage());
+            });
+
+            document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, label, button, a, option, th, td, div').forEach((node) => {
+                if (node.children.length > 0) return;
+                const current = node.dataset.adminOriginalText || node.textContent.trim();
+                if (!node.dataset.adminOriginalText && current) {
+                    node.dataset.adminOriginalText = current;
+                }
+                const key = ADMIN_TEXT_KEYS[node.dataset.adminOriginalText || ''];
+                if (key) {
+                    node.textContent = adminT(key);
+                }
+            });
+
+            document.querySelectorAll('[placeholder]').forEach((node) => {
+                const current = node.dataset.adminOriginalPlaceholder || node.getAttribute('placeholder') || '';
+                if (!node.dataset.adminOriginalPlaceholder && current) {
+                    node.dataset.adminOriginalPlaceholder = current;
+                }
+                const key = ADMIN_PLACEHOLDER_KEYS[node.dataset.adminOriginalPlaceholder || ''];
+                if (key) {
+                    node.setAttribute('placeholder', adminT(key));
+                }
+            });
+        }
 
         document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.admin-lang-toggle button').forEach((button) => {
+                button.addEventListener('click', () => {
+                    setAdminLanguage(button.dataset.adminLang || 'en');
+                    applyAdminLanguage();
+
+                    if (token) {
+                        loadDashboard();
+                        loadBookings();
+                        loadAnalytics();
+                        loadSettings();
+                    } else {
+                        showLoginForm();
+                    }
+                });
+            });
+
+            applyAdminLanguage();
+
             if (!token) {
                 showLoginForm();
             } else {
                 document.getElementById('userName').textContent = 'Admin';
                 loadDashboard();
             }
+
+            window.addEventListener('resize', handleAdminViewportChange, { passive: true });
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') {
+                    closeAdminNav();
+                }
+            });
         });
+
+        function toggleAdminNav() {
+            const willOpen = !document.body.classList.contains('admin-nav-open');
+            document.body.classList.toggle('admin-nav-open', willOpen);
+            const button = document.querySelector('.mobile-admin-nav-btn');
+            if (button) {
+                button.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+                button.textContent = willOpen ? '✕' : '☰';
+            }
+        }
+
+        function closeAdminNav() {
+            document.body.classList.remove('admin-nav-open');
+            const button = document.querySelector('.mobile-admin-nav-btn');
+            if (button) {
+                button.setAttribute('aria-expanded', 'false');
+                button.textContent = '☰';
+            }
+        }
+
+        function handleAdminViewportChange() {
+            if (window.innerWidth > 768) {
+                closeAdminNav();
+            }
+        }
 
         function showLoginForm() {
             const html = `
                 <div style="display: flex; align-items: center; justify-content: center; height: 100vh; background: #f5f5f5;">
                     <div style="background: white; padding: 40px; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); max-width: 400px; width: 100%;">
+                        <div style="display:flex; justify-content:flex-end; margin-bottom:14px; gap:8px;">
+                            <button type="button" onclick="setAdminLanguage('en'); showLoginForm();" style="border:1px solid #ddd; background:#fff; padding:6px 10px; border-radius:999px; cursor:pointer;">EN</button>
+                            <button type="button" onclick="setAdminLanguage('es'); showLoginForm();" style="border:1px solid #ddd; background:#fff; padding:6px 10px; border-radius:999px; cursor:pointer;">ES</button>
+                        </div>
                         <h1 style="color: var(--primary); margin-bottom: 30px; text-align: center; font-size: 1.8em;">🔐 Admin Login</h1>
                         <form onsubmit="handleLogin(event)" style="display: flex; flex-direction: column; gap: 15px;">
                             <div>
@@ -976,6 +1669,7 @@
                 </div>
             `;
             document.body.innerHTML = html;
+            applyAdminLanguage();
         }
 
         async function handleLogin(event) {
@@ -996,11 +1690,11 @@
                     localStorage.setItem('adminToken', token);
                     location.reload();
                 } else {
-                    document.getElementById('loginAlert').textContent = data.error || 'Login failed';
+                    document.getElementById('loginAlert').textContent = data.error || adminT('adminLoginFailed');
                     document.getElementById('loginAlert').style.display = 'block';
                 }
             } catch (error) {
-                document.getElementById('loginAlert').textContent = 'Error: ' + error.message;
+                document.getElementById('loginAlert').textContent = adminT('adminErrorPrefix') + error.message;
                 document.getElementById('loginAlert').style.display = 'block';
             }
         }
@@ -1020,13 +1714,13 @@
 
             if (response.status === 401) {
                 localStorage.removeItem('adminToken');
-                alert('Your admin session expired. Please log in again.');
+                alert(adminT('adminSessionExpired'));
                 location.reload();
                 throw new Error('Unauthorized');
             }
 
             if (!response.ok) {
-                throw new Error(data.error || 'Request failed');
+                throw new Error(data.error || adminT('adminRequestFailed'));
             }
 
             return data;
@@ -1037,6 +1731,7 @@
             document.getElementById(sectionId).classList.add('active');
             document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
             document.querySelector(`[data-section="${sectionId}"]`).classList.add('active');
+            closeAdminNav();
 
             if (sectionId === 'bookings') loadBookings();
             else if (sectionId === 'dashboard') loadDashboard();
@@ -1099,18 +1794,18 @@
                         <td>${b.booking_time}</td>
                         <td>${b.number_of_riders}</td>
                         <td>$${(parseFloat(b.total_price) || 0).toFixed(2)}</td>
-                        <td><span class="status-badge status-${b.status}">${b.status}</span></td>
+                        <td><span class="status-badge status-${b.status}">${b.status === 'confirmed' ? adminT('adminConfirmedLabel') : b.status === 'cancelled' ? adminT('adminCancelledLabel') : adminT('adminPendingLabel')}</span></td>
                         <td>
-                            <button class="btn btn-primary btn-small" onclick="openActionModal(${b.id}, 'confirm')">✓ Confirm</button>
-                            <button class="btn btn-primary btn-small" onclick="openActionModal(${b.id}, 'cancel')" style="background: #e74c3c;">✗ Cancel</button>
+                            <button class="btn btn-primary btn-small" onclick="openActionModal(${b.id}, 'confirm')">✓ ${adminT('adminConfirmed')}</button>
+                            <button class="btn btn-primary btn-small" onclick="openActionModal(${b.id}, 'cancel')" style="background: #e74c3c;">✗ ${adminT('adminCancelled')}</button>
                         </td>
                     </tr>
-                `).join('') || '<tr><td colspan="10" style="text-align: center; padding: 20px;">No bookings found</td></tr>';
+                `).join('') || `<tr><td colspan="10" style="text-align: center; padding: 20px;">${adminT('adminNoBookings')}</td></tr>`;
             } catch (error) {
                 console.error('Error loading bookings:', error);
                 const tbody = document.getElementById('bookingsTable');
                 if (tbody) {
-                    tbody.innerHTML = '<tr><td colspan="10" style="text-align: center; padding: 20px; color: #e74c3c;">Failed to load bookings. Please log in again and retry.</td></tr>';
+                    tbody.innerHTML = `<tr><td colspan="10" style="text-align: center; padding: 20px; color: #e74c3c;">${adminT('adminBookingsLoadFailed')}</td></tr>`;
                 }
             }
         }
@@ -1195,10 +1890,10 @@
                 });
 
                 if (response.ok) {
-                    alert('✓ Settings saved successfully!');
+                    alert(adminT('adminSettingsSaved'));
                 }
             } catch (error) {
-                alert('Error saving settings: ' + error.message);
+                alert(adminT('adminSettingsSaveError') + error.message);
             }
         }
 
@@ -1212,7 +1907,7 @@
             rows.forEach((row) => { byDay[row.day_of_week] = row; });
 
             const tbody = document.getElementById('weeklyScheduleRows');
-            tbody.innerHTML = DAY_LABELS.map((label, day) => {
+            tbody.innerHTML = DAY_LABELS[getAdminLanguage()].map((label, day) => {
                 const row = byDay[day] || {};
                 return `
                     <tr>
@@ -1248,10 +1943,10 @@
                     });
                 }
 
-                alert('✓ Weekly schedule saved successfully!');
+                alert(adminT('adminWeeklySaved'));
                 await loadWeeklySchedule();
             } catch (error) {
-                alert('Error saving weekly schedule: ' + error.message);
+                alert(adminT('adminWeeklySaveError') + error.message);
             }
         }
 
@@ -1290,7 +1985,7 @@
                     <td style="padding: 8px; border-bottom: 1px solid #f1f1f1;">${row.is_closed ? '-' : `${String(row.open_time || '').slice(0, 5)} - ${String(row.close_time || '').slice(0, 5)}`}</td>
                     <td style="padding: 8px; border-bottom: 1px solid #f1f1f1;">${row.max_bookings_per_hour ?? '-'}</td>
                     <td style="padding: 8px; border-bottom: 1px solid #f1f1f1;">${row.trail_price ?? '-'}</td>
-                    <td style="padding: 8px; border-bottom: 1px solid #f1f1f1;">${row.is_closed ? 'Closed' : 'Open'}</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #f1f1f1;">${row.is_closed ? adminT('adminClosed') : adminT('adminOpen')}</td>
                     <td style="padding: 8px; border-bottom: 1px solid #f1f1f1;">${row.notes || '-'}</td>
                     <td style="padding: 8px; border-bottom: 1px solid #f1f1f1; display:flex; gap:6px;">
                         <button class="btn btn-primary btn-small" onclick='startOverrideEdit(${JSON.stringify({
@@ -1302,11 +1997,11 @@
                             trail_price: row.trail_price,
                             is_closed: row.is_closed,
                             notes: row.notes,
-                        }).replace(/'/g, "&#39;")})'>Edit</button>
-                        <button class="btn btn-primary btn-small" style="background:#e74c3c" onclick="deleteDateOverride(${row.id})">Delete</button>
+                        }).replace(/'/g, "&#39;")})'>${adminT('adminEdit')}</button>
+                        <button class="btn btn-primary btn-small" style="background:#e74c3c" onclick="deleteDateOverride(${row.id})">${adminT('adminDelete')}</button>
                     </td>
                 </tr>
-            `).join('') || '<tr><td colspan="7" style="padding: 10px;">No date overrides</td></tr>';
+            `).join('') || `<tr><td colspan="7" style="padding: 10px;">${adminT('adminNoDateOverrides')}</td></tr>`;
         }
 
         function startOverrideEdit(override) {
@@ -1319,7 +2014,7 @@
             document.getElementById('overridePrice').value = override.trail_price ?? '';
             document.getElementById('overrideClosed').checked = Boolean(override.is_closed);
             document.getElementById('overrideNotes').value = override.notes || '';
-            document.getElementById('saveOverrideBtn').textContent = '💾 Update Override';
+            document.getElementById('saveOverrideBtn').textContent = '💾 ' + adminT('adminEdit');
             document.getElementById('cancelOverrideEditBtn').style.display = 'inline-block';
             document.getElementById('overrideDate').focus();
         }
@@ -1334,7 +2029,7 @@
             document.getElementById('overridePrice').value = '';
             document.getElementById('overrideClosed').checked = false;
             document.getElementById('overrideNotes').value = '';
-            document.getElementById('saveOverrideBtn').textContent = '➕ Save Override';
+            document.getElementById('saveOverrideBtn').textContent = adminT('adminSaveOverride');
             document.getElementById('cancelOverrideEditBtn').style.display = 'none';
         }
 
@@ -1371,9 +2066,9 @@
 
                 await loadDateOverrides();
                 cancelOverrideEdit();
-                alert(isEditing ? '✓ Date override updated!' : '✓ Date override saved!');
+                alert(isEditing ? adminT('adminOverrideUpdated') : adminT('adminOverrideSaved'));
             } catch (error) {
-                alert('Error saving date override: ' + error.message);
+                alert(adminT('adminOverrideSaveError') + error.message);
             }
         }
 
@@ -1386,7 +2081,7 @@
                 await parseApiResponse(response);
                 await loadDateOverrides();
             } catch (error) {
-                alert('Error deleting override: ' + error.message);
+                alert(adminT('adminOverrideDeleteError') + error.message);
             }
         }
 
@@ -1405,15 +2100,17 @@
                 <tr>
                     <td style="padding:8px; border-bottom:1px solid #f1f1f1;">${addOn.code}</td>
                     <td style="padding:8px; border-bottom:1px solid #f1f1f1;">${addOn.icon || '✨'} ${addOn.name}</td>
+                    <td style="padding:8px; border-bottom:1px solid #f1f1f1;">${addOn.name_es || '-'}</td>
                     <td style="padding:8px; border-bottom:1px solid #f1f1f1;">$${Number(addOn.price).toFixed(2)}</td>
                     <td style="padding:8px; border-bottom:1px solid #f1f1f1;">${addOn.charge_type}</td>
                     <td style="padding:8px; border-bottom:1px solid #f1f1f1;">${addOn.description || '-'}</td>
+                    <td style="padding:8px; border-bottom:1px solid #f1f1f1;">${addOn.description_es || '-'}</td>
                     <td style="padding:8px; border-bottom:1px solid #f1f1f1; display:flex; gap:6px;">
-                        <button class="btn btn-primary btn-small" onclick='editAddOn(${JSON.stringify(addOn).replace(/'/g, "&#39;")})'>Edit</button>
-                        <button class="btn btn-primary btn-small" style="background:#e74c3c;" onclick="deleteAddOn(${addOn.id})">Delete</button>
+                        <button class="btn btn-primary btn-small" onclick='editAddOn(${JSON.stringify(addOn).replace(/'/g, "&#39;")})'>${adminT('adminEdit')}</button>
+                        <button class="btn btn-primary btn-small" style="background:#e74c3c;" onclick="deleteAddOn(${addOn.id})">${adminT('adminDelete')}</button>
                     </td>
                 </tr>
-            `).join('') || '<tr><td colspan="6" style="padding:10px;">No add-ons configured</td></tr>';
+            `).join('') || `<tr><td colspan="8" style="padding:10px;">${adminT('adminNoAddOnsConfigured')}</td></tr>`;
         }
 
         function renderDiscounts() {
@@ -1423,34 +2120,39 @@
                     <td style="padding:8px; border-bottom:1px solid #f1f1f1;">${discount.min_riders}+${discount.max_riders ? ` to ${discount.max_riders}` : ''}</td>
                     <td style="padding:8px; border-bottom:1px solid #f1f1f1;">${Number(discount.discount_percent).toFixed(2)}%</td>
                     <td style="padding:8px; border-bottom:1px solid #f1f1f1;">${discount.description || '-'}</td>
+                    <td style="padding:8px; border-bottom:1px solid #f1f1f1;">${discount.description_es || '-'}</td>
                     <td style="padding:8px; border-bottom:1px solid #f1f1f1; display:flex; gap:6px;">
-                        <button class="btn btn-primary btn-small" onclick='editDiscount(${JSON.stringify(discount).replace(/'/g, "&#39;")})'>Edit</button>
-                        <button class="btn btn-primary btn-small" style="background:#e74c3c;" onclick="deleteDiscount(${discount.id})">Delete</button>
+                        <button class="btn btn-primary btn-small" onclick='editDiscount(${JSON.stringify(discount).replace(/'/g, "&#39;")})'>${adminT('adminEdit')}</button>
+                        <button class="btn btn-primary btn-small" style="background:#e74c3c;" onclick="deleteDiscount(${discount.id})">${adminT('adminDelete')}</button>
                     </td>
                 </tr>
-            `).join('') || '<tr><td colspan="4" style="padding:10px;">No discounts configured</td></tr>';
+            `).join('') || `<tr><td colspan="5" style="padding:10px;">${adminT('adminNoDiscountsConfigured')}</td></tr>`;
         }
 
         function editAddOn(addOn) {
             document.getElementById('addonId').value = addOn.id;
             document.getElementById('addonCode').value = addOn.code;
             document.getElementById('addonName').value = addOn.name;
+            document.getElementById('addonNameEs').value = addOn.name_es || '';
             document.getElementById('addonPrice').value = addOn.price;
             document.getElementById('addonChargeType').value = addOn.charge_type;
             document.getElementById('addonIcon').value = addOn.icon || '';
             document.getElementById('addonDescription').value = addOn.description || '';
-            document.getElementById('saveAddonBtn').textContent = 'Update Add-On';
+            document.getElementById('addonDescriptionEs').value = addOn.description_es || '';
+            document.getElementById('saveAddonBtn').textContent = adminT('adminUpdateAddOn');
         }
 
         function resetAddOnForm() {
             document.getElementById('addonId').value = '';
             document.getElementById('addonCode').value = '';
             document.getElementById('addonName').value = '';
+            document.getElementById('addonNameEs').value = '';
             document.getElementById('addonPrice').value = '';
             document.getElementById('addonChargeType').value = 'per_booking';
             document.getElementById('addonIcon').value = '';
             document.getElementById('addonDescription').value = '';
-            document.getElementById('saveAddonBtn').textContent = 'Save Add-On';
+            document.getElementById('addonDescriptionEs').value = '';
+            document.getElementById('saveAddonBtn').textContent = adminT('adminSaveAddOn');
         }
 
         async function saveAddOn(event) {
@@ -1459,10 +2161,12 @@
             const payload = {
                 code: document.getElementById('addonCode').value.trim(),
                 name: document.getElementById('addonName').value.trim(),
+                name_es: document.getElementById('addonNameEs').value.trim(),
                 price: parseFloat(document.getElementById('addonPrice').value),
                 charge_type: document.getElementById('addonChargeType').value,
                 icon: document.getElementById('addonIcon').value.trim() || '✨',
                 description: document.getElementById('addonDescription').value.trim(),
+                description_es: document.getElementById('addonDescriptionEs').value.trim(),
                 is_active: true,
             };
 
@@ -1494,7 +2198,8 @@
             document.getElementById('discountMaxRiders').value = discount.max_riders ?? '';
             document.getElementById('discountPercent').value = discount.discount_percent;
             document.getElementById('discountDescription').value = discount.description || '';
-            document.getElementById('saveDiscountBtn').textContent = 'Update Discount';
+            document.getElementById('discountDescriptionEs').value = discount.description_es || '';
+            document.getElementById('saveDiscountBtn').textContent = adminT('adminUpdateDiscount');
         }
 
         function resetDiscountForm() {
@@ -1503,7 +2208,8 @@
             document.getElementById('discountMaxRiders').value = '';
             document.getElementById('discountPercent').value = '';
             document.getElementById('discountDescription').value = '';
-            document.getElementById('saveDiscountBtn').textContent = 'Save Discount';
+            document.getElementById('discountDescriptionEs').value = '';
+            document.getElementById('saveDiscountBtn').textContent = adminT('adminSaveDiscount');
         }
 
         async function saveDiscount(event) {
@@ -1514,6 +2220,7 @@
                 max_riders: document.getElementById('discountMaxRiders').value || null,
                 discount_percent: parseFloat(document.getElementById('discountPercent').value),
                 description: document.getElementById('discountDescription').value.trim(),
+                description_es: document.getElementById('discountDescriptionEs').value.trim(),
                 is_active: true,
             };
             const response = await fetch(id ? `/api/pricing/discounts/${id}` : '/api/pricing/discounts', {
@@ -1543,7 +2250,7 @@
             document.getElementById('actionType').value = action;
             document.getElementById('reasonField').style.display = action === 'cancel' ? 'block' : 'none';
             document.getElementById('rescheduleField').style.display = action === 'reschedule' ? 'block' : 'none';
-            document.getElementById('modalTitle').textContent = action === 'confirm' ? 'Confirm Booking' : action === 'cancel' ? 'Cancel Booking' : 'Reschedule Booking';
+            document.getElementById('modalTitle').textContent = action === 'confirm' ? adminT('adminConfirmBooking') : action === 'cancel' ? adminT('adminCancelBooking') : adminT('adminRescheduleBooking');
             document.getElementById('actionModal').classList.add('show');
         }
 
@@ -1577,15 +2284,15 @@
                 });
 
                 if (response.ok) {
-                    alert('✓ Action completed!');
+                    alert(adminT('adminActionCompleted'));
                     closeModal();
                     loadBookings();
                 } else {
                     const error = await response.json();
-                    alert('Error: ' + (error.message || 'Action failed'));
+                    alert(adminT('adminErrorPrefix') + (error.message || adminT('adminActionFailed')));
                 }
             } catch (error) {
-                alert('Error: ' + error.message);
+                alert(adminT('adminErrorPrefix') + error.message);
             }
         }
 
@@ -1606,7 +2313,7 @@
                     data: {
                         labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
                         datasets: [{
-                            label: 'Bookings',
+                            label: adminT('adminBookingsChartLabel'),
                             data: [12, 19, 3, 5, 2, 3, 8],
                             borderColor: '#6B4423',
                             backgroundColor: 'rgba(107, 68, 35, 0.1)',
@@ -1623,7 +2330,7 @@
                 new Chart(statusCtx, {
                     type: 'doughnut',
                     data: {
-                        labels: ['Confirmed', 'Pending', 'Cancelled'],
+                        labels: [adminT('adminConfirmedLabel'), adminT('adminPendingLabel'), adminT('adminCancelledLabel')],
                         datasets: [{
                             data: [stats.confirmed || 0, stats.pending || 0, stats.cancelled || 0],
                             backgroundColor: ['#27ae60', '#f39c12', '#e74c3c']

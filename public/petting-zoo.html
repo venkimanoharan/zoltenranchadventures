@@ -132,15 +132,6 @@
             display: none;
         }
 
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 1.8rem;
-            color: var(--primary);
-            cursor: pointer;
-        }
-
         .page-hero {
             margin-top: 90px;
             height: 60vh;
@@ -409,27 +400,6 @@
                 padding: 1rem 2rem;
             }
 
-            .nav-links {
-                position: fixed;
-                top: 80px;
-                left: -100%;
-                width: 100%;
-                height: calc(100vh - 80px);
-                background: white;
-                flex-direction: column;
-                padding: 3rem;
-                transition: left 0.3s ease;
-                gap: 2rem;
-            }
-
-            .nav-links.active {
-                left: 0;
-            }
-
-            .mobile-menu-btn {
-                display: block;
-            }
-
             .logo-container img {
                 height: 45px;
             }
@@ -473,7 +443,6 @@
                     <span>Adventures Await</span>
                 </div>
             </div>
-            <button class="mobile-menu-btn" aria-label="Toggle menu">☰</button>
             <ul class="nav-links">
                 <li><a href="/">Home</a></li>
                 <li><a href="/horseback-riding.html" class="active">Experiences</a></li>
@@ -490,15 +459,15 @@
         <img src="./images/animals.jpg" alt="Petting Zoo at Zolten Ranch" class="page-hero-image">
         <div class="page-hero-overlay"></div>
         <div class="page-hero-content">
-            <h2>Petting Zoo</h2>
-            <p>Meet our friendly farm animals up close</p>
+            <h2 data-page-i18n="pettingHeroTitle">Petting Zoo</h2>
+            <p data-page-i18n="pettingHeroBody">Meet our friendly farm animals up close</p>
         </div>
     </section>
 
     <section class="content-section">
         <div class="section-intro">
-            <h3>Interactive Animal Experiences</h3>
-            <p>Our petting zoo offers hands-on fun for visitors of all ages. Meet and interact with a variety of friendly farm animals in a safe, supervised environment. It's the perfect educational and entertaining experience for families!</p>
+            <h3 data-page-i18n="pettingIntroTitle">Interactive Animal Experiences</h3>
+            <p data-page-i18n="pettingIntroBody">Our petting zoo offers hands-on fun for visitors of all ages. Meet and interact with a variety of friendly farm animals in a safe, supervised environment. It's the perfect educational and entertaining experience for families!</p>
         </div>
 
         <div class="animals-grid">
@@ -506,8 +475,8 @@
                 <img src="./images/animals.jpg" alt="Friendly Goats" class="animal-image">
                 <div class="animal-content">
                     <span class="animal-emoji">🐐</span>
-                    <h4>Playful Goats</h4>
-                    <p>Our goats are energetic, friendly, and love attention! Watch them jump and play, or give them a gentle pet. They're always ready to make new friends and their playful antics will keep you entertained.</p>
+                    <h4 data-page-i18n="pettingAnimal1Title">Playful Goats</h4>
+                    <p data-page-i18n="pettingAnimal1Body">Our goats are energetic, friendly, and love attention! Watch them jump and play, or give them a gentle pet. They're always ready to make new friends and their playful antics will keep you entertained.</p>
                 </div>
             </div>
 
@@ -515,8 +484,8 @@
                 <img src="./images/animals.jpg" alt="Adorable Sheep" class="animal-image">
                 <div class="animal-content">
                     <span class="animal-emoji">🐑</span>
-                    <h4>Gentle Sheep</h4>
-                    <p>Our woolly sheep are calm and gentle, perfect for younger children. Feel their soft wool and learn about how sheep help us. They're patient and love being brushed and petted.</p>
+                    <h4 data-page-i18n="pettingAnimal2Title">Gentle Sheep</h4>
+                    <p data-page-i18n="pettingAnimal2Body">Our woolly sheep are calm and gentle, perfect for younger children. Feel their soft wool and learn about how sheep help us. They're patient and love being brushed and petted.</p>
                 </div>
             </div>
 
@@ -524,8 +493,8 @@
                 <img src="./images/animals.jpg" alt="Cute Rabbits" class="animal-image">
                 <div class="animal-content">
                     <span class="animal-emoji">🐰</span>
-                    <h4>Cuddly Rabbits</h4>
-                    <p>Our bunnies are soft, gentle, and perfect for little hands. Hold them gently and watch them hop around. Kids especially love feeding our rabbits their favorite vegetables!</p>
+                    <h4 data-page-i18n="pettingAnimal3Title">Cuddly Rabbits</h4>
+                    <p data-page-i18n="pettingAnimal3Body">Our bunnies are soft, gentle, and perfect for little hands. Hold them gently and watch them hop around. Kids especially love feeding our rabbits their favorite vegetables!</p>
                 </div>
             </div>
 
@@ -533,8 +502,8 @@
                 <img src="./images/animals.jpg" alt="Friendly Donkeys" class="animal-image">
                 <div class="animal-content">
                     <span class="animal-emoji">🫏</span>
-                    <h4>Sweet Donkeys</h4>
-                    <p>Meet our lovable donkeys with their big personalities! They're gentle giants who love scratches behind the ears and treats. Don't be surprised by their loud but friendly brays!</p>
+                    <h4 data-page-i18n="pettingAnimal4Title">Sweet Donkeys</h4>
+                    <p data-page-i18n="pettingAnimal4Body">Meet our lovable donkeys with their big personalities! They're gentle giants who love scratches behind the ears and treats. Don't be surprised by their loud but friendly brays!</p>
                 </div>
             </div>
 
@@ -542,8 +511,8 @@
                 <img src="./images/animals.jpg" alt="Colorful Chickens" class="animal-image">
                 <div class="animal-content">
                     <span class="animal-emoji">🐔</span>
-                    <h4>Chickens & Birds</h4>
-                    <p>Watch our chickens peck around and learn about where eggs come from. We also have turkeys and other birds that add to the farm experience. Educational and entertaining!</p>
+                    <h4 data-page-i18n="pettingAnimal5Title">Chickens & Birds</h4>
+                    <p data-page-i18n="pettingAnimal5Body">Watch our chickens peck around and learn about where eggs come from. We also have turkeys and other birds that add to the farm experience. Educational and entertaining!</p>
                 </div>
             </div>
 
@@ -551,24 +520,24 @@
                 <img src="./images/animals.jpg" alt="More Farm Friends" class="animal-image">
                 <div class="animal-content">
                     <span class="animal-emoji">🦆</span>
-                    <h4>And More!</h4>
-                    <p>We have even more animal friends waiting to meet you! From ducks to miniature horses, there's always something new to discover at our petting zoo.</p>
+                    <h4 data-page-i18n="pettingAnimal6Title">And More!</h4>
+                    <p data-page-i18n="pettingAnimal6Body">We have even more animal friends waiting to meet you! From ducks to miniature horses, there's always something new to discover at our petting zoo.</p>
                 </div>
             </div>
         </div>
 
         <div class="info-boxes">
             <div class="info-box">
-                <h4>🎫 Admission</h4>
-                <p>$15 per person<br>Children under 2 free<br>Includes animal feed</p>
+                <h4 data-page-i18n="pettingInfo1Title">🎫 Admission</h4>
+                <p data-page-i18n="pettingInfo1Body">$15 per person<br>Children under 2 free<br>Includes animal feed</p>
             </div>
             <div class="info-box">
-                <h4>⏰ Visit Duration</h4>
-                <p>Self-paced visits<br>Most families spend<br>45 minutes to 1 hour</p>
+                <h4 data-page-i18n="pettingInfo2Title">⏰ Visit Duration</h4>
+                <p data-page-i18n="pettingInfo2Body">Self-paced visits<br>Most families spend<br>45 minutes to 1 hour</p>
             </div>
             <div class="info-box">
-                <h4>👶 Ages Welcome</h4>
-                <p>Perfect for all ages!<br>Especially great for<br>ages 2-12</p>
+                <h4 data-page-i18n="pettingInfo3Title">👶 Ages Welcome</h4>
+                <p data-page-i18n="pettingInfo3Body">Perfect for all ages!<br>Especially great for<br>ages 2-12</p>
             </div>
         </div>
     </section>
@@ -576,47 +545,47 @@
     <section class="experience-section">
         <div class="content-section">
             <div class="section-intro">
-                <h3>What to Expect</h3>
-                <p>Your petting zoo adventure includes everything you need for a memorable experience</p>
+                <h3 data-page-i18n="pettingExpectTitle">What to Expect</h3>
+                <p data-page-i18n="pettingExpectBody">Your petting zoo adventure includes everything you need for a memorable experience</p>
             </div>
             <div class="experience-grid">
                 <div class="experience-box">
                     <div class="experience-icon">🤲</div>
-                    <h5>Hands-On Fun</h5>
-                    <p>Pet, feed, and interact with all our friendly animals under staff supervision.</p>
+                    <h5 data-page-i18n="pettingFeature1Title">Hands-On Fun</h5>
+                    <p data-page-i18n="pettingFeature1Body">Pet, feed, and interact with all our friendly animals under staff supervision.</p>
                 </div>
                 <div class="experience-box">
                     <div class="experience-icon">📚</div>
-                    <h5>Educational</h5>
-                    <p>Learn interesting facts about each animal from our knowledgeable staff.</p>
+                    <h5 data-page-i18n="pettingFeature2Title">Educational</h5>
+                    <p data-page-i18n="pettingFeature2Body">Learn interesting facts about each animal from our knowledgeable staff.</p>
                 </div>
                 <div class="experience-box">
                     <div class="experience-icon">🧼</div>
-                    <h5>Clean & Safe</h5>
-                    <p>Hand washing stations throughout. All animals are healthy, vaccinated, and well-cared for.</p>
+                    <h5 data-page-i18n="pettingFeature3Title">Clean & Safe</h5>
+                    <p data-page-i18n="pettingFeature3Body">Hand washing stations throughout. All animals are healthy, vaccinated, and well-cared for.</p>
                 </div>
                 <div class="experience-box">
                     <div class="experience-icon">📸</div>
-                    <h5>Photo Ready</h5>
-                    <p>Capture adorable moments! Bring your camera for picture-perfect memories.</p>
+                    <h5 data-page-i18n="pettingFeature4Title">Photo Ready</h5>
+                    <p data-page-i18n="pettingFeature4Body">Capture adorable moments! Bring your camera for picture-perfect memories.</p>
                 </div>
                 <div class="experience-box">
                     <div class="experience-icon">🌤️</div>
-                    <h5>Mostly Outdoors</h5>
-                    <p>Enjoy fresh air! Some covered areas available. Dress for the weather.</p>
+                    <h5 data-page-i18n="pettingFeature5Title">Mostly Outdoors</h5>
+                    <p data-page-i18n="pettingFeature5Body">Enjoy fresh air! Some covered areas available. Dress for the weather.</p>
                 </div>
                 <div class="experience-box">
                     <div class="experience-icon">♿</div>
-                    <h5>Accessible</h5>
-                    <p>Wheelchair and stroller friendly paths throughout the petting zoo area.</p>
+                    <h5 data-page-i18n="pettingFeature6Title">Accessible</h5>
+                    <p data-page-i18n="pettingFeature6Body">Wheelchair and stroller friendly paths throughout the petting zoo area.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <section class="cta-section">
-        <h3>Ready to Meet the Animals?</h3>
-        <p>Book your petting zoo visit today and create unforgettable memories with our furry friends!</p>
+        <h3 data-page-i18n="pettingCtaTitle">Ready to Meet the Animals?</h3>
+        <p data-page-i18n="pettingCtaBody">Book your petting zoo visit today and create unforgettable memories with our furry friends!</p>
         <a href="contact.html" class="btn btn-light">Plan Your Visit</a>
     </section>
 
@@ -654,5 +623,101 @@
     </footer>
 
     <script src="/site-enhancements.js"></script>
+    <script>
+        const PAGE_TRANSLATIONS = {
+            en: {
+                pettingHeroTitle: 'Petting Zoo',
+                pettingHeroBody: 'Meet our friendly farm animals up close',
+                pettingIntroTitle: 'Interactive Animal Experiences',
+                pettingIntroBody: "Our petting zoo offers hands-on fun for visitors of all ages. Meet and interact with a variety of friendly farm animals in a safe, supervised environment. It's the perfect educational and entertaining experience for families!",
+                pettingAnimal1Title: 'Playful Goats',
+                pettingAnimal1Body: 'Our goats are energetic, friendly, and love attention! Watch them jump and play, or give them a gentle pet. They\'re always ready to make new friends and their playful antics will keep you entertained.',
+                pettingAnimal2Title: 'Gentle Sheep',
+                pettingAnimal2Body: 'Our woolly sheep are calm and gentle, perfect for younger children. Feel their soft wool and learn about how sheep help us. They\'re patient and love being brushed and petted.',
+                pettingAnimal3Title: 'Cuddly Rabbits',
+                pettingAnimal3Body: 'Our bunnies are soft, gentle, and perfect for little hands. Hold them gently and watch them hop around. Kids especially love feeding our rabbits their favorite vegetables!',
+                pettingAnimal4Title: 'Sweet Donkeys',
+                pettingAnimal4Body: 'Meet our lovable donkeys with their big personalities! They\'re gentle giants who love scratches behind the ears and treats. Don\'t be surprised by their loud but friendly brays!',
+                pettingAnimal5Title: 'Chickens & Birds',
+                pettingAnimal5Body: 'Watch our chickens peck around and learn about where eggs come from. We also have turkeys and other birds that add to the farm experience. Educational and entertaining!',
+                pettingAnimal6Title: 'And More!',
+                pettingAnimal6Body: "We have even more animal friends waiting to meet you! From ducks to miniature horses, there's always something new to discover at our petting zoo.",
+                pettingInfo1Title: '🎫 Admission',
+                pettingInfo1Body: '$15 per person<br>Children under 2 free<br>Includes animal feed',
+                pettingInfo2Title: '⏰ Visit Duration',
+                pettingInfo2Body: 'Self-paced visits<br>Most families spend<br>45 minutes to 1 hour',
+                pettingInfo3Title: '👶 Ages Welcome',
+                pettingInfo3Body: 'Perfect for all ages!<br>Especially great for<br>ages 2-12',
+                pettingExpectTitle: 'What to Expect',
+                pettingExpectBody: 'Your petting zoo adventure includes everything you need for a memorable experience',
+                pettingFeature1Title: 'Hands-On Fun',
+                pettingFeature1Body: 'Pet, feed, and interact with all our friendly animals under staff supervision.',
+                pettingFeature2Title: 'Educational',
+                pettingFeature2Body: 'Learn interesting facts about each animal from our knowledgeable staff.',
+                pettingFeature3Title: 'Clean & Safe',
+                pettingFeature3Body: 'Hand washing stations throughout. All animals are healthy, vaccinated, and well-cared for.',
+                pettingFeature4Title: 'Photo Ready',
+                pettingFeature4Body: 'Capture adorable moments! Bring your camera for picture-perfect memories.',
+                pettingFeature5Title: 'Mostly Outdoors',
+                pettingFeature5Body: 'Enjoy fresh air! Some covered areas available. Dress for the weather.',
+                pettingFeature6Title: 'Accessible',
+                pettingFeature6Body: 'Wheelchair and stroller friendly paths throughout the petting zoo area.',
+                pettingCtaTitle: 'Ready to Meet the Animals?',
+                pettingCtaBody: 'Book your petting zoo visit today and create unforgettable memories with our furry friends!'
+            },
+            es: {
+                pettingHeroTitle: 'Zoologico interactivo',
+                pettingHeroBody: 'Conoce de cerca a nuestros amigables animales de granja',
+                pettingIntroTitle: 'Experiencias interactivas con animales',
+                pettingIntroBody: 'Nuestro zoologico interactivo ofrece diversion practica para visitantes de todas las edades. Conoce e interactua con una gran variedad de animales de granja en un entorno seguro y supervisado. Es la experiencia educativa y entretenida perfecta para familias.',
+                pettingAnimal1Title: 'Cabras juguetonas',
+                pettingAnimal1Body: 'Nuestras cabras son energicas, amistosas y adoran la atencion. Miralas saltar y jugar, o dales una caricia suave. Siempre estan listas para hacer nuevos amigos y sus travesuras te van a divertir.',
+                pettingAnimal2Title: 'Ovejas tranquilas',
+                pettingAnimal2Body: 'Nuestras ovejas lanudas son tranquilas y gentiles, perfectas para los ninos pequenos. Siente su lana suave y aprende como las ovejas nos ayudan. Son pacientes y disfrutan que las cepillen y acaricien.',
+                pettingAnimal3Title: 'Conejitos tiernos',
+                pettingAnimal3Body: 'Nuestros conejitos son suaves, nobles y perfectos para manos pequenas. Cargalos con cuidado y observalos brincar. A los ninos les encanta darles sus verduras favoritas.',
+                pettingAnimal4Title: 'Burritos dulces',
+                pettingAnimal4Body: 'Conoce a nuestros adorables burritos con grandes personalidades. Son gigantes gentiles que disfrutan los rascones detras de las orejas y los premios. No te sorprendas con sus rebuznos fuertes pero amistosos.',
+                pettingAnimal5Title: 'Gallinas y aves',
+                pettingAnimal5Body: 'Observa a nuestras gallinas picotear y aprende de donde vienen los huevos. Tambien tenemos pavos y otras aves que enriquecen la experiencia de granja. Educativo y entretenido.',
+                pettingAnimal6Title: 'Y mas animales',
+                pettingAnimal6Body: 'Tenemos aun mas amigos animales esperandote. Desde patos hasta caballos miniatura, siempre hay algo nuevo por descubrir en nuestro zoologico interactivo.',
+                pettingInfo1Title: '🎫 Entrada',
+                pettingInfo1Body: '$15 por persona<br>Ninos menores de 2 gratis<br>Incluye alimento para animales',
+                pettingInfo2Title: '⏰ Duracion de la visita',
+                pettingInfo2Body: 'Visitas a tu ritmo<br>La mayoria de las familias pasan<br>de 45 minutos a 1 hora',
+                pettingInfo3Title: '👶 Todas las edades',
+                pettingInfo3Body: 'Perfecto para todas las edades<br>Especialmente ideal para<br>ninos de 2 a 12 anos',
+                pettingExpectTitle: 'Que esperar',
+                pettingExpectBody: 'Tu aventura incluye todo lo necesario para una experiencia memorable',
+                pettingFeature1Title: 'Diversion practica',
+                pettingFeature1Body: 'Acaricia, alimenta e interactua con nuestros animales bajo la supervision del personal.',
+                pettingFeature2Title: 'Educativo',
+                pettingFeature2Body: 'Aprende datos interesantes sobre cada animal con nuestro personal experto.',
+                pettingFeature3Title: 'Limpio y seguro',
+                pettingFeature3Body: 'Hay estaciones para lavarse las manos en toda el area. Todos los animales estan sanos, vacunados y bien cuidados.',
+                pettingFeature4Title: 'Listo para fotos',
+                pettingFeature4Body: 'Captura momentos adorables. Trae tu camara para recuerdos perfectos.',
+                pettingFeature5Title: 'Principalmente al aire libre',
+                pettingFeature5Body: 'Disfruta el aire libre. Hay algunas areas techadas. Ven vestido segun el clima.',
+                pettingFeature6Title: 'Accesible',
+                pettingFeature6Body: 'Senderos accesibles para sillas de ruedas y carriolas en toda el area.',
+                pettingCtaTitle: 'Listo para conocer a los animales?',
+                pettingCtaBody: 'Reserva hoy tu visita y crea recuerdos inolvidables con nuestros amigos peludos.'
+            }
+        };
+
+        function applyPageTranslations() {
+            const lang = window.ZoltenSiteI18n?.getLanguage?.() || 'en';
+            document.querySelectorAll('[data-page-i18n]').forEach((node) => {
+                const key = node.getAttribute('data-page-i18n');
+                const value = PAGE_TRANSLATIONS[lang]?.[key] || PAGE_TRANSLATIONS.en[key];
+                if (value) node.innerHTML = value;
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', applyPageTranslations);
+        window.addEventListener('zolten:languagechange', applyPageTranslations);
+    </script>
 </body>
 </html>
