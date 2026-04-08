@@ -210,6 +210,68 @@
     window.localStorage.setItem(STORAGE_KEY, lang === 'es' ? 'es' : 'en');
   }
 
+  function setupMobileNavigation() {
+    const nav = document.querySelector('nav');
+    const navLinks = document.querySelector('.nav-links');
+    if (!nav || !navLinks) return;
+
+    const container = nav.querySelector('.nav-container') || nav;
+    let button = container.querySelector('.mobile-menu-btn') || nav.querySelector('.mobile-menu-btn');
+    const menuId = navLinks.id || 'site-mobile-menu';
+    navLinks.id = menuId;
+
+    let overlay = document.querySelector('.site-nav-overlay');
+    if (!overlay) {
+      overlay = document.createElement('div');
+      overlay.className = 'site-nav-overlay';
+      document.body.appendChild(overlay);
+    }
+
+    if (!button) {
+      button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'mobile-menu-btn';
+      button.setAttribute('aria-label', 'Toggle navigation menu');
+      container.appendChild(button);
+    }
+
+    button.setAttribute('aria-controls', menuId);
+
+    const setMenuState = (isOpen) => {
+      navLinks.classList.toggle('active', isOpen);
+      document.body.classList.toggle('nav-open', isOpen);
+      button.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      button.textContent = isOpen ? '✕' : '☰';
+    };
+
+    const updateOffset = () => {
+      const navHeight = Math.ceil(nav.getBoundingClientRect().height || nav.offsetHeight || 84);
+      document.documentElement.style.setProperty('--site-nav-offset', `${navHeight}px`);
+      if (window.innerWidth > 1024) {
+        setMenuState(false);
+      }
+    };
+
+    setMenuState(false);
+
+    if (!button.dataset.siteNavManaged) {
+      button.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        setMenuState(!navLinks.classList.contains('active'));
+      });
+      button.dataset.siteNavManaged = 'true';
+    }
+
+    overlay.onclick = () => setMenuState(false);
+    navLinks.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => setMenuState(false));
+    });
+
+    window.addEventListener('resize', updateOffset, { passive: true });
+    updateOffset();
+  }
+
   function injectLanguageToggle() {
     if (document.querySelector('.lang-toggle')) return;
 
@@ -424,6 +486,7 @@
 
   document.addEventListener('DOMContentLoaded', async () => {
     injectLanguageToggle();
+    setupMobileNavigation();
     const lang = getStoredLanguage();
     applyLanguage(lang);
 

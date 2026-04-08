@@ -11,23 +11,6 @@
     <link rel="canonical" href="https://zoltenranch.com/gallery.html">
     <link rel="icon" type="image/png" href="/images/logo.png">
     <link rel="stylesheet" href="/site-enhancements.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary: #8B1538;
-            --secondary: #D4464A;
-            --accent: #F5A623;
-            --dark: #1a1a1a;
-            --light: #f8f6f3;
-            --white: #ffffff;
-            --border: #e0d5c7;
-        }
-
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             line-height: 1.7;
@@ -796,22 +779,6 @@
 
     <script src="/site-enhancements.js"></script>
     <script>
-        // Mobile menu
-        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-        const navLinks = document.querySelector('.nav-links');
-
-        mobileMenuBtn.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-            mobileMenuBtn.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
-        });
-
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('active');
-                mobileMenuBtn.textContent = '☰';
-            });
-        });
-
         // Gallery filtering
         const filterButtons = document.querySelectorAll('.filter-btn');
         const galleryItems = document.querySelectorAll('.gallery-item');
