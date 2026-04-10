@@ -36,12 +36,11 @@ button.submit-btn:focus-visible {
 }
 
 .lang-toggle-slot {
-    display: flex;
-    align-items: center;
+    display: none !important;
 }
 
 .lang-toggle {
-    display: inline-flex;
+    display: none !important;
     align-items: center;
     gap: 6px;
     padding: 5px;

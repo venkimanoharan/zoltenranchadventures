@@ -790,12 +790,15 @@
   }
 
   function getStoredLanguage() {
-    const value = window.localStorage.getItem(STORAGE_KEY);
-    return value === 'es' ? 'es' : 'en';
+    return 'en';
   }
 
   function setStoredLanguage(lang) {
-    window.localStorage.setItem(STORAGE_KEY, lang === 'es' ? 'es' : 'en');
+    try {
+      window.localStorage.setItem(STORAGE_KEY, 'en');
+    } catch (_error) {
+      // Ignore storage failures and keep the site in English.
+    }
   }
 
   function setupMobileNavigation() {
@@ -869,38 +872,6 @@
       overlay.dataset.siteNavManaged = 'true';
     }
 
-    if (!navLinks.dataset.siteNavManaged) {
-      navLinks.addEventListener('click', (event) => {
-        const anchor = event.target.closest('a[href]');
-        if (!anchor || !navLinks.contains(anchor)) return;
-        const href = anchor.getAttribute('href');
-
-        if (window.innerWidth > 1024) {
-          setMenuState(false);
-          return;
-        }
-
-        if (!href || href.startsWith('javascript:')) {
-          event.preventDefault();
-          setMenuState(false);
-          return;
-        }
-
-        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
-          setMenuState(false);
-          return;
-        }
-
-        if (href.startsWith('#')) {
-          setMenuState(false);
-          return;
-        }
-
-        setMenuState(false);
-      });
-      navLinks.dataset.siteNavManaged = 'true';
-    }
-
     if (!document.body.dataset.siteNavEscapeManaged) {
       document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') {
@@ -915,32 +886,13 @@
   }
 
   function injectLanguageToggle() {
-    if (document.querySelector('.lang-toggle')) return;
-
-    const navLinks = document.querySelector('.nav-links');
-    const nav = document.querySelector('nav');
-    if (!navLinks && !nav) return;
-
-    const slotTag = navLinks?.tagName === 'UL' ? 'li' : 'div';
-    const slot = document.createElement(slotTag);
-    slot.className = 'lang-toggle-slot';
-    slot.innerHTML = [
-      '<div class="lang-toggle" aria-label="Language toggle">',
-      '  <button type="button" data-lang="en">EN</button>',
-      '  <button type="button" data-lang="es">ES</button>',
-      '</div>'
-    ].join('');
-
-    (navLinks || nav).appendChild(slot);
-    slot.querySelectorAll('button').forEach((button) => {
-      button.addEventListener('click', () => applyLanguage(button.dataset.lang || 'en'));
+    document.querySelectorAll('.lang-toggle-slot, .lang-toggle').forEach((node) => {
+      node.remove();
     });
   }
 
   function updateToggleState(lang) {
-    document.querySelectorAll('.lang-toggle button').forEach((button) => {
-      button.classList.toggle('is-active', button.dataset.lang === lang);
-    });
+    return lang;
   }
 
   function applyDataI18n(lang) {
@@ -1137,7 +1089,7 @@
   }
 
   function applyLanguage(lang) {
-    const normalized = lang === 'es' ? 'es' : 'en';
+    const normalized = 'en';
     setStoredLanguage(normalized);
     document.documentElement.lang = normalized;
     updateToggleState(normalized);
@@ -1185,15 +1137,14 @@
   document.addEventListener('DOMContentLoaded', async () => {
     injectLanguageToggle();
     setupMobileNavigation();
-    const lang = getStoredLanguage();
-    applyLanguage(lang);
+    applyLanguage('en');
 
     try {
       const { settings, weekly } = await fetchBusinessSettings();
       cachedBusinessSettings = settings;
       cachedWeeklySchedule = weekly;
       applyBusinessSettings(settings, weekly);
-      applyLanguage(getStoredLanguage());
+      applyLanguage('en');
     } catch (error) {
       console.error('Failed to apply site enhancements:', error);
     }
