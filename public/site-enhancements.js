@@ -845,39 +845,6 @@
       button.textContent = isOpen ? '✕' : '☰';
     };
 
-    const navigateFromMenuLink = (anchor) => {
-      if (!anchor) return;
-
-      const href = anchor.getAttribute('href');
-      if (!href || href.startsWith('javascript:')) {
-        setMenuState(false);
-        return;
-      }
-
-      if (anchor.target === '_blank' || anchor.hasAttribute('download')) {
-        setMenuState(false);
-        return;
-      }
-
-      if (href.startsWith('#')) {
-        setMenuState(false);
-        window.location.hash = href.slice(1);
-        return;
-      }
-
-      const destination = new URL(href, window.location.origin);
-      const isSamePath = destination.pathname === window.location.pathname;
-
-      setMenuState(false);
-
-      if (isSamePath && destination.hash) {
-        window.location.assign(destination.href);
-        return;
-      }
-
-      window.location.assign(destination.href);
-    };
-
     const updateOffset = () => {
       const navHeight = Math.ceil(nav.getBoundingClientRect().height || nav.offsetHeight || 84);
       document.documentElement.style.setProperty('--site-nav-offset', `${navHeight}px`);
@@ -906,8 +873,15 @@
       navLinks.addEventListener('click', (event) => {
         const anchor = event.target.closest('a[href]');
         if (!anchor || !navLinks.contains(anchor)) return;
+        const href = anchor.getAttribute('href');
 
         if (window.innerWidth > 1024) {
+          setMenuState(false);
+          return;
+        }
+
+        if (!href || href.startsWith('javascript:')) {
+          event.preventDefault();
           setMenuState(false);
           return;
         }
@@ -917,8 +891,12 @@
           return;
         }
 
-        event.preventDefault();
-        navigateFromMenuLink(anchor);
+        if (href.startsWith('#')) {
+          setMenuState(false);
+          return;
+        }
+
+        setMenuState(false);
       });
       navLinks.dataset.siteNavManaged = 'true';
     }
