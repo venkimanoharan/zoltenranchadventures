@@ -806,17 +806,8 @@
     const navLinks = document.querySelector('.nav-links');
     if (!nav || !navLinks) return;
 
-    let container = nav.querySelector('.nav-container');
-    if (!container) {
-      container = document.createElement('div');
-      container.className = 'nav-container';
-
-      while (nav.firstChild) {
-        container.appendChild(nav.firstChild);
-      }
-
-      nav.appendChild(container);
-    }
+    const container = nav.querySelector('.nav-container') || nav;
+    container.classList.add('site-nav-layout');
 
     let button = container.querySelector('.mobile-menu-btn') || nav.querySelector('.mobile-menu-btn');
     const menuId = navLinks.id || 'site-mobile-menu';

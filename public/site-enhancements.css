@@ -91,7 +91,7 @@ button.submit-btn:focus-visible {
         width: 100%;
     }
 
-    body .nav-container {
+    body .site-nav-layout {
         width: 100%;
         gap: 12px !important;
         justify-content: space-between !important;
