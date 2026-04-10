@@ -803,7 +803,18 @@
     const navLinks = document.querySelector('.nav-links');
     if (!nav || !navLinks) return;
 
-    const container = nav.querySelector('.nav-container') || nav;
+    let container = nav.querySelector('.nav-container');
+    if (!container) {
+      container = document.createElement('div');
+      container.className = 'nav-container';
+
+      while (nav.firstChild) {
+        container.appendChild(nav.firstChild);
+      }
+
+      nav.appendChild(container);
+    }
+
     let button = container.querySelector('.mobile-menu-btn') || nav.querySelector('.mobile-menu-btn');
     const menuId = navLinks.id || 'site-mobile-menu';
     navLinks.id = menuId;
@@ -820,6 +831,7 @@
       button.type = 'button';
       button.className = 'mobile-menu-btn';
       button.setAttribute('aria-label', 'Toggle navigation menu');
+      button.setAttribute('aria-haspopup', 'true');
       container.appendChild(button);
     }
 
@@ -827,6 +839,7 @@
 
     const setMenuState = (isOpen) => {
       navLinks.classList.toggle('active', isOpen);
+      navLinks.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
       document.body.classList.toggle('nav-open', isOpen);
       button.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
       button.textContent = isOpen ? '✕' : '☰';
@@ -878,13 +891,16 @@
     if (!button.dataset.siteNavManaged) {
       button.addEventListener('click', (event) => {
         event.preventDefault();
-        event.stopImmediatePropagation();
+        event.stopPropagation();
         setMenuState(!navLinks.classList.contains('active'));
       });
       button.dataset.siteNavManaged = 'true';
     }
 
-    overlay.onclick = () => setMenuState(false);
+    if (!overlay.dataset.siteNavManaged) {
+      overlay.addEventListener('click', () => setMenuState(false));
+      overlay.dataset.siteNavManaged = 'true';
+    }
 
     if (!navLinks.dataset.siteNavManaged) {
       navLinks.addEventListener('click', (event) => {
@@ -905,6 +921,15 @@
         navigateFromMenuLink(anchor);
       });
       navLinks.dataset.siteNavManaged = 'true';
+    }
+
+    if (!document.body.dataset.siteNavEscapeManaged) {
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+          setMenuState(false);
+        }
+      });
+      document.body.dataset.siteNavEscapeManaged = 'true';
     }
 
     window.addEventListener('resize', updateOffset, { passive: true });
