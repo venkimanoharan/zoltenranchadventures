@@ -86,6 +86,11 @@ button.submit-btn:focus-visible {
         --site-nav-offset: 84px;
     }
 
+    body header {
+        z-index: 2200 !important;
+        isolation: isolate;
+    }
+
     body nav,
     body header nav {
         width: 100%;
