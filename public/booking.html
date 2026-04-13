@@ -802,6 +802,11 @@
         let ranchSettings = {trail_price: 50, max_bookings_per_hour: 5};
         let pricingCatalog = { packages: [], add_ons: [], group_discounts: [] };
         let blockedDates = new Set();
+        const CENTRAL_TIME_ZONE = 'America/Chicago';
+        const BOOKING_ACCESS_START_HOUR = 7;
+        const BOOKING_ACCESS_END_HOUR = 23;
+        const BOOKING_PUBLIC_SETTINGS_CACHE_KEY = 'zolten-booking-public-settings';
+        const BOOKING_PUBLIC_SETTINGS_TTL_MS = 300000;
         const PACKAGE_COPY = {
             1: { title: 'pricingPackage1Title', description: 'pricingPackage1Description' },
             2: { title: 'pricingPackage2Title', description: 'pricingPackage2Description' },
@@ -837,6 +842,127 @@
             return data?.error || data?.message || data?.errors?.[0]?.msg || fallbackMessage;
         }
 
+        function readBookingSettingsCache() {
+            try {
+                const raw = window.sessionStorage.getItem(BOOKING_PUBLIC_SETTINGS_CACHE_KEY);
+                if (!raw) return null;
+                const parsed = JSON.parse(raw);
+                if (!parsed.cachedAt || (Date.now() - parsed.cachedAt) > BOOKING_PUBLIC_SETTINGS_TTL_MS) {
+                    window.sessionStorage.removeItem(BOOKING_PUBLIC_SETTINGS_CACHE_KEY);
+                    return null;
+                }
+                return parsed.value || null;
+            } catch (_error) {
+                return null;
+            }
+        }
+
+        function writeBookingSettingsCache(value) {
+            try {
+                window.sessionStorage.setItem(BOOKING_PUBLIC_SETTINGS_CACHE_KEY, JSON.stringify({
+                    cachedAt: Date.now(),
+                    value,
+                }));
+            } catch (_error) {
+                // Ignore cache write failures.
+            }
+        }
+
+        async function preloadPublicBusinessSettings() {
+            const cached = readBookingSettingsCache();
+            if (cached) {
+                ranchSettings = { ...ranchSettings, ...cached };
+                return cached;
+            }
+
+            try {
+                const snapshot = await window.ZoltenPublicData?.getSnapshot?.().catch(() => null);
+                const settings = snapshot?.settings || null;
+                if (settings) {
+                    ranchSettings = { ...ranchSettings, ...settings };
+                    writeBookingSettingsCache(settings);
+                    return settings;
+                }
+            } catch (_error) {
+                // Ignore snapshot lookup failures.
+            }
+
+            try {
+                const response = await fetch('/site-data.json');
+                if (!response.ok) return null;
+                const payload = await response.json();
+                if (payload?.settings) {
+                    ranchSettings = { ...ranchSettings, ...payload.settings };
+                    writeBookingSettingsCache(payload.settings);
+                    return payload.settings;
+                }
+            } catch (_error) {
+                // Ignore static snapshot failures.
+            }
+
+            return null;
+        }
+
+        function getCentralTimeParts() {
+            const formatter = new Intl.DateTimeFormat('en-US', {
+                timeZone: CENTRAL_TIME_ZONE,
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false
+            });
+            const parts = formatter.formatToParts(new Date());
+            const values = Object.fromEntries(parts.filter((part) => part.type !== 'literal').map((part) => [part.type, part.value]));
+
+            return {
+                hour: Number(values.hour || 0),
+                minute: Number(values.minute || 0)
+            };
+        }
+
+        function isBookingAccessWindowOpen() {
+            const { hour, minute } = getCentralTimeParts();
+            const totalMinutes = (hour * 60) + minute;
+            return totalMinutes >= (BOOKING_ACCESS_START_HOUR * 60) && totalMinutes < (BOOKING_ACCESS_END_HOUR * 60);
+        }
+
+        function isServiceWindowError(error) {
+            return error?.status === 503 || /database initialization in progress/i.test(String(error?.message || ''));
+        }
+
+        function getBookingAccessStatusMessage() {
+            const { hour, minute } = getCentralTimeParts();
+            const totalMinutes = (hour * 60) + minute;
+
+            if (totalMinutes < (BOOKING_ACCESS_START_HOUR * 60)) {
+                return 'Online booking reopens today at 7:00 AM Central Time.';
+            }
+
+            return 'Online booking reopens tomorrow at 7:00 AM Central Time.';
+        }
+
+        function renderBookingAccessNotice(reasonMessage) {
+            const container = document.querySelector('.booking-container');
+            if (!container) return;
+
+            container.innerHTML = `
+                <div style="max-width: 760px; margin: 0 auto; padding: 24px; border-radius: 20px; background: linear-gradient(180deg, #fffaf3 0%, #ffffff 100%); border: 1px solid rgba(139, 21, 56, 0.12); box-shadow: 0 24px 60px rgba(26, 12, 10, 0.12); text-align: left;">
+                    <div style="display:inline-flex; align-items:center; gap:10px; padding:8px 14px; border-radius:999px; background:rgba(245, 166, 35, 0.14); color:#8B1538; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; font-size:0.82rem;">Booking Access Hours</div>
+                    <h1 style="margin:18px 0 12px; color:#8B1538; font-size:clamp(2rem, 4vw, 2.8rem); line-height:1.1;">Online booking is available daily from 7:00 AM to 11:00 PM Central Time.</h1>
+                    <p style="margin:0 0 14px; color:#5b4a45; font-size:1.05rem; line-height:1.7;">${reasonMessage || getBookingAccessStatusMessage()}</p>
+                    <p style="margin:0 0 24px; color:#5b4a45; font-size:1rem; line-height:1.7;">Please come back during booking hours, or contact the ranch directly if you need help with a reservation.</p>
+                    <div style="display:flex; flex-wrap:wrap; gap:14px; margin-bottom:20px;">
+                        <a href="tel:${ranchSettings.contact_phone || '210-769-4164'}" style="display:inline-flex; align-items:center; justify-content:center; min-height:52px; padding:0 22px; border-radius:999px; text-decoration:none; background:#8B1538; color:#fff; font-weight:700;">Call ${ranchSettings.contact_phone || '210-769-4164'}</a>
+                        <a href="mailto:${ranchSettings.booking_email || ranchSettings.contact_email || 'booking@zoltenranch.com'}" style="display:inline-flex; align-items:center; justify-content:center; min-height:52px; padding:0 22px; border-radius:999px; text-decoration:none; background:#f5a623; color:#1a1a1a; font-weight:700;">Email Booking Team</a>
+                        <a href="/" style="display:inline-flex; align-items:center; justify-content:center; min-height:52px; padding:0 22px; border-radius:999px; text-decoration:none; border:1px solid rgba(139, 21, 56, 0.18); color:#8B1538; font-weight:700; background:#fff;">Return Home</a>
+                    </div>
+                    <div style="padding:16px 18px; border-radius:16px; background:#f8f6f3; color:#6c5d57; line-height:1.6;">
+                        Booking access window: <strong>7:00 AM to 11:00 PM</strong> in <strong>America/Chicago</strong>.<br>
+                        Live availability and reservation submission are only available during that window.
+                    </div>
+                </div>
+            `;
+        }
+
         async function readJsonResponse(response, fallbackMessage) {
             let data = {};
 
@@ -847,7 +973,9 @@
             }
 
             if (!response.ok) {
-                throw new Error(getApiErrorMessage(data, fallbackMessage));
+                const error = new Error(getApiErrorMessage(data, fallbackMessage));
+                error.status = response.status;
+                throw error;
             }
 
             return data;
@@ -855,6 +983,13 @@
 
         // Initialize
         document.addEventListener('DOMContentLoaded', async () => {
+            await preloadPublicBusinessSettings();
+
+            if (!isBookingAccessWindowOpen()) {
+                renderBookingAccessNotice();
+                return;
+            }
+
             initializeForm();
             await loadSettings();
             await loadPricingCatalog();
@@ -896,6 +1031,10 @@
                 renderAddOnOptions();
             } catch (error) {
                 console.error('Error loading pricing catalog:', error);
+                if (isServiceWindowError(error)) {
+                    renderBookingAccessNotice('Live pricing and booking data are offline right now. Online booking is available daily from 7:00 AM to 11:00 PM Central Time.');
+                    return;
+                }
                 showError(error.message);
             }
         }
@@ -990,6 +1129,10 @@
             } catch (error) {
                 blockedDates = new Set();
                 console.error('Error loading closed dates:', error);
+                if (isServiceWindowError(error)) {
+                    renderBookingAccessNotice('Date availability is offline right now. Online booking is available daily from 7:00 AM to 11:00 PM Central Time.');
+                    return;
+                }
                 showError(error.message);
             }
         }
@@ -1074,6 +1217,10 @@
                 ranchSettings = data.settings || data;
             } catch (error) {
                 console.error('Error loading settings:', error);
+                if (isServiceWindowError(error)) {
+                    renderBookingAccessNotice('Booking settings are offline right now. Online booking is available daily from 7:00 AM to 11:00 PM Central Time.');
+                    return;
+                }
                 showError(error.message);
             }
         }
@@ -1156,6 +1303,10 @@
                 updateSummary();
             } catch (error) {
                 console.error('Error checking availability:', error);
+                if (isServiceWindowError(error)) {
+                    renderBookingAccessNotice('Live slot availability is offline right now. Online booking is available daily from 7:00 AM to 11:00 PM Central Time.');
+                    return;
+                }
                 formData.booking_time = '';
                 document.getElementById('bookingTime').value = '';
                 document.getElementById('timePicker').innerHTML = `<div class="input-hint">${translate('bookingAvailabilityLoadFailed')}</div>`;
@@ -1256,6 +1407,11 @@
         }
 
         async function submitBooking() {
+            if (!isBookingAccessWindowOpen()) {
+                renderBookingAccessNotice();
+                return;
+            }
+
             const formElement = document.getElementById('bookingForm');
 
             // Validate all steps before submitting, since the form is multi-step.
@@ -1281,10 +1437,18 @@
                     formElement.reset();
                     setTimeout(() => window.location.href = '/', 3000);
                 } else {
+                    if (response.status === 503) {
+                        renderBookingAccessNotice('Online booking is temporarily unavailable. Reservations can be placed daily from 7:00 AM to 11:00 PM Central Time.');
+                        return;
+                    }
                     const apiError = result.error || result.message || result.errors?.[0]?.msg || 'Booking failed';
                     showError(apiError);
                 }
             } catch (error) {
+                if (isServiceWindowError(error)) {
+                    renderBookingAccessNotice('Online booking is temporarily unavailable. Reservations can be placed daily from 7:00 AM to 11:00 PM Central Time.');
+                    return;
+                }
                 showError(translate('bookingSubmitError', { message: error.message }));
             }
         }

@@ -1546,10 +1546,131 @@
         let bookingsData = [];
         let editingOverrideId = null;
         let pricingCatalog = { packages: [], add_ons: [], group_discounts: [] };
+        const ADMIN_CENTRAL_TIME_ZONE = 'America/Chicago';
+        const ADMIN_ACCESS_START_HOUR = 7;
+        const ADMIN_ACCESS_END_HOUR = 23;
+        const ADMIN_PUBLIC_SETTINGS_CACHE_KEY = 'zolten-admin-public-settings';
+        const ADMIN_PUBLIC_SETTINGS_TTL_MS = 300000;
+        let adminPublicSettings = {
+            contact_phone: '210-769-4164',
+            booking_email: 'booking@zoltenranch.com',
+            contact_email: 'info@zoltenranch.com'
+        };
         const DAY_LABELS = {
             en: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
             es: ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado']
         };
+
+        function readAdminSettingsCache() {
+            try {
+                const raw = window.sessionStorage.getItem(ADMIN_PUBLIC_SETTINGS_CACHE_KEY);
+                if (!raw) return null;
+                const parsed = JSON.parse(raw);
+                if (!parsed.cachedAt || (Date.now() - parsed.cachedAt) > ADMIN_PUBLIC_SETTINGS_TTL_MS) {
+                    window.sessionStorage.removeItem(ADMIN_PUBLIC_SETTINGS_CACHE_KEY);
+                    return null;
+                }
+                return parsed.value || null;
+            } catch (_error) {
+                return null;
+            }
+        }
+
+        function writeAdminSettingsCache(value) {
+            try {
+                window.sessionStorage.setItem(ADMIN_PUBLIC_SETTINGS_CACHE_KEY, JSON.stringify({
+                    cachedAt: Date.now(),
+                    value,
+                }));
+            } catch (_error) {
+                // Ignore cache write failures.
+            }
+        }
+
+        async function preloadAdminPublicSettings() {
+            const cached = readAdminSettingsCache();
+            if (cached) {
+                adminPublicSettings = { ...adminPublicSettings, ...cached };
+                return cached;
+            }
+
+            try {
+                const response = await fetch('/site-data.json');
+                if (!response.ok) return null;
+                const payload = await response.json();
+                if (payload?.settings) {
+                    adminPublicSettings = { ...adminPublicSettings, ...payload.settings };
+                    writeAdminSettingsCache(payload.settings);
+                    return payload.settings;
+                }
+            } catch (_error) {
+                // Ignore static snapshot failures.
+            }
+
+            return null;
+        }
+
+        function getAdminCentralTimeParts() {
+            const formatter = new Intl.DateTimeFormat('en-US', {
+                timeZone: ADMIN_CENTRAL_TIME_ZONE,
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false
+            });
+            const parts = formatter.formatToParts(new Date());
+            const values = Object.fromEntries(parts.filter((part) => part.type !== 'literal').map((part) => [part.type, part.value]));
+            return {
+                hour: Number(values.hour || 0),
+                minute: Number(values.minute || 0)
+            };
+        }
+
+        function isAdminAccessWindowOpen() {
+            const { hour, minute } = getAdminCentralTimeParts();
+            const totalMinutes = (hour * 60) + minute;
+            return totalMinutes >= (ADMIN_ACCESS_START_HOUR * 60) && totalMinutes < (ADMIN_ACCESS_END_HOUR * 60);
+        }
+
+        function isAdminServiceWindowError(error) {
+            return error?.status === 503 || /database initialization in progress/i.test(String(error?.message || ''));
+        }
+
+        function adminAccessStatusMessage() {
+            const { hour, minute } = getAdminCentralTimeParts();
+            const totalMinutes = (hour * 60) + minute;
+            if (totalMinutes < (ADMIN_ACCESS_START_HOUR * 60)) {
+                return 'Admin access reopens today at 7:00 AM Central Time.';
+            }
+
+            return 'Admin access reopens tomorrow at 7:00 AM Central Time.';
+        }
+
+        function showAdminAccessNotice(reasonMessage) {
+            document.body.innerHTML = `
+                <div style="min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px; background:linear-gradient(160deg, #f8f6f3 0%, #fff 100%);">
+                    <div style="max-width:760px; width:100%; background:#fff; border:1px solid rgba(139, 21, 56, 0.12); border-radius:24px; box-shadow:0 24px 60px rgba(26, 12, 10, 0.12); padding:32px;">
+                        <div style="display:flex; justify-content:flex-end; gap:8px; margin-bottom:18px;">
+                            <button type="button" onclick="setAdminLanguage('en'); showAdminAccessNotice();" style="border:1px solid #ddd; background:#fff; padding:6px 10px; border-radius:999px; cursor:pointer;">EN</button>
+                            <button type="button" onclick="setAdminLanguage('es'); showAdminAccessNotice();" style="border:1px solid #ddd; background:#fff; padding:6px 10px; border-radius:999px; cursor:pointer;">ES</button>
+                        </div>
+                        <div style="display:inline-flex; align-items:center; gap:10px; padding:8px 14px; border-radius:999px; background:rgba(245, 166, 35, 0.14); color:#8B1538; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; font-size:0.82rem;">Admin Access Hours</div>
+                        <h1 style="margin:18px 0 12px; color:#8B1538; font-size:clamp(2rem, 4vw, 2.8rem); line-height:1.1;">Admin tools are available daily from 7:00 AM to 11:00 PM Central Time.</h1>
+                        <p style="margin:0 0 14px; color:#5b4a45; font-size:1.05rem; line-height:1.7;">${reasonMessage || adminAccessStatusMessage()}</p>
+                        <p style="margin:0 0 24px; color:#5b4a45; font-size:1rem; line-height:1.7;">Booking management, settings updates, and admin login are paused outside that window so the database can safely shut down overnight.</p>
+                        <div style="display:flex; flex-wrap:wrap; gap:14px; margin-bottom:20px;">
+                            <a href="tel:${adminPublicSettings.contact_phone || '210-769-4164'}" style="display:inline-flex; align-items:center; justify-content:center; min-height:52px; padding:0 22px; border-radius:999px; text-decoration:none; background:#8B1538; color:#fff; font-weight:700;">Call ${adminPublicSettings.contact_phone || '210-769-4164'}</a>
+                            <a href="mailto:${adminPublicSettings.booking_email || adminPublicSettings.contact_email || 'booking@zoltenranch.com'}" style="display:inline-flex; align-items:center; justify-content:center; min-height:52px; padding:0 22px; border-radius:999px; text-decoration:none; background:#f5a623; color:#1a1a1a; font-weight:700;">Email Ranch Team</a>
+                            <a href="/booking.html" style="display:inline-flex; align-items:center; justify-content:center; min-height:52px; padding:0 22px; border-radius:999px; text-decoration:none; background:#8B1538; color:#fff; font-weight:700;">Open Booking Page</a>
+                            <a href="/" style="display:inline-flex; align-items:center; justify-content:center; min-height:52px; padding:0 22px; border-radius:999px; text-decoration:none; border:1px solid rgba(139, 21, 56, 0.18); color:#8B1538; font-weight:700; background:#fff;">Return Home</a>
+                        </div>
+                        <div style="padding:16px 18px; border-radius:16px; background:#f8f6f3; color:#6c5d57; line-height:1.6;">
+                            Admin access window: <strong>7:00 AM to 11:00 PM</strong> in <strong>America/Chicago</strong>.<br>
+                            If you need changes outside those hours, sign in again once the next service window opens.
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
 
         function getAdminLanguage() {
             return localStorage.getItem(ADMIN_LANGUAGE_KEY) === 'es' ? 'es' : 'en';
@@ -1596,6 +1717,13 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            preloadAdminPublicSettings().catch(() => null);
+
+            if (!isAdminAccessWindowOpen()) {
+                showAdminAccessNotice();
+                return;
+            }
+
             document.querySelectorAll('.admin-lang-toggle button').forEach((button) => {
                 button.addEventListener('click', () => {
                     setAdminLanguage(button.dataset.adminLang || 'en');
@@ -1684,6 +1812,10 @@
 
         async function handleLogin(event) {
             event.preventDefault();
+            if (!isAdminAccessWindowOpen()) {
+                showAdminAccessNotice();
+                return;
+            }
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
@@ -1700,10 +1832,18 @@
                     localStorage.setItem('adminToken', token);
                     location.reload();
                 } else {
+                    if (response.status === 503) {
+                        showAdminAccessNotice('Admin login is temporarily unavailable. Access is available daily from 7:00 AM to 11:00 PM Central Time.');
+                        return;
+                    }
                     document.getElementById('loginAlert').textContent = data.error || adminT('adminLoginFailed');
                     document.getElementById('loginAlert').style.display = 'block';
                 }
             } catch (error) {
+                if (isAdminServiceWindowError(error)) {
+                    showAdminAccessNotice('Admin login is temporarily unavailable. Access is available daily from 7:00 AM to 11:00 PM Central Time.');
+                    return;
+                }
                 document.getElementById('loginAlert').textContent = adminT('adminErrorPrefix') + error.message;
                 document.getElementById('loginAlert').style.display = 'block';
             }
@@ -1730,7 +1870,12 @@
             }
 
             if (!response.ok) {
-                throw new Error(data.error || adminT('adminRequestFailed'));
+                const error = new Error(data.error || adminT('adminRequestFailed'));
+                error.status = response.status;
+                if (error.status === 503) {
+                    showAdminAccessNotice('Admin tools are temporarily unavailable. Access is available daily from 7:00 AM to 11:00 PM Central Time.');
+                }
+                throw error;
             }
 
             return data;
