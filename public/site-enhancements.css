@@ -89,6 +89,8 @@ button.submit-btn:focus-visible {
     body nav,
     body header nav {
         width: 100%;
+        z-index: 2200 !important;
+        isolation: isolate;
     }
 
     body .site-nav-layout {
@@ -131,7 +133,7 @@ button.submit-btn:focus-visible {
         font-size: 1.45rem !important;
         line-height: 1;
         cursor: pointer;
-        z-index: 2100;
+        z-index: 2260;
     }
 
     body .nav-links {
@@ -160,7 +162,7 @@ button.submit-btn:focus-visible {
         pointer-events: none;
         transform: translateY(-14px) scale(0.98);
         transition: opacity 0.22s ease, transform 0.22s ease, visibility 0.22s ease !important;
-        z-index: 2050 !important;
+        z-index: 2250 !important;
     }
 
     body .nav-links.active {
@@ -204,7 +206,7 @@ button.submit-btn:focus-visible {
         opacity: 0;
         pointer-events: none;
         transition: opacity 0.22s ease;
-        z-index: 2000;
+        z-index: 2150;
     }
 
     body.nav-open {

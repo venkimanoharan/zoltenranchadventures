@@ -863,6 +863,15 @@
       overlay.dataset.siteNavManaged = 'true';
     }
 
+    if (!navLinks.dataset.siteNavManaged) {
+      navLinks.addEventListener('click', (event) => {
+        const link = event.target.closest('a[href]');
+        if (!link) return;
+        setMenuState(false);
+      });
+      navLinks.dataset.siteNavManaged = 'true';
+    }
+
     if (!document.body.dataset.siteNavEscapeManaged) {
       document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') {
