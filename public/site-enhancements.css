@@ -235,6 +235,20 @@ button.submit-btn:focus-visible {
 }
 
 @media (max-width: 768px) {
+    html,
+    body {
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    body img,
+    body video,
+    body canvas,
+    body iframe,
+    body svg {
+        max-width: 100%;
+    }
+
     .lang-toggle-slot {
         width: 100%;
         justify-content: center;
@@ -247,6 +261,45 @@ button.submit-btn:focus-visible {
 
     body .page-hero {
         height: min(42vh, 320px) !important;
+    }
+
+    body .experience-grid,
+    body .event-types,
+    body .gallery-grid,
+    body .animals-grid,
+    body .amenities-grid,
+    body .pricing-grid,
+    body .services-grid,
+    body .discounts-grid,
+    body .addon-grid,
+    body .hours-grid,
+    body .testimonials,
+    body .footer-content,
+    body .contact-grid,
+    body .map-grid {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
+
+    body .time-picker,
+    body .duration-picker,
+    body .counter-picker {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    body .btn,
+    body .trust-item,
+    body .experience-card,
+    body .event-card,
+    body .gallery-item,
+    body .animal-card,
+    body .amenity-card,
+    body .pricing-card,
+    body .service-card,
+    body .discount-card,
+    body .contact-card,
+    body .hours-item,
+    body .testimonial {
+        min-width: 0 !important;
     }
 
     body .hero-buttons .btn,
