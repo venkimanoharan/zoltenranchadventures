@@ -23,6 +23,47 @@ const verifyAdmin = (req, res, next) => {
 
 router.use(verifyAdmin);
 
+async function purgeBookingsByIds(db, bookingIds = []) {
+  if (!Array.isArray(bookingIds) || bookingIds.length === 0) {
+    return { deletedCount: 0, affectedDates: [] };
+  }
+
+  const normalizedIds = [...new Set(
+    bookingIds
+      .map((value) => parseInt(value, 10))
+      .filter((value) => Number.isInteger(value) && value > 0)
+  )];
+
+  if (normalizedIds.length === 0) {
+    return { deletedCount: 0, affectedDates: [] };
+  }
+
+  const targetResult = await db.query(
+    `SELECT id, booking_date
+     FROM bookings
+     WHERE id = ANY($1::int[])`,
+    [normalizedIds]
+  );
+
+  if (targetResult.rows.length === 0) {
+    return { deletedCount: 0, affectedDates: [] };
+  }
+
+  const targetIds = targetResult.rows.map((row) => row.id);
+  const affectedDates = [...new Set(targetResult.rows.map((row) => String(row.booking_date).slice(0, 10)))];
+
+  await db.query('DELETE FROM booking_history WHERE booking_id = ANY($1::int[])', [targetIds]);
+  await db.query('DELETE FROM booking_add_ons WHERE booking_id = ANY($1::int[])', [targetIds]);
+  const deleteResult = await db.query('DELETE FROM bookings WHERE id = ANY($1::int[])', [targetIds]);
+
+  affectedDates.forEach((date) => invalidateAvailabilityCache(date));
+
+  return {
+    deletedCount: deleteResult.rowCount || 0,
+    affectedDates,
+  };
+}
+
 // Get all bookings (admin only)
 router.get('/bookings', async (req, res) => {
   try {
@@ -70,6 +111,76 @@ router.get('/bookings', async (req, res) => {
   } catch (error) {
     console.error('Get bookings error:', error);
     res.status(500).json({ error: 'Failed to fetch bookings' });
+  }
+});
+
+router.post('/bookings/purge/selected', async (req, res) => {
+  const db = req.app.locals.db;
+
+  try {
+    const { bookingIds } = req.body || {};
+
+    if (!Array.isArray(bookingIds) || bookingIds.length === 0) {
+      return res.status(400).json({ error: 'bookingIds array is required' });
+    }
+
+    await db.query('BEGIN');
+    const result = await purgeBookingsByIds(db, bookingIds);
+    await db.query('COMMIT');
+
+    return res.json({
+      message: `Purged ${result.deletedCount} booking(s)`,
+      deletedCount: result.deletedCount,
+      affectedDates: result.affectedDates,
+    });
+  } catch (error) {
+    await db.query('ROLLBACK');
+    console.error('Purge selected bookings error:', error);
+    return res.status(500).json({ error: 'Failed to purge selected bookings' });
+  }
+});
+
+router.post('/bookings/purge/older-than', async (req, res) => {
+  const db = req.app.locals.db;
+
+  try {
+    const rawDays = req.body?.days;
+    const days = parseInt(rawDays, 10);
+
+    if (!Number.isInteger(days) || days < 1 || days > 3650) {
+      return res.status(400).json({ error: 'days must be an integer between 1 and 3650' });
+    }
+
+    const targetResult = await db.query(
+      `SELECT id
+       FROM bookings
+       WHERE booking_date < CURRENT_DATE - ($1 * INTERVAL '1 day')`,
+      [days]
+    );
+
+    const targetIds = targetResult.rows.map((row) => row.id);
+
+    if (targetIds.length === 0) {
+      return res.json({
+        message: 'No bookings matched the purge criteria',
+        deletedCount: 0,
+        affectedDates: [],
+      });
+    }
+
+    await db.query('BEGIN');
+    const result = await purgeBookingsByIds(db, targetIds);
+    await db.query('COMMIT');
+
+    return res.json({
+      message: `Purged ${result.deletedCount} booking(s) older than ${days} day(s)`,
+      deletedCount: result.deletedCount,
+      affectedDates: result.affectedDates,
+    });
+  } catch (error) {
+    await db.query('ROLLBACK');
+    console.error('Purge old bookings error:', error);
+    return res.status(500).json({ error: 'Failed to purge old bookings' });
   }
 });
 

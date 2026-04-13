@@ -818,13 +818,20 @@
                             </select>
                             <input type="date" class="filter-input" id="dateFilter" onchange="filterBookings()">
                         </div>
-                        <button class="btn btn-primary btn-small" onclick="loadBookings()">🔄 Reload</button>
+                        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                            <input type="number" class="filter-input" id="purgeDaysInput" min="1" max="3650" value="90" style="width:110px;" title="Purge bookings older than this many days">
+                            <button class="btn btn-primary btn-small" style="background:#c56a00;" onclick="purgeOldBookings()">🗑 Purge Older</button>
+                            <button class="btn btn-primary btn-small" style="background:#b03a2e;" onclick="purgeSelectedBookings()">🗑 Purge Selected</button>
+                            <button class="btn btn-primary btn-small" style="background:#2e7d32;" onclick="exportBookingsCsv()">⬇ Export CSV</button>
+                            <button class="btn btn-primary btn-small" onclick="loadBookings()">🔄 Reload</button>
+                        </div>
                     </div>
 
                     <div class="table-scroll">
                     <table>
                         <thead>
                             <tr>
+                                <th><input type="checkbox" id="selectAllBookings" onchange="toggleSelectAllBookings()" aria-label="Select all bookings"></th>
                                 <th>ID</th>
                                 <th>Name</th>
                                 <th>Email</th>
@@ -838,7 +845,7 @@
                             </tr>
                         </thead>
                         <tbody id="bookingsTable">
-                            <tr><td colspan="10" style="text-align: center; padding: 30px;">Loading...</td></tr>
+                            <tr><td colspan="11" style="text-align: center; padding: 30px;">Loading...</td></tr>
                         </tbody>
                     </table>
                     </div>
@@ -1941,6 +1948,7 @@
                 const tbody = document.getElementById('bookingsTable');
                 tbody.innerHTML = bookingsData.map(b => `
                     <tr>
+                        <td><input type="checkbox" class="booking-select" value="${b.id}" onchange="syncSelectAllBookings()" aria-label="Select booking ${b.id}"></td>
                         <td>#${b.id}</td>
                         <td>${b.name}</td>
                         <td>${b.email}</td>
@@ -1955,13 +1963,188 @@
                             <button class="btn btn-primary btn-small" onclick="openActionModal(${b.id}, 'cancel')" style="background: #e74c3c;">✗ ${adminT('adminCancelAction')}</button>
                         </td>
                     </tr>
-                `).join('') || `<tr><td colspan="10" style="text-align: center; padding: 20px;">${adminT('adminNoBookings')}</td></tr>`;
+                `).join('') || `<tr><td colspan="11" style="text-align: center; padding: 20px;">${adminT('adminNoBookings')}</td></tr>`;
+                syncSelectAllBookings();
             } catch (error) {
                 console.error('Error loading bookings:', error);
                 const tbody = document.getElementById('bookingsTable');
                 if (tbody) {
-                    tbody.innerHTML = `<tr><td colspan="10" style="text-align: center; padding: 20px; color: #e74c3c;">${adminT('adminBookingsLoadFailed')}</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="11" style="text-align: center; padding: 20px; color: #e74c3c;">${adminT('adminBookingsLoadFailed')}</td></tr>`;
                 }
+            }
+        }
+
+        function toggleSelectAllBookings() {
+            const checked = document.getElementById('selectAllBookings')?.checked;
+            document.querySelectorAll('.booking-select').forEach((node) => {
+                node.checked = Boolean(checked);
+            });
+        }
+
+        function syncSelectAllBookings() {
+            const master = document.getElementById('selectAllBookings');
+            if (!master) return;
+
+            const all = Array.from(document.querySelectorAll('.booking-select'));
+            if (all.length === 0) {
+                master.checked = false;
+                return;
+            }
+
+            master.checked = all.every((node) => node.checked);
+        }
+
+        function getSelectedBookingIds() {
+            return Array.from(document.querySelectorAll('.booking-select:checked'))
+                .map((node) => parseInt(node.value, 10))
+                .filter((id) => Number.isInteger(id) && id > 0);
+        }
+
+        async function purgeSelectedBookings() {
+            const selectedIds = getSelectedBookingIds();
+            if (selectedIds.length === 0) {
+                alert('Select at least one booking to purge.');
+                return;
+            }
+
+            if (!window.confirm(`Permanently delete ${selectedIds.length} selected booking(s)? This cannot be undone.`)) {
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/admin/bookings/purge/selected', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ bookingIds: selectedIds })
+                });
+
+                const result = await parseApiResponse(response);
+                alert(result.message || `Purged ${selectedIds.length} booking(s).`);
+                await loadBookings();
+                await loadDashboard();
+            } catch (error) {
+                alert(adminT('adminErrorPrefix') + error.message);
+            }
+        }
+
+        async function purgeOldBookings() {
+            const days = parseInt(document.getElementById('purgeDaysInput')?.value || '', 10);
+            if (!Number.isInteger(days) || days < 1) {
+                alert('Enter a valid number of days (minimum 1).');
+                return;
+            }
+
+            if (!window.confirm(`Permanently delete bookings older than ${days} day(s)? This cannot be undone.`)) {
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/admin/bookings/purge/older-than', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ days })
+                });
+
+                const result = await parseApiResponse(response);
+                alert(result.message || `Purged bookings older than ${days} day(s).`);
+                await loadBookings();
+                await loadDashboard();
+            } catch (error) {
+                alert(adminT('adminErrorPrefix') + error.message);
+            }
+        }
+
+        function csvEscape(value) {
+            if (value === null || value === undefined) return '';
+            const str = String(value);
+            if (/[",\n\r]/.test(str)) {
+                return `"${str.replace(/"/g, '""')}"`;
+            }
+            return str;
+        }
+
+        function buildBookingsCsvRows(rows) {
+            const headers = [
+                'id',
+                'name',
+                'email',
+                'phone',
+                'booking_date',
+                'booking_time',
+                'duration_hours',
+                'number_of_riders',
+                'status',
+                'total_price',
+                'special_requests',
+                'created_at'
+            ];
+
+            const lines = [headers.join(',')];
+            rows.forEach((booking) => {
+                const values = [
+                    booking.id,
+                    booking.name,
+                    booking.email,
+                    booking.phone,
+                    booking.booking_date,
+                    booking.booking_time,
+                    booking.duration_hours,
+                    booking.number_of_riders,
+                    booking.status,
+                    booking.total_price,
+                    booking.special_requests,
+                    booking.created_at
+                ];
+                lines.push(values.map(csvEscape).join(','));
+            });
+
+            return lines.join('\n');
+        }
+
+        function downloadCsvFile(filename, csvContent) {
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const anchor = document.createElement('a');
+            anchor.href = url;
+            anchor.download = filename;
+            document.body.appendChild(anchor);
+            anchor.click();
+            document.body.removeChild(anchor);
+            URL.revokeObjectURL(url);
+        }
+
+        async function exportBookingsCsv() {
+            try {
+                const status = document.getElementById('statusFilter').value;
+                const date = document.getElementById('dateFilter').value;
+
+                let url = '/api/admin/bookings?limit=5000';
+                if (status) url += '&status=' + encodeURIComponent(status);
+                if (date) url += '&dateFrom=' + encodeURIComponent(date);
+
+                const response = await fetch(url, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                const data = await parseApiResponse(response);
+                const rows = data.bookings || [];
+
+                if (!rows.length) {
+                    alert('No bookings found for the current filters.');
+                    return;
+                }
+
+                const csv = buildBookingsCsvRows(rows);
+                const dateStamp = new Date().toISOString().slice(0, 10);
+                downloadCsvFile(`bookings-export-${dateStamp}.csv`, csv);
+            } catch (error) {
+                alert(adminT('adminErrorPrefix') + error.message);
             }
         }
 
